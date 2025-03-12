@@ -1,0 +1,25 @@
+<?php
+
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Sections>
+ */
+class SectionsFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'Title' =>'Miss u',
+            'sections'=> $this->faker->paragraph(6),
+            'subsections'=>'Sana ako na lang'
+        ];
+    }
+}
