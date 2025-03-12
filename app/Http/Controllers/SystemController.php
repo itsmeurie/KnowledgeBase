@@ -65,7 +65,7 @@ class SystemController extends Controller
         $record = System::find($id);
 
         $validator = Validator::make($request->all(), [
-            'title' => 'required', 
+            'title' => 'title eme', 
             'content' => 'nullable'
             
         ]);
