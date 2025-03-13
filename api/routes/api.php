@@ -142,7 +142,7 @@ Route::middleware(["auth:sanctum", "throttle:90,1", "isActive"])->group(function
         Route::post("/test/upload", [TestController::class, "upload"]);
         #endregion
     });
-
+       
     Route::prefix("auth")->group(function () {
         Route::patch("profile-update", [ProfileController::class, "updateProfile"])->name("auth.profile.update.forced");
         Route::post("logout", [AuthenticationController::class, "logout"]);
