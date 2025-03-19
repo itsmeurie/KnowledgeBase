@@ -48,7 +48,7 @@ const links = [{
     
     <!-- image -->
     <div class="sm:col-span-4 min-h-[100px]">
-        <img src="@/assets/images/image.png" class='h-[250px] ml-[20px] scale-150 object-contain mt-[60px] ' />
+        <img src="@/assets/image/image.png" class='h-[250px] ml-[20px] scale-150 object-contain mt-[60px] ' />
     </div>
    
 </div>
@@ -58,7 +58,7 @@ const links = [{
 <div class="m-2 grid grid-cols-1 gap-4 sm:grid-cols-10">
     <div class="sm:col-span-4 min-h-[300px]">
         <div class="sm:col-span-4 min-h-[100px]">
-            <img src='@/assets/images/bgg.png' class='h-[290px] ml-[100px] scale-150 object-contain mt-[60px] ' />
+            <img src='@/assets/image/bgg.png' class='h-[290px] ml-[100px] scale-150 object-contain mt-[60px] ' />
         </div>
     </div>
 
