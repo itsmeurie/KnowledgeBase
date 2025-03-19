@@ -212,15 +212,7 @@ Route::middleware(["auth:sanctum", "throttle:60,1"])->prefix("v1.0")->group(func
 });
 
 
-//Route::prefix('systems', function()){
-//}
-// Route::get('/systems', [SystemController::class, 'index']);
-Route::get('/systems', [SystemController::class, 'list']);
-Route::get('/systems/{id}', [SystemController::class, 'show']);
-Route::post('/systems', [SystemController::class, 'store']);
-Route::put('/systems/{id}', [SystemController::class, 'restore']);
-Route::delete('/systems/{id}', [SystemController::class, 'destroy']);
-Route::patch('/systems/{id}',[SystemController::class, 'update']);
+
 
 
     
