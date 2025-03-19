@@ -11,8 +11,6 @@ export default computed(() => [
   // Debug
 	{
 		children: [
-<<<<<<< Updated upstream
-=======
       
       {
         path: "/playground",
@@ -43,35 +41,34 @@ export default computed(() => [
       },
 
 
-      {
-        path: "/ced",
-        name: "ced",
-        component: () => import('@/pages/ced.vue'),
+      // {
+      //   path: "/ced",
+      //   name: "ced",
+      //   component: () => import('@/pages/ced.vue'),
          
-        meta: {
+      //   meta: {
           
-          title: "ced",
+      //     title: "ced",
 
-          layout: 'public'
+      //     layout: 'public'
           
-        },
-      },
+      //   },
+      // },
 
-      {
-        path: "/articlepage",
-        name: "Article",
-        component: () => import('@/pages/articlepage.vue'),
+      // {
+      //   path: "/articlepage",
+      //   name: "Article",
+      //   component: () => import('@/pages/articlepage.vue'),
          
-        meta: {
+      //   meta: {
           
-          title: "Article",
+      //     title: "Article",
 
-          layout: 'public'
+      //     layout: 'public'
           
-        },
-      },
+      //   },
+      // },
 
->>>>>>> Stashed changes
 			{
 				path: "/tickets",
 				name: "tickets-index",
