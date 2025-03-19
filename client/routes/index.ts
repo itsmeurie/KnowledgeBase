@@ -11,8 +11,6 @@ export default computed(() => [
   // Debug
 	{
 		children: [
-<<<<<<< Updated upstream
-=======
       
       {
         path: "/playground",
@@ -71,7 +69,6 @@ export default computed(() => [
         },
       },
 
->>>>>>> Stashed changes
 			{
 				path: "/tickets",
 				name: "tickets-index",
