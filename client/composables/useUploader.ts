@@ -26,7 +26,7 @@ export const useUploader = (
     files.value.some((file) => file.status === "uploading"),
   );
 
-  const fileBrowser = (accept: string = "*") => {
+  const fileBrowser = (accept: string = "*", p0: boolean) => {
     if (!uploading.value) {
       const { openFileBrowser } = useFileBrowser({
         accept,

@@ -55,19 +55,19 @@ export default computed(() => [
       //   },
       // },
 
-      // {
-      //   path: "/articlepage",
-      //   name: "Article",
-      //   component: () => import('@/pages/articlepage.vue'),
+      {
+        path: "/articlepage",
+        name: "Article",
+        component: () => import('@/pages/articlepage.vue'),
          
-      //   meta: {
+        meta: {
           
-      //     title: "Article",
+          title: "Article",
 
-      //     layout: 'public'
+          layout: 'public'
           
-      //   },
-      // },
+        },
+      },
 
 			{
 				path: "/tickets",
