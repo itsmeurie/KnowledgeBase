@@ -11,16 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sections', function (Blueprint $table) {
+        Schema::create('offices', function (Blueprint $table) {
             $table->id();
-            $table->string('Title');
-            $table->longText('sections');
-            $table->string('subsections');
-
-            $table->timestamps();
+            $table->string('name');
+            $table->string('code')->nullable();
             $table->softDeletes();
-
-
+            $table->timestamps();
         });
     }
 
@@ -29,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sections');
+        Schema::dropIfExists('offices');
     }
 };

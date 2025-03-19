@@ -11,6 +11,67 @@ export default computed(() => [
   // Debug
 	{
 		children: [
+<<<<<<< Updated upstream
+=======
+      
+      {
+        path: "/playground",
+        name: "playground",
+        component: () => import('@/pages/playground.vue'),
+         
+        meta: {
+          
+          title: "Playground",
+
+          layout: 'public'
+          
+        },
+      },
+
+      {
+        path: "/offices",
+        meta: {
+          title: 'office landing page',
+          layout: 'office'
+        },
+        children: [
+          {
+            path: "",
+            component: () => import('@/pages/offices/index.vue')
+          }
+        ]
+      },
+
+
+      {
+        path: "/ced",
+        name: "ced",
+        component: () => import('@/pages/ced.vue'),
+         
+        meta: {
+          
+          title: "ced",
+
+          layout: 'public'
+          
+        },
+      },
+
+      {
+        path: "/articlepage",
+        name: "Article",
+        component: () => import('@/pages/articlepage.vue'),
+         
+        meta: {
+          
+          title: "Article",
+
+          layout: 'public'
+          
+        },
+      },
+
+>>>>>>> Stashed changes
 			{
 				path: "/tickets",
 				name: "tickets-index",

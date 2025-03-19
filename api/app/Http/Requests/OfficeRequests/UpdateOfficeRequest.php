@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\ViolatorRequests;
+namespace App\Http\Requests\OfficeRequests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ShowViolatorRequest extends FormRequest
+class UpdateOfficeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,8 @@ class ShowViolatorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'nullable',
+            'code' => 'nullable'
         ];
     }
 }

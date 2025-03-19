@@ -1,16 +1,18 @@
 <?php
 
 namespace App\Models;
+
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
-class System extends AppModel {
+
+class Office extends AppModel {
+
 
     use SoftDeletes;
 
     protected $fillable = [
-        'name',
-        'description',
-        'office'
-        
+        'name', 
+        'code',
     ];
 
     /**
@@ -22,11 +24,7 @@ class System extends AppModel {
         return [ ];
     }
 
-    /**
-    * Prepare a date for array / JSON serialization.
-    */
-    // protected function serializeDate(DateTimeInterface $date): string {
-    //     return $date->format('Y-m-d');
-    // }
-    
+    public function scopeName(Builder $query, string $name){
+        $query->where('name', 'ilike', "%{$name}%");
+    }    
 }

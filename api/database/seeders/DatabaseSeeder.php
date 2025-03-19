@@ -21,8 +21,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             AddressSeeder::class,
             PrivacyPolicySeeder::class,
-            SystemSeeder::class,
-            SectionsSeeder::class
+            OfficeSeeder::class,
         ]); 
     }
 }

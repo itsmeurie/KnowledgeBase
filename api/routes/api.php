@@ -20,9 +20,7 @@ use App\Http\Controllers\LogController;
 
 use App\Http\Controllers\GenderController;
 use App\Http\Controllers\TestController;
-use App\Http\Controllers\TicketController;
-use App\Http\Controllers\ViolationController;
-use App\Http\Controllers\ViolatorController;
+use App\Http\Controllers\OfficeController;
 
 
 
@@ -45,6 +43,14 @@ Route::prefix("genders")->group(function() {
     Route::get("", [GenderController::class, "list"])->name("genders.list");
 });
 
+Route::prefix('offices')->group(function(){
+    Route::get('', [OfficeController::class, 'list'])->name('offices.list');
+    Route::get('{office}', [OfficeController::class, 'show'])->name('offices.show');
+    Route::post('', [OfficeController::class, 'create'])->name('offices.create');
+    Route::put('{office}', [OfficeController::class, 'update'])->name('offices.update');
+    Route::delete('{office}', [OfficeController::class, 'delete'])->name('offices.delete');
+    Route::patch('{office}', [OfficeController::class, 'restore'])->name('offices.restore');
+});
 
 
 
