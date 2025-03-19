@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Sections>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Office>
  */
-class SectionsFactory extends Factory
+class OfficeFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,9 +17,8 @@ class SectionsFactory extends Factory
     public function definition(): array
     {
         return [
-            'Title' =>'Miss u',
-            'sections'=> $this->faker->paragraph(6),
-            'subsections'=>'Sana ako na lang'
+            'name' => $this->faker->name(),
+            'code' => $this->faker->name()
         ];
     }
 }

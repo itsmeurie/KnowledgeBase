@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\TicketRequests;
+namespace App\Http\Requests\OfficeRequests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RestoreTicketRequest extends FormRequest
+class CreateOfficeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,8 @@ class RestoreTicketRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required', 
+            'code' => 'nullable',
         ];
     }
 }
