@@ -35,13 +35,15 @@ const state = reactive({
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   // Do something with data
-  console.log(event.data)
   $api.post('/offices', event.data)
         .then((response) => {
             if(response.status == 200)
                 emit('update:show', false)
         })
+  console.log(event.data)
+ 
 }
+
 
 function toggleModal(state : boolean | undefined){
     emit("update:show", state)
@@ -51,7 +53,7 @@ function toggleModal(state : boolean | undefined){
 
 <!-- VALIDATION -->
 <template>
-    <TSlideover :modelValue="show" @update:modelValue="toggleModal">
+    <TSlideover :modelValue="show" @update:modelValue="toggleModal" >
         <div class="p-4 flex-1">
             <TButton
             color="gray"
@@ -65,15 +67,16 @@ function toggleModal(state : boolean | undefined){
             />
                 <h2 class="text-xl">Create new Office </h2>
                 <p class="text-sm">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Explicabo officia culpa eveniet voluptas atque mollitia corrupti magnam vel possimus labore. Quaerat animi eaque officiis nemo impedit natus cum debitis minima?</p>
-                <TForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-                    <TFormGroup label="Office Name" name="office_name">
+                <TForm :validate="validate" :state="state" class="space-y-4" @submit="onSubmit" :schema="schema" >
+                    <TFormGroup label="Office Name" name="name">
                         <TInput v-model="state.name" />
                     </TFormGroup>
 
-                    <TFormGroup label="Office Code" name="office_code">
+                    <TFormGroup label="Office Code" name="code">
                         <TInput v-model="state.code" />
                     </TFormGroup>
 
+                    <div></div>
                     <TButton type="submit">
                         Submit
                     </TButton>
