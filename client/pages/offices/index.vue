@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import type { Office } from '~/types';
+
 const { $api } = useNuxtApp();
 
 // Import Component
 const CreateOffice = defineAsyncComponent(() => import('./components/create-office.vue'))
 
-const offices = ref([])
+const offices = ref<Office[]>([])
 const search_term = ref('');
 
 const is_creating = ref(false);
@@ -20,14 +22,9 @@ function fetchOfficeList(name : string = "", code: string = ""){
         })
 }
 
-function toggleSlideOver(mode: string = "", target: object = {}){
-    if(mode == 'create'){
-        is_creating.value = true
-        return;
-    }
-    if(mode == 'update'){
-        is_updating.value = true
-    }
+function toggleCreate(state : boolean){
+    log('Index Emit Event', state)
+    is_creating.value = state
 }
 
 watchDebounced(search_term, (value) => {
@@ -48,7 +45,7 @@ onMounted(() => {
                 <div class="flex justify-between items-center">
                     <h5 class="text-xl">Office Documentations</h5>
                     <div class="flex justify-between gap-4">
-                        <TTooltip @click="toggleSlideOver('create')" text="Add New System">
+                        <TTooltip @click="toggleCreate(true)" text="Add New System">
                             <TButton
                                 icon="tabler:plus"
                                 size="sm"
@@ -65,6 +62,6 @@ onMounted(() => {
                 </div>
             </div>
         </div>
-        <CreateOffice :show="is_creating"></CreateOffice>
+        <CreateOffice :show="is_creating" @update:show="toggleCreate"></CreateOffice>
     </div>
 </template>

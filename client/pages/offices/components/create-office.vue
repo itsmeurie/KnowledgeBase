@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { z } from 'zod'
-import type { FormSubmitEvent } from '#ui/types'
+import type { FormError, FormSubmitEvent } from '#ui/types'
 
 const { $api } = useNuxtApp();
 
 const props = defineProps({
     show: Boolean,
 })
+
+
 
 const emit = defineEmits(['update:show'])
 
@@ -16,6 +18,8 @@ const validate = (state: any): FormError[] => {
   if (!state.code) errors.push({ path: 'code', message: 'Required' })
   return errors
 }
+
+//hahahaha
 
 const schema = z.object({
   name: z.string(),
@@ -39,11 +43,15 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         })
 }
 
+function toggleModal(state : boolean | undefined){
+    emit("update:show", state)
+}
+
 </script>
 
 
 <template>
-    <TSlideover :modelValue="show">
+    <TSlideover :modelValue="show" @update:modelValue="toggleModal">
         <div class="p-4 flex-1">
             <TButton
             color="gray"
@@ -53,7 +61,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             class="flex sm:hidden absolute end-5 top-5 z-10"
             square
             padded
-            @click="is_creating = false"
+            @click= "toggleModal(false)"
             />
                 <h2 class="text-xl">Create new Office </h2>
                 <p class="text-sm">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Explicabo officia culpa eveniet voluptas atque mollitia corrupti magnam vel possimus labore. Quaerat animi eaque officiis nemo impedit natus cum debitis minima?</p>
