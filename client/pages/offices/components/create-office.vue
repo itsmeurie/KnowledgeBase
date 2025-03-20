@@ -12,6 +12,15 @@ const props = defineProps({
 
 const emit = defineEmits(['update:show'])
 
+const validate = (state: any): FormError[] => {
+  const errors = []
+  if (!state.name) errors.push({ path: 'name', message: 'Required' })
+  if (!state.code) errors.push({ path: 'code', message: 'Required' })
+  return errors
+}
+
+//hahahaha
+
 const schema = z.object({
   name: z.string(),
   code: z.string().min(3, 'Must be at least 3 characters')
@@ -23,13 +32,6 @@ const state = reactive({
   name: undefined,
   code: undefined
 })
-
-const validate = (state: any): FormError[] => {
-  const errors = []
-  if (!state.name) errors.push({ path: 'name', message: 'Required' })
-  if (!state.code) errors.push({ path: 'code', message: 'Required' })
-  return errors
-}
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   // Do something with data
@@ -49,7 +51,7 @@ function toggleModal(state : boolean | undefined){
 
 </script>
 
-
+<!-- VALIDATION -->
 <template>
     <TSlideover :modelValue="show" @update:modelValue="toggleModal" >
         <div class="p-4 flex-1">
