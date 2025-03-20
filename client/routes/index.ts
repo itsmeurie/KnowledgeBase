@@ -41,19 +41,19 @@ export default computed(() => [
       },
 
 
-      {
-        path: "/ced",
-        name: "ced",
-        component: () => import('@/pages/ced.vue'),
+      // {
+      //   path: "/ced",
+      //   name: "ced",
+      //   component: () => import('@/pages/ced.vue'),
          
-        meta: {
+      //   meta: {
           
-          title: "ced",
+      //     title: "ced",
 
-          layout: 'public'
+      //     layout: 'public'
           
-        },
-      },
+      //   },
+      // },
 
       {
         path: "/articlepage",
