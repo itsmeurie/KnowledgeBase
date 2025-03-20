@@ -19,6 +19,8 @@ const validate = (state: any): FormError[] => {
   return errors
 }
 
+//hahahaha
+
 const schema = z.object({
   name: z.string(),
   code: z.string().min(3, 'Must be at least 3 characters')
