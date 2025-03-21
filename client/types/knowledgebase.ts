@@ -6,3 +6,21 @@ export type Office = {
     updated_at?: string
     created_at?: string
 }
+
+export type Section = {
+    id: number
+    title: string
+    office_id: number
+    deleted_at?: string
+    updated_at?: string
+    created_at?: string
+}
+
+export type Documents = {
+    id: string
+    section_id: number
+    contents: string
+    deleted_at?: string
+    updated_at?: string
+    created_at?: string
+}
