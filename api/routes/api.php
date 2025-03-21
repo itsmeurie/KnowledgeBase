@@ -11,6 +11,7 @@ use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\SystemController;
 
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\ProfileController;
@@ -37,6 +38,14 @@ Route::post('give-me-data', function (Request $request){
 });
 
 
+Route::prefix('documents')->group(function(){
+    Route::get('', [DocumentsController::class, 'list'])->name('documents.list');
+    Route::get('{document}', [DocumentsController::class, 'show'])->name('documents.show');
+    Route::post('', [DocumentsController::class, 'create'])->name('documents.create');
+    Route::put('{document}', [DocumentsController::class, 'update'])->name('documents.update');
+    Route::delete('{document}', [DocumentsController::class, 'delete'])->name('documents.delete');
+    Route::patch('{document}', [DocumentsController::class, 'restore'])->name('documents.restore');
+});
 
 
 Route::prefix("genders")->group(function() {
