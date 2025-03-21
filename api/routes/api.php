@@ -21,10 +21,7 @@ use App\Http\Controllers\LogController;
 use App\Http\Controllers\GenderController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\OfficeController;
-
-
-
-
+use App\Http\Controllers\SectionController;
 
 Route::post('give-me-data', function (Request $request){
     $validated_data = Validator::make(
@@ -52,6 +49,15 @@ Route::prefix('offices')->group(function(){
     Route::patch('{office}', [OfficeController::class, 'restore'])->name('offices.restore');
 });
 
+
+Route::prefix('sections')->group(function(){
+    Route::get('', [SectionController::class, 'list'])->name('sections.list');
+    Route::get('{section}', [SectionController::class, 'show'])->name('sections.show');
+    Route::post('', [SectionController::class, 'create'])->name('sections.create');
+    Route::put('{section}', [SectionController::class, 'update'])->name('sections.update');
+    Route::delete('{section}', [SectionController::class, 'delete'])->name('sections.delete');
+    Route::patch('{section}', [SectionController::class, 'restore'])->name('sections.restore');
+});
 
 
 Route::middleware(["auth:sanctum", "throttle:90,1", "isActive"])->group(function () {
