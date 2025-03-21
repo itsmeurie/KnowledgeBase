@@ -1,6 +1,20 @@
 <script setup lang="ts"> 
+import { createRouter, createWebHistory } from 'vue-router';
+import CED from './ced.vue'; 
+import SECRETARY from './secretary.vue'
+import ADMINISTRATIVE from './administrative.vue'
 
 
+const routes = [
+  { path: '/ced', component: CED },
+  { path: '/ced', component: SECRETARY },
+  { path: '/ced', component: ADMINISTRATIVE },
+];
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+});
 
 const links = [{
   label: 'Home',
@@ -69,12 +83,12 @@ const openItems = ref([]);
     </THorizontalNavigation>
   </div>
 </div>
- 
+
+
+
 <div class="m-1 grid gap-2 sm:grid-cols-10">
-    <!-- Accordion Navigation -->
-    <div class="sm:col-span-2" > 
-      <!-- Search Bar -->
-      <div class="sm:col-span-2  rounded-md ml-6">
+    <!-- Search Bar -->
+    <div class="sm:col-span-2  rounded-md ml-6">
             <TInput
         icon="i-heroicons-magnifying-glass-20-solid"
         size="sm"
@@ -82,9 +96,42 @@ const openItems = ref([]);
         :trailing="false"
         placeholder="Search here..."/>
     </div>
-      
-  <div class="w-64 m-3">
-    <TAccordion v-model:open="openItems" :items="items" multiple>
+
+    <!-- Breadcrumbs -->
+    <div class="sm:col-span-4 h-10 p-1 ml-[40px]" >
+
+            <nav class="flex items-center space-x-2">
+                <a href="http://127.0.0.1:8080/playground" class="text-gray-700 font-medium capitalized hover:text-blue-500">CED Office</a>
+                <span>></span>
+                <a href="http://127.0.0.1:8080/articlepage" class="text-gray-700 font-medium capitalized hover:text-blue-500">Campus Executive Director</a>
+            </nav>
+    </div>
+
+    <!-- Add and Edit Icon -->
+    <div class="sm:col-span-2 h-10 flex items-center space-x-4">
+        <TIcon name="i-heroicons-plus" class="w-5 h-5 cursor-pointer" />
+        <TIcon name="i-heroicons-pencil-square" class="w-5 h-5 cursor-pointer"/>
+    </div>
+
+
+    <!-- More information -->
+    <div class="sm:col-span-2 h-10">
+        <p class="text-xl font-bold text-center ">More Information</p>
+            <div class="mx-6 mt-4 ">
+                     <hr class="border-gray-700" />
+            </div>
+    </div>
+</div>
+
+
+
+         
+<div class="m-1 grid gap-2 sm:grid-cols-10">
+        
+    <!-- Accordion Navigation -->
+    <div class="sm:col-span-2" >  
+        <div class="w-64 m-3">
+       <TAccordion v-model:open="openItems" :items="items" multiple>
           <template #default="{ item, open }">
             <TButton 
               color="gray" 
@@ -116,29 +163,14 @@ const openItems = ref([]);
     </div>
 
     <div class="col-span-6 grid grid-cols-1 gap-4 ">
-
-      <div class="flex gap-40 ">
-            <!-- Breadcrumbs -->
-          <div class="sm:col-span-4 h-10 p-1 ml-10" >
-                  <nav class="flex items-center space-x-2">
-                      <a href="http://127.0.0.1:8080/playground" class="text-gray-700 font-medium capitalized hover:text-blue-500">Home</a>
-                      <span>></span>
-                      <a href="http://127.0.0.1:8080/articlepage" class="text-gray-700 font-medium capitalized hover:text-blue-500">School of Academia</a>
-                  </nav>
-          </div>
-                    <!--Edit Icon -->
-                    <div class="sm:col-span-2 h-10 flex items-center space-x-5">
-                        <TIcon name="i-heroicons-pencil-square" class="w-5 h-5 cursor-pointer"/>
-                    </div>
-      </div>
         <div class="ml-1 grid gap-2">
         <!-- Title of Article -->
-        <div class="col-span-1 flex items-center justify-center ml-5">
-            <h1 class="text-black  font-Inter font-extrabold text-4xl p-4">School of Academia - Official Documentation</h1>
+        <div class="col-span-1   ml-5">
+            <h1 class="text-black  font-Inter font-extrabold text-4xl p-4">Campus Executive Director</h1>
         </div>
         <!-- Last update -->
         <div class="col-span-1 min-h-[20px] w-200 ml-20">
-            Last update 04/11/2025
+            Last update 04/18/2025
         </div>
 
         <!-- No.1 --> 
@@ -213,19 +245,14 @@ const openItems = ref([]);
 
     <!-- Documents -->
 <div class="sm:col-span-2">
-  <!-- More information -->
-  <div class="sm:col-span-2 h-10">
-        <p class="text-xl font-bold text-center ">More Information</p>
-            <div class="mx-6 mt-4 ">
-                     <hr class="border-gray-700" />
-            </div>
-    </div>
-    <div class="flex justify-center">
-        <TIcon name="tabler:book" class="text-lg mr-2 mt-1.5"></TIcon>
+    <div class="flex items-center ml-14">
+        <TIcon name="tabler:book" class="text-lg mr-2"></TIcon>
         <h1 class="text-black-100 font-Inter font-semibold text-lg">
             Documents
         </h1>
     </div>
-  </div>
 </div>
+</div>
+
+
 </template>

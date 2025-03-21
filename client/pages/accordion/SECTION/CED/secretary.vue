@@ -1,4 +1,20 @@
 <script setup lang="ts"> 
+import { createRouter, createWebHistory } from 'vue-router';
+import CED from './ced.vue'; 
+import SECRETARY from './secretary.vue'
+import ADMINISTRATIVE from './administrative.vue'
+
+
+const routes = [
+  { path: '/ced', component: CED },
+  { path: '/ced', component: SECRETARY },
+  { path: '/ced', component: ADMINISTRATIVE },
+];
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+});
 
 const links = [{
   label: 'Home',
@@ -14,10 +30,30 @@ const links = [{
 
 const items = ref([
   { label: "School of Academia", children: ["Overview"] },
-  { label: "CED Office", children: ["Campus Executive Director", "Secretary", "Administrative Aide"] },
-  { label: "CI Office", children: ["Campus Executive Director", "Secretary", "Administrative Aide"] },
-  { label: "VP Office", children: ["Campus Executive Director" , "Secretary", "Administrative Aide"] },
-  
+  { 
+    label: "CED Office", 
+    children: [
+      { label: "Campus Executive Director", to: "/ced" },
+      { label: "Secretary", to: "/secretary" },
+      { label: "Administrative Aide", to: "/administrative-aide" }
+    ] 
+  },
+  { 
+    label: "CI Office", 
+    children: [
+      { label: "Campus Executive Director" },
+      { label: "Secretary" },
+      { label: "Administrative Aide" }
+    ] 
+  },
+  { 
+    label: "VP Office", 
+    children: [
+      { label: "Campus Executive Director" },
+      { label: "Secretary" },
+      { label: "Administrative Aide" }
+    ] 
+  },
 ]);
 
 const openItems = ref([]);
@@ -95,34 +131,34 @@ const openItems = ref([]);
     <!-- Accordion Navigation -->
     <div class="sm:col-span-2" >  
         <div class="w-64 m-3">
-        <TAccordion v-model:open="openItems" :items="items" multiple>
-      <template #default="{ item, open }">
-        <TButton 
-          color="gray" 
-          variant="ghost" 
-          block 
-          class="flex justify-between items-center px-4 py-2 w-full text-left"
-        >
-          <span>{{ item.label }}</span>
-          <TIcon 
-            :name="open ? 'i-heroicons-chevron-down' : 'i-heroicons-chevron-right'" 
-            class="ml-2"
-          />
-        </TButton>
-      </template>
-
-      <template #item="{ item }">
-        <ul v-if="item.children" class="pl-6 text-gray-600">
-          <li v-for="child in item.children" :key="child">
-            <TButton color="gray" 
-            variant="link" block 
-            class="flex justify-between items-center px-4 py-2 w-full text-left">
-              {{ child }}
+       <TAccordion v-model:open="openItems" :items="items" multiple>
+          <template #default="{ item, open }">
+            <TButton 
+              color="gray" 
+              variant="ghost" 
+              block 
+              class="flex justify-between items-center px-4 py-2 w-full text-left"
+            >
+              <span>{{ item.label }}</span>
+              <TIcon :name="open ? 'i-heroicons-chevron-down' : 'i-heroicons-chevron-right'" class="ml-2"/>
             </TButton>
-          </li>
-        </ul>
-      </template>
-    </TAccordion>
+          </template>
+
+          <template #item="{ item }">
+            <ul v-if="item.children" class="pl-6 text-gray-600">
+              <li v-for="child in item.children" :key="child.label">
+                <router-link v-if="child.to" :to="child.to">
+                  <TButton color="gray" variant="link" block class="flex justify-between items-center px-4 py-2 w-full text-left">
+                    {{ child.label }}
+                  </TButton>
+                </router-link>
+                <TButton v-else color="gray" variant="link" block class="flex justify-between items-center px-4 py-2 w-full text-left">
+                  {{ child.label }}
+                </TButton>
+              </li>
+            </ul>
+          </template>
+      </TAccordion>
   </div>
     </div>
 
@@ -130,7 +166,7 @@ const openItems = ref([]);
         <div class="ml-1 grid gap-2">
         <!-- Title of Article -->
         <div class="col-span-1   ml-5">
-            <h1 class="text-black  font-Inter font-extrabold text-4xl p-4">Campus Executive Director</h1>
+            <h1 class="text-black  font-Inter font-extrabold text-4xl p-4">Secretary</h1>
         </div>
         <!-- Last update -->
         <div class="col-span-1 min-h-[20px] w-200 ml-20">
