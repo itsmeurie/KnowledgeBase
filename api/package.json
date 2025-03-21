@@ -16,5 +16,8 @@
         ],
         "braceStyle": "1tbs",
         "printWidth": 160
+    },
+    "dependencies": {
+        "@nuxt/ui": "^3.0.0"
     }
 }

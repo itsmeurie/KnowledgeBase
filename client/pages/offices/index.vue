@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { Office } from '~/types';
+import { useRouter } from 'vue-router';
 
 const { $api } = useNuxtApp();
+const router = useRouter();
 
 // Import Component
 const CreateOffice = defineAsyncComponent(() => import('./components/create-office.vue'))
@@ -12,31 +14,29 @@ const search_term = ref('');
 const is_creating = ref(false);
 const is_updating = ref(false);
 
-function fetchOfficeList(name : string = "", code: string = ""){
-    $api.get('/offices', {params: {
-            name: name,
-            code: code,
-        }})
+function fetchOfficeList(name: string = "", code: string = "") {
+    $api.get('/offices', { params: { name, code } })
         .then((response) => {
-            offices.value = response.data
-        })
+            offices.value = response.data;
+        });
 }
 
-function toggleCreate(state : boolean){
-    log('Index Emit Event', state)
-    is_creating.value = state
+function toggleCreate(state: boolean) {
+    is_creating.value = state;
+}
+
+function goToArticlePage() {
+    router.push('/articlepage');
 }
 
 watchDebounced(search_term, (value) => {
-    fetchOfficeList(value)
-}, {debounce: 375, maxWait: 1000})
+    fetchOfficeList(value);
+}, { debounce: 375, maxWait: 1000 });
 
 onMounted(() => {
     fetchOfficeList();
-})
-
+});
 </script>
-
 
 <template>
     <div class="flex flex-col items-center h-full p-4">
@@ -46,18 +46,21 @@ onMounted(() => {
                     <h5 class="text-xl">Office Documentations</h5>
                     <div class="flex justify-between gap-4">
                         <TTooltip @click="toggleCreate(true)" text="Add New System">
-                            <TButton
-                                icon="tabler:plus"
-                                size="sm"
-                            />
+                            <TButton icon="tabler:plus" size="sm" />
                         </TTooltip>
                     </div>
                 </div>
-                <p class="text-sm max-w-xl">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nemo earum, quibusdam saepe obcaecati repellat repudiandae officiis, ea exercitationem beatae nihil praesentium, magnam dolores dolorum veritatis explicabo. Aperiam corporis sunt dolorum!</p>
+                <p class="text-sm max-w-xl">
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                    Nemo earum, quibusdam saepe obcaecati repellat repudiandae officiis, ea exercitationem beatae nihil praesentium, magnam dolores dolorum veritatis explicabo. Aperiam corporis sunt dolorum!
+                </p>
             </div>
-            <TInput v-model="search_term" type="text" placeholder="Search for offices"/>
+            <TInput v-model="search_term" type="text" placeholder="Search for offices" />
             <div class="grid grid-cols-1 lg:grid-cols-6 justify-center">
-                <div v-for="office in offices" class="flex justify-center py-8 border">
+                <div v-for="office in offices" 
+                     :key="office.id" 
+                     class="flex justify-center py-8 border cursor-pointer hover:text-blue-500"
+                     @click="goToArticlePage">
                     {{ office.name }}
                 </div>
             </div>

@@ -11,6 +11,7 @@ use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\SystemController;
 
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\DocumentsController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\ProfileController;
@@ -21,10 +22,7 @@ use App\Http\Controllers\LogController;
 use App\Http\Controllers\GenderController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\OfficeController;
-
-
-
-
+use App\Http\Controllers\SectionController;
 
 Route::post('give-me-data', function (Request $request){
     $validated_data = Validator::make(
@@ -37,6 +35,14 @@ Route::post('give-me-data', function (Request $request){
 });
 
 
+Route::prefix('documents')->group(function(){
+    Route::get('', [DocumentsController::class, 'list'])->name('documents.list');
+    Route::get('{document}', [DocumentsController::class, 'show'])->name('documents.show');
+    Route::post('', [DocumentsController::class, 'create'])->name('documents.create');
+    Route::put('{document}', [DocumentsController::class, 'update'])->name('documents.update');
+    Route::delete('{document}', [DocumentsController::class, 'delete'])->name('documents.delete');
+    Route::patch('{document}', [DocumentsController::class, 'restore'])->name('documents.restore');
+});
 
 
 Route::prefix("genders")->group(function() {
@@ -52,6 +58,15 @@ Route::prefix('offices')->group(function(){
     Route::patch('{office}', [OfficeController::class, 'restore'])->name('offices.restore');
 });
 
+
+Route::prefix('sections')->group(function(){
+    Route::get('', [SectionController::class, 'list'])->name('sections.list');
+    Route::get('{section}', [SectionController::class, 'show'])->name('sections.show');
+    Route::post('', [SectionController::class, 'create'])->name('sections.create');
+    Route::put('{section}', [SectionController::class, 'update'])->name('sections.update');
+    Route::delete('{section}', [SectionController::class, 'delete'])->name('sections.delete');
+    Route::patch('{section}', [SectionController::class, 'restore'])->name('sections.restore');
+});
 
 
 Route::middleware(["auth:sanctum", "throttle:90,1", "isActive"])->group(function () {
