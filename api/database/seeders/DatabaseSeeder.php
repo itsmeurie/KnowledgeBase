@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-
+use Dom\Document;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             AddressSeeder::class,
             PrivacyPolicySeeder::class,
             OfficeSeeder::class,
+            DocumentsSeeder::class,
         ]); 
     }
 }
