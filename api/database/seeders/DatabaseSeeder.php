@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             AddressSeeder::class,
             PrivacyPolicySeeder::class,
             OfficeSeeder::class,
+            SectionSeeder::class,
             DocumentsSeeder::class,
         ]); 
     }
