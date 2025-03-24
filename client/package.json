@@ -26,6 +26,8 @@
     "encrypt-storage": "^2.14.6",
     "focus-trap": "^7.6.4",
     "fuse.js": "^7.0.0",
+    "lodash-es": "^4.17.21",
+    "marked": "^15.0.7",
     "nuxt": "^3.15.3",
     "pinia": "^2.3.1",
     "pinia-plugin-persistedstate-2": "^2.0.28",

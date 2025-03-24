@@ -25,6 +25,19 @@ export default computed(() => [
           
         },
       },
+      {
+        path: "/markdown",
+        name: "markdown",
+        component: () => import('@/pages/markdowneditor.vue'),
+         
+        meta: {
+          
+          title: "markdown",
+
+          layout: 'public'
+          
+        },
+      },
 
       {
         path: "/offices",
@@ -36,6 +49,19 @@ export default computed(() => [
           {
             path: "",
             component: () => import('@/pages/offices/index.vue')
+          }
+        ]
+      },
+      {
+        path: "/add",
+        meta: {
+          title: 'add ',
+          layout: 'add'
+        },
+        children: [
+          {
+            path: "",
+            component: () => import('@/pages/add.vue')
           }
         ]
       },
