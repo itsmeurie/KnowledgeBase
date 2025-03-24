@@ -13,6 +13,20 @@ class OfficeSeeder extends Seeder
      */
     public function run(): void
     {
-        Office::factory(10)->create();
+        $offices = [
+            [
+                'name' => "City Mayor's Office",
+                'code' => "CMO"
+            ],
+            [
+                'name' => "City Administrator's Office",
+                'code' => "CADMO"
+            ],
+        ];
+
+
+        foreach($offices as $office){
+            Office::create($office);
+        }
     }
 }

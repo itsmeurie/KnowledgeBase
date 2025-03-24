@@ -49,22 +49,22 @@ export default computed(() => [
           {
             path: "",
             component: () => import('@/pages/offices/index.vue')
-          }
-        ]
-      },
-      {
-        path: "/add",
-        meta: {
-          title: 'add ',
-          layout: 'add'
-        },
-        children: [
+          },
+          
           {
-            path: "",
+            path: "articles",
+            component: () => import('@/pages/offices/articles.vue')
+          },
+          {
+            path: "articles/add",
+            meta: {
+              title: 'Create new Article',
+            },
             component: () => import('@/pages/add.vue')
-          }
+          },
         ]
       },
+      
 
 
       // {

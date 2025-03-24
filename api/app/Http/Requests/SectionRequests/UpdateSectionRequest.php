@@ -23,7 +23,7 @@ class UpdateSectionRequest extends FormRequest
     {
         return [
             'title' => 'required',
-            'office_id' => 'nullable', 
+            'office_id' => 'nullable|numeric|exists:offices,id', 
         ];
     }
 }
