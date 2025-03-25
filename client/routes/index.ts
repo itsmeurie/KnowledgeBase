@@ -26,19 +26,19 @@ export default computed(() => [
         },
       },
 
-      {
-        path: "/sub-list",
-        name: "sub-list",
-        component: () => import('@/pages/sub_list.vue'),
+      // {
+      //   path: "/sub-list",
+      //   name: "sub-list",
+      //   component: () => import('@/pages/sub_list.vue'),
          
-        meta: {
+      //   meta: {
           
-          title: "sub-list",
+      //     title: "sub-list",
 
-          layout: 'public'
+      //     layout: 'public'
           
-        },
-      },
+      //   },
+      // },
 
       {
         path: "/offices",
