@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Office;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,7 @@ class SectionFactory extends Factory
     {
         return [
             'title' => $this->faker->name(),
-            'office_id' => $this->faker->randomDigit()
+            'office_id' => Office::inRandomOrder()->first()->id,
         ];
     }
 }

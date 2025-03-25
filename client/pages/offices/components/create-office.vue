@@ -65,15 +65,15 @@ function toggleModal(state : boolean | undefined){
             />
                 <h2 class="text-xl">Create new Office </h2>
                 <p class="text-sm">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Explicabo officia culpa eveniet voluptas atque mollitia corrupti magnam vel possimus labore. Quaerat animi eaque officiis nemo impedit natus cum debitis minima?</p>
-                <TForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-                    <TFormGroup label="Office Name" name="office_name">
+                <TForm :schema="schema" :validate="validate" :state="state" class="space-y-4" @submit="onSubmit">
+                    <TFormGroup label="Office Name" name="name">
                         <TInput v-model="state.name" />
                     </TFormGroup>
 
-                    <TFormGroup label="Office Code" name="office_code">
+                    <TFormGroup label="Office Code" name="code">
                         <TInput v-model="state.code" />
                     </TFormGroup>
-
+                    <div></div>
                     <TButton type="submit">
                         Submit
                     </TButton>
