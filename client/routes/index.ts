@@ -75,47 +75,19 @@ export default computed(() => [
       
 
 
-      {
-        path: "/ced",
-        name: "ced",
-        component: () => import('@/pages/CEDULA/why.vue'),
+      // {
+      //   path: "/ced",
+      //   name: "ced",
+      //   component: () => import('@/pages/ced.vue'),
          
-        meta: {
+      //   meta: {
           
-          title: "ced",
+      //     title: "ced",
 
-          layout: 'public'
+      //     layout: 'public'
           
-        },
-      },
-
-      {
-        path: "/secretary",
-        name: "secretary",
-        component: () => import('@/pages/CEDULA/where.vue'),
-        meta: {
-          
-          title: "secretary",
-
-          layout: 'public'
-          
-        },
-      },
-
-      {
-        path: "/administrative-aide",
-        name: "administrative-aide",
-        component: () => import('@/pages/CEDULA/how.vue'),
-         
-        meta: {
-          
-          title: "administrative-aide",
-
-          layout: 'public'
-          
-        },
-      },
-
+      //   },
+      // },
 
       {
         path: "/articlepage",
