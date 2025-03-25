@@ -26,19 +26,19 @@ export default computed(() => [
         },
       },
       {
-        path: "/markdown",
-        name: "markdown",
-        component: () => import('@/pages/markdowneditor.vue'),
+        path: "/systemsections",
+        name: "systemsections",
+        component: () => import('@/pages/offices/systemsections.vue'),
          
         meta: {
           
-          title: "markdown",
+          title: "System Sections",
 
           layout: 'public'
           
         },
       },
-
+      
       {
         path: "/offices",
         meta: {
@@ -50,7 +50,14 @@ export default computed(() => [
             path: "",
             component: () => import('@/pages/offices/index.vue')
           },
-          
+          {
+            path: "articles",
+            component: () => import('@/pages/offices/articles.vue')
+          },
+          {
+            path: "system/sections",
+            component: () => import('@/pages/offices/systemsections.vue')
+          },
           {
             path: "articles",
             component: () => import('@/pages/offices/articles.vue')
