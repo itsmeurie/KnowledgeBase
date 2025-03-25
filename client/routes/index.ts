@@ -38,22 +38,22 @@ export default computed(() => [
           
         },
       },
-      {
-        path: "/add",
-        name: "add",
-        component: () => import('@/pages/add.vue'),
-        path: "/systemsections",
-        name: "systemsections",
-        component: () => import('@/pages/offices/systemsections.vue'),
+      // {
+      //   path: "/add",
+      //   name: "add",
+      //   component: () => import('@/pages/add.vue'),
+      //   path: "/systemsections",
+      //   name: "systemsections",
+      //   component: () => import('@/pages/offices/systemsections.vue'),
          
-        meta: {
+      //   meta: {
           
-          title: "System Sections",
+      //     title: "System Sections",
 
-          layout: 'public'
+      //     layout: 'public'
           
-        },
-      },
+      //   },
+      // },
       {
         path: "/add",
         name: "add",
@@ -108,11 +108,11 @@ export default computed(() => [
         name: "why",
         component: () => import('@/pages/CEDULA/why.vue'),
          
-      //   meta: {
+       meta: {
           
           title: "why",
 
-      //     layout: 'public'
+         layout: 'public'
           
         },
       },
