@@ -8,7 +8,7 @@ const links = [{
   to: '/offices'
 }, {
   label: 'About',
-  to: '/add'
+  to: '/articles/add'
 }]
 
 </script>

@@ -41,11 +41,11 @@ onMounted(() => {
 
 </script>
 <template>
-    <div class="flex flex-col items-center h-full p-4">
+    <div class="flex flex-col items-center h-full p-8">
         <div class="flex flex-col gap-4 max-w-7xl w-full">
-            <div class="flex flex-col gap-3">
+            <div class="flex flex-col gap-2">
                 <div class="flex justify-between items-center">
-                    <h5 class="text-2xl font-bold">Office Documentations</h5>
+                    <h5 class="text-4xl font-bold">Office Documentations</h5>
                     <div class="flex justify-between gap-4">
                         <TTooltip @click="toggleCreate(true)" text="Add New System">
                             <TButton icon="tabler:plus" size="sm" />
@@ -58,10 +58,10 @@ onMounted(() => {
                 </p>
             </div>
             <TInput v-model="search_term" type="text" placeholder="Search for offices" />
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 justify-center">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 justify-center">
                 <div v-for="office in offices" 
                      :key="office.id" 
-                     class="flex items-center py-8 border cursor-pointer hover:text-blue-500 gap-4 p-4 text-xl font-bold rounded-lg"
+                     class="flex items-center py-8 hover:bg-gray-100 cursor-pointer hover:text-blue-500 gap-4 p-4 text-md font-bold rounded-lg"
                      @click="goToArticlePage">
                     
                     <img class="h-20 w-20" src="~/assets/image/default_seal.png" alt="Office Logo" >
