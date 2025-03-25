@@ -103,19 +103,47 @@ export default computed(() => [
       
 
 
-      // {
-      //   path: "/ced",
-      //   name: "ced",
-      //   component: () => import('@/pages/ced.vue'),
+      {
+        path: "/why",
+        name: "why",
+        component: () => import('@/pages/CEDULA/why.vue'),
          
       //   meta: {
           
-      //     title: "ced",
+          title: "why",
 
       //     layout: 'public'
           
-      //   },
-      // },
+        },
+      },
+
+      {
+        path: "/where",
+        name: "where",
+        component: () => import('@/pages/CEDULA/where.vue'),
+        meta: {
+          
+          title: "where",
+
+          layout: 'public'
+          
+        },
+      },
+
+      {
+        path: "/how",
+        name: "how",
+        component: () => import('@/pages/CEDULA/how.vue'),
+         
+        meta: {
+          
+          title: "how",
+
+          layout: 'public'
+          
+        },
+      },
+
 
       {
         path: "/articlepage",
