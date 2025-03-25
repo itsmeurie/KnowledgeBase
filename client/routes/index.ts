@@ -38,6 +38,19 @@ export default computed(() => [
           
         },
       },
+      {
+        path: "/add",
+        name: "add",
+        component: () => import('@/pages/add.vue'),
+         
+        meta: {
+          
+          title: "Create Article",
+
+          layout: 'public'
+          
+        },
+      },
       
       {
         path: "/offices",
