@@ -78,7 +78,7 @@ export default computed(() => [
       {
         path: "/ced",
         name: "ced",
-        component: () => import('@/pages/accordion/SECTION/CED/ced.vue'),
+        component: () => import('@/pages/CEDULA/why.vue'),
          
         meta: {
           
@@ -92,8 +92,7 @@ export default computed(() => [
       {
         path: "/secretary",
         name: "secretary",
-        component: () => import('@/pages/accordion/SECTION/CED/secretary.vue'),
-         
+        component: () => import('@/pages/CEDULA/where.vue'),
         meta: {
           
           title: "secretary",
@@ -106,7 +105,7 @@ export default computed(() => [
       {
         path: "/administrative-aide",
         name: "administrative-aide",
-        component: () => import('@/pages/accordion/SECTION/CED/administrative.vue'),
+        component: () => import('@/pages/CEDULA/how.vue'),
          
         meta: {
           
