@@ -27,6 +27,20 @@ export default computed(() => [
       },
 
       {
+        path: "/sub-list",
+        name: "sub-list",
+        component: () => import('@/pages/sub_list.vue'),
+         
+        meta: {
+          
+          title: "sub-list",
+
+          layout: 'public'
+          
+        },
+      },
+
+      {
         path: "/offices",
         meta: {
           title: 'office landing page',
@@ -42,13 +56,13 @@ export default computed(() => [
 
 
       {
-        path: "/ced",
-        name: "ced",
-        component: () => import('@/pages/accordion/SECTION/CED/ced.vue'),
+        path: "/why",
+        name: "why",
+        component: () => import('~/pages/accordion/SECTION/CEDULA/why.vue'),
          
         meta: {
           
-          title: "ced",
+          title: "why",
 
           layout: 'public'
           
@@ -56,13 +70,13 @@ export default computed(() => [
       },
 
       {
-        path: "/secretary",
-        name: "secretary",
-        component: () => import('@/pages/accordion/SECTION/CED/secretary.vue'),
+        path: "/where",
+        name: "where",
+        component: () => import('~/pages/accordion/SECTION/CEDULA/where.vue'),
          
         meta: {
           
-          title: "secretary",
+          title: "where",
 
           layout: 'public'
           
@@ -70,13 +84,13 @@ export default computed(() => [
       },
 
       {
-        path: "/administrative-aide",
-        name: "administrative-aide",
-        component: () => import('@/pages/accordion/SECTION/CED/administrative.vue'),
+        path: "/how",
+        name: "how",
+        component: () => import('~/pages/accordion/SECTION/CEDULA/how.vue'),
          
         meta: {
           
-          title: "administrative-aide",
+          title: "how",
 
           layout: 'public'
           
