@@ -25,27 +25,15 @@ export default computed(() => [
           
         },
       },
-      {
-        path: "/systemsections",
-        name: "systemsections",
-        component: () => import('@/pages/offices/systemsections.vue'),
-         
-        meta: {
-          
-          title: "System Sections",
 
-          layout: 'public'
-          
-        },
-      },
       {
-        path: "/add",
-        name: "add",
-        component: () => import('@/pages/add.vue'),
+        path: "/sub-list",
+        name: "sub-list",
+        component: () => import('@/pages/sub_list.vue'),
          
         meta: {
           
-          title: "Create Article",
+          title: "sub-list",
 
           layout: 'public'
           
@@ -88,13 +76,13 @@ export default computed(() => [
 
 
       {
-        path: "/why",
-        name: "why",
-        component: () => import('~/pages/accordion/SECTION/CEDULA/why.vue'),
+        path: "/ced",
+        name: "ced",
+        component: () => import('@/pages/accordion/SECTION/CED/ced.vue'),
          
         meta: {
           
-          title: "why",
+          title: "ced",
 
           layout: 'public'
           
@@ -102,13 +90,13 @@ export default computed(() => [
       },
 
       {
-        path: "/where",
-        name: "where",
-        component: () => import('~/pages/accordion/SECTION/CEDULA/where.vue'),
+        path: "/secretary",
+        name: "secretary",
+        component: () => import('@/pages/accordion/SECTION/CED/secretary.vue'),
          
         meta: {
           
-          title: "where",
+          title: "secretary",
 
           layout: 'public'
           
@@ -116,13 +104,13 @@ export default computed(() => [
       },
 
       {
-        path: "/how",
-        name: "how",
-        component: () => import('~/pages/accordion/SECTION/CEDULA/how.vue'),
+        path: "/administrative-aide",
+        name: "administrative-aide",
+        component: () => import('@/pages/accordion/SECTION/CED/administrative.vue'),
          
         meta: {
           
-          title: "how",
+          title: "administrative-aide",
 
           layout: 'public'
           

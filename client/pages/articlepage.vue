@@ -15,12 +15,13 @@ const links = [{
 
 
 const items = ref([
+  { label: "School of Academia", children: ["Overview"] },
   { 
-    label: "CEDULA", 
+    label: "CED Office", 
     children: [
-      { label: "Why do we need Cedula", to: "/why" },
-      { label: "Where to use", to: "/where" },
-      { label: "How to get Cedula", to: "/how" }
+      { label: "Campus Executive Director", to: "/ced" },
+      { label: "Secretary", to: "/secretary" },
+      { label: "Administrative Aide", to: "/administrative-aide" }
     ] 
   },
   { 
@@ -49,27 +50,25 @@ const openItems = ref([]);
 <template>
 
 <!-- Header -->
-<div class="flex flex-wrap items-center justify-between px-4 sm:grid sm:grid-cols-8 gap-4">
-          <!-- Logo -->
-          <div class="flex items-center min-w-48 ">
-            <p class="text-2xl sm:text-3xl font-extrabold text-black font-Inter">Dokumentaryo</p>
-          </div>
+<div class="mx-2 grid gap-4 sm:grid-cols-8">
+  <div class="col-span-1 flex h-[100px] w-[200px] items-center">
+    <p class="font-Inter ml-[10px] text-left text-3xl font-extrabold text-black">Dokumentaryo</p>
+  </div>
 
-          <!-- Spacing divs for layout balance (hidden on small screens) -->
-          <div class="hidden sm:block col-span-1 h-[100px]"></div>
-          <div class="hidden sm:block col-span-1 h-[100px]"></div>
-          <div class="hidden sm:block col-span-1 h-[100px]"></div>
-          <div class="hidden sm:block col-span-1 h-[100px]"></div>
+  <div class="col-span-1 h-[100px] w-[200px]"></div>
+  <div class="col-span-1 h-[100px] w-[200px]"></div>
+  <div class="col-span-1 h-[100px] w-[200px]"></div>
+  <div class="col-span-1 h-[100px] w-[200px]"></div>
 
-          <!-- Navigation -->
-          <div class="w-full sm:w-auto col-span-3 flex justify-center sm:justify-end">
-            <THorizontalNavigation :links="links">
-              <template #default="{ link }">
-                <span class="text-lg mx-4 sm:mx-8 text-black font-Inter font-bold group-hover:text-primary relative">{{ link.label }}</span>
-              </template>
-            </THorizontalNavigation>
-          </div>
-    </div>
+  <!-- Navigation -->
+  <div class="col-span-3">
+    <THorizontalNavigation :links="links">
+        <template #default="{ link }">
+            <span class="text-lg mt-5 mx-8 text-black font-Inter font-bold group-hover:text-primary relative">{{ link.label }}</span>
+        </template>
+    </THorizontalNavigation>
+  </div>
+</div>
  
 <div class="m-1 grid gap-2 sm:grid-cols-10">
     <!-- Accordion Navigation -->
@@ -84,11 +83,6 @@ const openItems = ref([]);
         placeholder="Search here..."/>
     </div>
       
-    <!-- title -->
-    <div class="flex flex-col justify-center ml-7 mt-3">
-      <h6>City Mayors Office</h6>
-    </div>
-
   <div class="w-64 m-3">
     <TAccordion v-model:open="openItems" :items="items" multiple>
           <template #default="{ item, open }">
@@ -121,15 +115,15 @@ const openItems = ref([]);
   </div>
     </div>
 
-    <div class=" flex flex-wrap col-span-6  grid-cols-1 gap-4 ">
+    <div class="col-span-6 grid grid-cols-1 gap-4 ">
 
       <div class="flex gap-40 ">
             <!-- Breadcrumbs -->
-          <div class=" flex flex-wrap sm:col-span-4 h-10 p-1 ml-10" >
+          <div class="sm:col-span-4 h-10 p-1 ml-10" >
                   <nav class="flex items-center space-x-2">
                       <a href="http://127.0.0.1:8080/playground" class="text-gray-700 font-medium capitalized hover:text-blue-500">Home</a>
                       <span>></span>
-                      <a href="http://127.0.0.1:8080/articlepage" class=" flex flex-wrap text-gray-700 font-medium capitalized hover:text-blue-500">City Mayor Office</a>
+                      <a href="http://127.0.0.1:8080/articlepage" class="text-gray-700 font-medium capitalized hover:text-blue-500">School of Academia</a>
                   </nav>
           </div>
                     <!--Edit Icon -->
@@ -139,8 +133,8 @@ const openItems = ref([]);
       </div>
         <div class="ml-1 grid gap-2">
         <!-- Title of Article -->
-        <div class="col-span-1 flex items-center  ml-5">
-            <h1 class="text-black  font-Inter font-extrabold text-4xl p-4">CITY MAYORS OFFICE</h1>
+        <div class="col-span-1 flex items-center justify-center ml-5">
+            <h1 class="text-black  font-Inter font-extrabold text-4xl p-4">School of Academia - Official Documentation</h1>
         </div>
         <!-- Last update -->
         <div class="col-span-1 min-h-[20px] w-200 ml-20">
@@ -218,7 +212,7 @@ const openItems = ref([]);
     </div>
 
     <!-- Documents -->
-<div class="sm:col-span-2 max-w">
+<div class="sm:col-span-2">
   <!-- More information -->
   <div class="sm:col-span-2 h-10">
         <p class="text-xl font-bold text-center ">More Information</p>
