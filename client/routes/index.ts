@@ -42,6 +42,22 @@ export default computed(() => [
         path: "/add",
         name: "add",
         component: () => import('@/pages/add.vue'),
+        path: "/systemsections",
+        name: "systemsections",
+        component: () => import('@/pages/offices/systemsections.vue'),
+         
+        meta: {
+          
+          title: "System Sections",
+
+          layout: 'public'
+          
+        },
+      },
+      {
+        path: "/add",
+        name: "add",
+        component: () => import('@/pages/add.vue'),
          
         meta: {
           
