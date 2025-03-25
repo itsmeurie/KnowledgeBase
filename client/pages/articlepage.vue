@@ -153,6 +153,9 @@ const openItems = ref([]);
         <div class="ml-1 grid gap-2">
         <!-- Title of Article -->
         <div class="col-span-1 flex items-center justify-center ml-8">
+            <h1 class="text-black  font-Inter font-extrabold text-4xl p-4">City Mayors Office</h1>
+        <div class="col-span-1 flex items-center justify-center ml-5">
+        <div class="col-span-1 flex items-center justify-center ml-8">
             <h1 class="text-black  font-Inter font-extrabold text-4xl p-4">School of Academia - Official Documentation</h1>
         </div>
         <!-- Last update -->
@@ -238,8 +241,9 @@ const openItems = ref([]);
             Documents
         </h1>
     </div>
+  </div>
 </div>
 </div>
-
+</div>
 
 </template>
