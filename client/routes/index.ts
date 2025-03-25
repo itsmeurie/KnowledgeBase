@@ -38,21 +38,6 @@ export default computed(() => [
           
         },
       },
-
-      {
-        path: "/sub-list",
-        name: "sub-list",
-        component: () => import('@/pages/sub_list.vue'),
-         
-        meta: {
-          
-          title: "sub-list",
-
-          layout: 'public'
-          
-        },
-      },
-
       {
         path: "/offices",
         meta: {
