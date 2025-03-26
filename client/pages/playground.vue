@@ -39,9 +39,11 @@ const links = [
         Leadership and <br> Governance in Higher <br> Education: Roles and <br> Responsibilities
       </h1>
       <p class="mt-4 text-lg">A centralized platform for obtaining knowledge on system documentation.</p>
-      <button class="mt-6 bg-black hover:bg-green-300 text-white font-bold py-2 px-6 rounded-full border-2">
-        Get Started
-      </button>
+      <a href="/offices">
+          <button class="mt-6 bg-black hover:bg-green-300 text-white font-bold py-2 px-6 rounded-full border-2">
+            Get Started
+          </button>
+      </a>
     </div>
     
     <!-- Image -->
