@@ -2,7 +2,7 @@
 const links = [
   { label: 'Home', to: '/playground' },
   { label: 'Docs', to: '/offices' },
-  { label: 'About', to: '/systemsections' }
+  { label: 'About', to: '/' }
 ];
 const manuals = [
   
