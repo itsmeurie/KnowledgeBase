@@ -38,6 +38,19 @@ export default computed(() => [
           
         },
       },
+      {
+        path: "/add",
+        name: "add",
+        component: () => import('@/pages/add.vue'),
+         
+        meta: {
+          
+          title: "Create Article",
+
+          layout: 'public'
+          
+        },
+      },
       
       {
         path: "/offices",
@@ -67,7 +80,7 @@ export default computed(() => [
             meta: {
               title: 'Create new Article',
             },
-            component: () => import('@/pages/add.vue')
+            component: () => import('~/pages/add.vue')
           },
         ]
       },
