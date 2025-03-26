@@ -39,31 +39,6 @@ const items = ref([
       { label: "Administrative Aide" }
     ] 
   },
-  { label: "School of Academia", children: ["Overview"] },
-  { 
-    label: "CED Office", 
-    children: [
-      { label: "Campus Executive Director", to: "/ced" },
-      { label: "Secretary", to: "/secretary" },
-      { label: "Administrative Aide", to: "/administrative-aide" }
-    ] 
-  },
-  { 
-    label: "CI Office", 
-    children: [
-      { label: "Campus Executive Director" },
-      { label: "Secretary" },
-      { label: "Administrative Aide" }
-    ] 
-  },
-  { 
-    label: "VP Office", 
-    children: [
-      { label: "Campus Executive Director" },
-      { label: "Secretary" },
-      { label: "Administrative Aide" }
-    ] 
-  },
 ]);
 
 const openItems = ref([]);
