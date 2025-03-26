@@ -27,7 +27,11 @@ function toggleCreate(state: boolean) {
     is_creating.value = state;
 }
 
+<<<<<<< Updated upstream
 function goToSystemSections() {
+=======
+function goToSystemSection() {
+>>>>>>> Stashed changes
     router.push('/systemsections');
 }
 
@@ -62,7 +66,11 @@ onMounted(() => {
                 <div v-for="office in offices" 
                      :key="office.id" 
                      class="flex items-center py-8 hover:bg-gray-100 cursor-pointer hover:text-blue-500 gap-4 p-4 text-md font-bold rounded-lg"
+<<<<<<< Updated upstream
                      @click="goToSystemSections">
+=======
+                     @click="goToSystemSection">
+>>>>>>> Stashed changes
                     
                     <img class="h-20 w-20" src="~/assets/image/default_seal.png" alt="Office Logo" >
                     <span>{{ office.name }}</span>
