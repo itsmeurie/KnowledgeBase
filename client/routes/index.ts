@@ -88,6 +88,48 @@ export default computed(() => [
           
       //   },
       // },
+      
+      {
+        path: "/why",
+        name: "why",
+        component: () => import('@/pages/CEDULA/why.vue'),
+         
+       meta: {
+          
+          title: "why",
+
+         layout: 'public'
+          
+        },
+      },
+
+      {
+        path: "/where",
+        name: "where",
+        component: () => import('@/pages/CEDULA/where.vue'),
+        meta: {
+          
+          title: "where",
+
+          layout: 'public'
+          
+        },
+      },
+
+      {
+        path: "/how",
+        name: "how",
+        component: () => import('@/pages/CEDULA/how.vue'),
+         
+        meta: {
+          
+          title: "how",
+
+          layout: 'public'
+          
+        },
+      },
+
 
       {
         path: "/articlepage",
