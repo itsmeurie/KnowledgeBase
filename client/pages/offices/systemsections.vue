@@ -5,14 +5,15 @@ const links = [
   { label: 'About', to: '/systemsections' }
 ];
 const manuals = [
-  { title: "Get Started", subtitle: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.", to: "/articlepage" },
-  { title: "Overview", subtitle: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.", to: "/articlepage" },
-  { title: "How to Get", subtitle: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.", to: "/articlepage" },
-  { title: "Where to Use", subtitle: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.", to: "/articlepage" },
-  { title: "Lorem", subtitle: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.", to: "/articlepage" },
-  { title: "Ako", subtitle: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.", to: "/articlepage" },
-  { title: "Dito", subtitle: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.", to: "/articlepage" },
-  { title: "Madame", subtitle: "Lorem ipsum dolor, sit amet consectetur adipisicing elit.", to: "/articlepage" }
+  
+  { "title": "Overview", "subtitle": "A quick summary of everything you need to know.", "to": "/articlepage" },
+  { "title": "Cedula", "subtitle": "Learn the Everything about cedula.", "to": "/articlepage" },
+  { "title": "How to Get", "subtitle": "Find out how to acquire what you need.", "to": "/articlepage" },
+  { "title": "Where to Use", "subtitle": "Discover the best applications and use cases.", "to": "/articlepage" },
+  { "title": "Understanding the Topic", "subtitle": "Exploring the significance and purpose of this topic.", "to": "/articlepage" },
+  { "title": "My Role and Responsibilities", "subtitle": "Understanding my role and responsibilities.", "to": "/articlepage" },
+  { "title": "The Importance of This Place", "subtitle": "Why this place matters and what it offers.", "to": "/articlepage" },
+  { "title": "Key Figures and Concepts", "subtitle": "A deeper look into an important figure or concept.", "to": "/articlepage" }
   
 ];
 
@@ -47,10 +48,11 @@ const manuals = [
       <div class="flex flex-col gap-4 rounded-md px-6 py-6">  
         <div class="flex justify-between items-center">
           <h5 class="text-4xl font-semibold">City Mayor's Office</h5>
-        </div>
-        <p class="text-sm max-w-xl">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nemo earum, quibusdam saepe obcaecati repellat repudiandae officiis, ea exercitationem beatae nihil praesentium, magnam dolores dolorum veritatis explicabo. Aperiam corporis sunt dolorum!
-        </p>
+</div>
+<p class="text-sm max-w-xl">
+  The City Mayor's Office serves as the central hub for local governance, overseeing public services, infrastructure development, and community initiatives. It is responsible for implementing policies, addressing citizen concerns, and ensuring the city's overall progress and welfare.
+</p>
+
       </div>
     </div>
       <div class="flex flex-col items-center h-full p-4">
