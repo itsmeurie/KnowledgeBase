@@ -9,8 +9,8 @@ const manuals = [
   { "title": "Overview", "subtitle": "A quick summary of everything you need to know.", "to": "/articlepage" },
   { "title": "Cedula", "subtitle": "Learn the Everything about cedula.", "to": "/articlepage" },
   { "title": "How to Get", "subtitle": "Find out how to acquire what you need.", "to": "/articlepage" },
-  { "title": "Where to Use", "subtitle": "Discover the best applications and use cases.", "to": "/articlepage" },
-  { "title": "Understanding the Topic", "subtitle": "Exploring the significance and purpose of this topic.", "to": "/articlepage" },
+  { "title": "Where to Get Cedula", "subtitle": "Discover where to get your Cedula.", "to": "/articlepage" },
+  { "title": "How to Get Cedula", "subtitle": "Ways how to get your Cedula.", "to": "/articlepage" },
   { "title": "My Role and Responsibilities", "subtitle": "Understanding my role and responsibilities.", "to": "/articlepage" },
   { "title": "The Importance of This Place", "subtitle": "Why this place matters and what it offers.", "to": "/articlepage" },
   { "title": "Key Figures and Concepts", "subtitle": "A deeper look into an important figure or concept.", "to": "/articlepage" }
