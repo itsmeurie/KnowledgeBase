@@ -2,7 +2,7 @@
 const links = [
   { label: 'Home', to: '/playground' },
   { label: 'Docs', to: '/offices' },
-  { label: 'About', to: '/systemsections' }
+  { label: 'About', to: '#about-documentation' } //inayos
 ];
 </script>
 
@@ -24,7 +24,9 @@ const links = [
           <div class="w-full sm:w-auto col-span-3 flex justify-center sm:justify-end">
             <THorizontalNavigation :links="links">
               <template #default="{ link }">
-                <span class="text-lg mx-4 sm:mx-8 text-black font-Inter font-bold group-hover:text-primary relative">{{ link.label }}</span>
+                <a :href="link.to" class="text-lg mx-4 sm:mx-8 text-black font-Inter font-bold group-hover:text-primary relative">
+            {{ link.label }}
+          </a> <!-- inayos -->
               </template>
             </THorizontalNavigation>
           </div>
@@ -63,8 +65,9 @@ const links = [
     </div>
   </div>
 
-  <!-- About Documentation -->
-  <div class="m-2 px-4">
+ 
+  <!-- About Documentation --> 
+  <div id="about-documentation" class="m-2 px-4 "> <!-- Inayos-->
     <h1 class="text-black text-3xl font-extrabold font-Inter">About Documentation</h1>
   </div>
 
@@ -73,7 +76,9 @@ const links = [
       Leadership and Governance in Higher Education: Roles and Responsibilities explores the key functions,
       structures, and challenges of leadership and governance within academic institutions. This documentation provides 
       insights into the roles of administrators, faculty, and governing bodies in shaping policies, ensuring 
-      institutional effectiveness, and fostering academic excellence.
+      institutional effectiveness, and fostering academic excellence. Lorem ipsum dolor sit amet consectetur adipisicing elit.
+       Modi illum doloribus pariatur quasi optio ipsum repellendus nostrum obcaecati. Sunt suscipit tempore necessitatibus sequi quasi aliquid quas adipisci animi earum autem! Lorem ipsum dolor,
+       sit amet consectetur adipisicing elit. Quasi iste aperiam ipsam provident numquam obcaecati nihil blanditiis possimus labore at laborum magni dicta, nobis dolor sunt amet! Repellat, ea incidunt?
     </p>
   </div>
 

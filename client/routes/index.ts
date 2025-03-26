@@ -80,11 +80,11 @@ export default computed(() => [
       //   name: "ced",
       //   component: () => import('@/pages/ced.vue'),
          
-      //   meta: {
+       //meta: {
           
       //     title: "ced",
 
-      //     layout: 'public'
+      // layout: 'public'
           
       //   },
       // },
