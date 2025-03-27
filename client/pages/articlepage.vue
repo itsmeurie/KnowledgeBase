@@ -128,13 +128,9 @@ const openItems = ref([]);
         <div class="flex flex-wrap items-center justify-between px-4 sm:px-10 py-2 gap-4">
                     <!-- Breadcrumbs -->
             <nav class="flex flex-wrap items-center space-x-2 text-sm sm:text-base">
-                <a href="http://127.0.0.1:8080/playground" class="text-gray-700 font-medium capitalize hover:text-blue-500">
-                  City Mayors Office
-                </a>
-                <span class="text-gray-500">></span>
-                <a href="http://127.0.0.1:8080/articlepage" class="text-gray-700 font-medium capitalize hover:text-blue-500">
-                  Why do we need Cedula
-                </a>
+              <NuxtLink to="/articlepage" external>
+                      City Mayors Office
+              </NuxtLink>
             </nav>  
 
             <!-- Edit Icon -->
