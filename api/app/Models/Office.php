@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Office extends AppModel {
@@ -26,5 +27,10 @@ class Office extends AppModel {
 
     public function scopeName(Builder $query, string $name){
         $query->where('name', 'ilike', "%{$name}%");
-    }    
+    }
+
+    public function sections() : HasMany
+    {
+        return $this->hasMany(Section::class);
+    }
 }

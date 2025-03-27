@@ -27,9 +27,10 @@ function toggleCreate(state: boolean) {
     is_creating.value = state;
 }
 
-function goToSystemSection() {
-    router.push('/systemsections');
+function goToSystemSection(officeName: string) {
+    router.push({ path: '/systemsections', query: { office: officeName } });
 }
+
 
 watchDebounced(search_term, (value) => {
     fetchOfficeList(value);
@@ -60,13 +61,14 @@ onMounted(() => {
             <TInput v-model="search_term" type="text" placeholder="Search for offices" />
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 justify-center">
                 <div v-for="office in offices" 
-                     :key="office.id" 
-                     class="flex items-center py-8 hover:bg-gray-100 cursor-pointer hover:text-blue-500 gap-4 p-4 text-md font-bold rounded-lg"
-                     @click="goToSystemSection">
-                    
-                    <img class="h-20 w-20" src="~/assets/image/default_seal.png" alt="Office Logo" >
-                    <span>{{ office.name }}</span>
-                </div>  
+     :key="office.id" 
+     class="flex items-center py-8 hover:bg-gray-100 cursor-pointer hover:text-blue-500 gap-4 p-4 text-md font-bold rounded-lg"
+     @click="goToSystemSection(office.name)">
+    
+    <img class="h-20 w-20" src="~/assets/image/default_seal.png" alt="Office Logo">
+    <span>{{ office.name }}</span>
+</div>  
+ 
             </div>
         </div>
         <CreateOffice :show="is_creating" @update:show="toggleCreate"></CreateOffice>
