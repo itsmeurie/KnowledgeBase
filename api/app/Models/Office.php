@@ -14,6 +14,7 @@ class Office extends AppModel {
     protected $fillable = [
         'name', 
         'code',
+        'description',
     ];
 
     /**

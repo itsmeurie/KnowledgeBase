@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('sections', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('description')->comment('description');
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->foreignIdFor(Office::class)->references('id')->on('offices');
             $table->softDeletes();
