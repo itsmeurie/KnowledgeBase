@@ -24,7 +24,7 @@ const links = [{
   to: '/articlepage'
 }, {
   label: 'About',
-  to: '/components/table'
+  to: 'playground#about-documentation'
 }]
 
 

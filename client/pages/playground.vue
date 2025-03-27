@@ -4,6 +4,15 @@ const links = [
   { label: 'Docs', to: '/offices' },
   { label: 'About', to: '#about-documentation' } //inayos
 ];
+
+// inayos
+const aboutSection = ref<HTMLElement | null>(null);
+
+const scrollToAbout = () => {
+  if (aboutSection.value) {
+    aboutSection.value.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+};
 </script>
 
 <template>
@@ -22,12 +31,16 @@ const links = [
 
           <!-- Navigation -->
           <div class="w-full sm:w-auto col-span-3 flex justify-center sm:justify-end">
-            <THorizontalNavigation :links="links">
-              <template #default="{ link }">
-                <a :href="link.to" class="text-lg mx-4 sm:mx-8 text-black font-Inter font-bold group-hover:text-primary relative">
-            {{ link.label }}
-          </a> <!-- inayos -->
-              </template>
+            <THorizontalNavigation :links="links"> <!-- Inayos-->
+                <template #default="{ link }">
+                  <a 
+                    :href="link.to" 
+                    @click.prevent="link.label === 'About' ? scrollToAbout() : null" 
+                    class="text-lg mx-4 sm:mx-8 text-black font-Inter font-bold group-hover:text-primary relative"
+                  >
+                    {{ link.label }}
+                  </a>
+                </template>
             </THorizontalNavigation>
           </div>
         </div>
@@ -39,9 +52,11 @@ const links = [
         Leadership and <br> Governance in Higher <br> Education: Roles and <br> Responsibilities
       </h1>
       <p class="mt-4 text-lg">A centralized platform for obtaining knowledge on system documentation.</p>
-      <button class="mt-6 bg-black hover:bg-green-300 text-white font-bold py-2 px-6 rounded-full border-2">
-        Get Started
-      </button>
+      <a href="/offices">
+          <button class="mt-6 bg-black hover:bg-green-300 text-white font-bold py-2 px-6 rounded-full border-2">
+            Get Started
+          </button>
+      </a>
     </div>
     
     <!-- Image -->
@@ -67,9 +82,9 @@ const links = [
 
  
   <!-- About Documentation --> 
-  <div id="about-documentation" class="m-2 px-4 "> <!-- Inayos-->
-    <h1 class="text-black text-3xl font-extrabold font-Inter">About Documentation</h1>
-  </div>
+<div id="about-documentation" ref="aboutSection" class="m-2 px-4">
+  <h1 class="text-black text-3xl font-extrabold font-Inter">About Documentation</h1>
+</div>
 
   <div class="m-2 px-4">
     <p class="text-lg">
