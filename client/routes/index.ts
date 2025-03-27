@@ -69,6 +69,34 @@ export default computed(() => [
       },
       
       {
+        path: "/edit-article",
+        name: "edit-article",
+        component: () => import('~/pages/edit.vue'),
+         
+        meta: {
+          
+          title: "edit-article",
+
+          layout: 'public'
+          
+        },
+      },
+
+      {
+        path: "/systemsections",
+        name: "systemsections",
+        component: () => import('~/pages/offices/systemsections.vue'),
+         
+        meta: {
+          
+          title: "System Sections",
+
+          layout: 'public'
+          
+        },
+      },
+
+      {
         path: "/offices",
         meta: {
           title: 'office landing page',
