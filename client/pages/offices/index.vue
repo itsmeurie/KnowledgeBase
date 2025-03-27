@@ -47,7 +47,7 @@ onMounted(() => {
                 <div class="flex justify-between items-center">
                     <h5 class="text-4xl font-bold">Office Documentations</h5>
                     <div class="flex justify-between gap-4">
-                        <TTooltip @click="toggleCreate(true)" text="Add New System">
+                        <TTooltip @click="toggleCreate(true)" text="Add New Office">
                             <TButton icon="tabler:plus" size="sm" />
                         </TTooltip>
                     </div>
