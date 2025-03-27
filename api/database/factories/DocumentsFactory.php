@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Section;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +19,7 @@ class DocumentsFactory extends Factory
     {
         return [
             //
-            'section_id' => $this->faker->randomDigitNotNull(),
+            'section_id' => Section::inRandomOrder()->id,
             'contents' => $this->faker->name()
         ];
     }
