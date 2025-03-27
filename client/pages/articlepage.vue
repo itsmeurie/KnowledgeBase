@@ -1,6 +1,12 @@
 <script setup lang="ts"> 
 
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
+
+const goToEditPage = () => {
+  router.push('/edit-article');
+};
 
 const links = [{
   label: 'Home',
@@ -135,7 +141,9 @@ const openItems = ref([]);
 
             <!-- Edit Icon -->
             <div class="flex items-center space-x-4">
-              <TIcon name="i-heroicons-pencil-square" class="w-5 h-5 cursor-pointer text-gray-600 hover:text-black transition"/>
+              <TIcon name="i-heroicons-pencil-square" 
+           class="w-5 h-5 cursor-pointer text-gray-600 hover:text-black transition"
+           @click="goToEditPage"/>
             </div>  
         </div>
 
