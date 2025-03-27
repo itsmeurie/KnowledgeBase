@@ -24,7 +24,7 @@ class OfficeSeeder extends Seeder
             ],
             [
                 'name' => "Sangguniang Panlungsod ng Baguio",
-                'code' => "SPB"
+                'code' => "SP"
             ],
             [
                 'name' => "City Human Resource Management Office",
