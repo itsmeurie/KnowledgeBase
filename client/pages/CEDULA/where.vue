@@ -69,12 +69,11 @@ const openItems = ref([]);
             <p class="text-2xl sm:text-3xl font-extrabold text-black font-Inter">Dokumentaryo</p>
           </div>
 
-          <!-- Spacing divs for layout balance (hidden on small screens) -->
-          <div class="hidden sm:block col-span-1 h-[100px]"></div>
-          <div class="hidden sm:block col-span-1 h-[100px]"></div>
-          <div class="hidden sm:block col-span-1 h-[100px]"></div>
-          <div class="hidden sm:block col-span-1 h-[100px]"></div>
-
+           <!-- Spacing divs for layout balance (hidden on small screens) -->
+            <div class="hidden sm:block col-span-1 h-6.25"></div>
+            <div class="hidden sm:block col-span-1 h-6.25"></div>
+            <div class="hidden sm:block col-span-1 h-6.25"></div>
+            <div class="hidden sm:block col-span-1 h-6.25"></div>
           <!-- Navigation -->
           <div class="w-full sm:w-auto col-span-3 flex justify-center sm:justify-end">
             <THorizontalNavigation :links="links">
@@ -139,20 +138,24 @@ const openItems = ref([]);
 
     <div class="col-span-6 grid grid-cols-1 gap-4 ">
       
-      <div class="flex gap-40 ">
-            <!-- Breadcrumbs -->
-          <div class=" flex flex-wrap sm:col-span-4 h-10 p-1 ml-10" >
-                  <nav class="flex items-center space-x-2">
-                      <a href="http://127.0.0.1:8080/playground" class="text-gray-700 font-medium capitalized hover:text-blue-500">City Mayors Office</a>
-                      <span>></span>
-                      <a href="http://127.0.0.1:8080/articlepage" class=" flex flex-wrap text-gray-700 font-medium capitalized hover:text-blue-500">Where to use Cedula</a>
-                  </nav>
-          </div>
-                    <!--Edit Icon -->
-                    <div class="sm:col-span-2 h-10 flex items-center space-x-5">
-                        <TIcon name="i-heroicons-pencil-square" class="w-5 h-5 cursor-pointer"/>
-                    </div>
-      </div>
+      <div class="flex flex-wrap items-center justify-between px-4 sm:px-10 py-2 gap-4">
+                    <!-- Breadcrumbs -->
+            <nav class="flex flex-wrap items-center space-x-2 text-sm sm:text-base">
+                <a href="http://127.0.0.1:8080/playground" class="text-gray-700 font-medium capitalize hover:text-blue-500">
+                  City Mayors Office
+                </a>
+                <span class="text-gray-500">></span>
+                <a href="http://127.0.0.1:8080/articlepage" class="text-gray-700 font-medium capitalize hover:text-blue-500">
+                  Why do we need Cedula
+                </a>
+            </nav>  
+
+            <!-- Edit Icon -->
+            <div class="flex items-center space-x-4">
+              <TIcon name="i-heroicons-pencil-square" class="w-5 h-5 cursor-pointer text-gray-600 hover:text-black transition"/>
+            </div>  
+        </div>
+
 
         <div class="ml-1 grid gap-2">
         <!-- Title of Article -->
