@@ -1,8 +1,8 @@
 <script setup lang="ts">
 const links = [
   { label: 'Home', to: '/playground' },
-  { label: 'Docs', to: '/offices' },
-  { label: 'About', to: '/' }
+  { label: 'Docs', to: '/systemsections' },
+  { label: 'About', to: '/playground#about-documentation' }
 ];
 const manuals = [
   
