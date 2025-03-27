@@ -69,11 +69,11 @@ const openItems = ref([]);
             <p class="text-2xl sm:text-3xl font-extrabold text-black font-Inter">Dokumentaryo</p>
           </div>
 
-          <!-- Spacing divs for layout balance (hidden on small screens) -->
-          <div class="hidden sm:block col-span-1 h-[100px]"></div>
-          <div class="hidden sm:block col-span-1 h-[100px]"></div>
-          <div class="hidden sm:block col-span-1 h-[100px]"></div>
-          <div class="hidden sm:block col-span-1 h-[100px]"></div>
+           <!-- Spacing divs for layout balance (hidden on small screens) -->
+            <div class="hidden sm:block col-span-1 h-6.25"></div>
+            <div class="hidden sm:block col-span-1 h-6.25"></div>
+            <div class="hidden sm:block col-span-1 h-6.25"></div>
+            <div class="hidden sm:block col-span-1 h-6.25"></div>
 
           <!-- Navigation -->
           <div class="w-full sm:w-auto col-span-3 flex justify-center sm:justify-end">
