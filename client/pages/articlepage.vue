@@ -56,10 +56,10 @@ const openItems = ref([]);
             </div>
   
             <!-- Spacing divs for layout balance (hidden on small screens) -->
-            <div class="hidden sm:block col-span-1 h-[100px]"></div>
-            <div class="hidden sm:block col-span-1 h-[100px]"></div>
-            <div class="hidden sm:block col-span-1 h-[100px]"></div>
-            <div class="hidden sm:block col-span-1 h-[100px]"></div>
+            <div class="hidden sm:block col-span-1 h-6.25"></div>
+            <div class="hidden sm:block col-span-1 h-6.25"></div>
+            <div class="hidden sm:block col-span-1 h-6.25"></div>
+            <div class="hidden sm:block col-span-1 h-6.25"></div>
   
             <!-- Navigation -->
             <div class="w-full sm:w-auto col-span-3 flex justify-center sm:justify-end">
