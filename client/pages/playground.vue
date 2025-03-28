@@ -54,7 +54,7 @@ const scrollToAbout = () => {
       </h1>
       <p class="mt-4 text-lg">A centralized platform for obtaining knowledge on system documentation.</p>
       <a href="/offices">
-          <button class="mt-6 bg-black hover:bg-green-300 text-white font-bold py-2 px-6 rounded-full border-2">
+          <button class="mt-6 bg-black hover:bg-green-700 text-white font-bold py-2 px-6 rounded-full border-2">
             Get Started
           </button>
       </a>
