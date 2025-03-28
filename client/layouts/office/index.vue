@@ -19,8 +19,8 @@ const scrollToAbout = () => {
       <!-- Header -->
   <div class="flex flex-wrap items-center justify-between px-4 sm:grid sm:grid-cols-8 gap-4">
         <!-- Logo -->
-        <div class="flex items-center min-w-48 ">
-          <p class="text-2xl sm:text-3xl font-extrabold text-black font-Inter">Dokumentaryo</p>
+        <div class="flex items-center min-w-60 ">
+          <p class="text-2xl sm:text-3xl font-extrabold text-black font-Inter">Knowledge Base</p>
         </div>
 
         <!-- Spacing divs for layout balance (hidden on small screens) -->

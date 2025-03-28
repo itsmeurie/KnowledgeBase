@@ -16,6 +16,7 @@ const validate = (state: any): FormError[] => {
   const errors = []
   if (!state.name) errors.push({ path: 'name', message: 'Required' })
   if (!state.code) errors.push({ path: 'code', message: 'Required' })
+  if (!state.description) errors.push({ path: 'description', message: 'Required' })
   return errors
 }
 
@@ -23,14 +24,16 @@ const validate = (state: any): FormError[] => {
 
 const schema = z.object({
   name: z.string(),
-  code: z.string().min(3, 'Must be at least 3 characters')
+  code: z.string().min(3, 'Must be at least 3 characters'),
+  description: z.string(),
 })
 
 type Schema = z.output<typeof schema>
 
 const state = reactive({
   name: undefined,
-  code: undefined
+  code: undefined,
+  description: undefined
 })
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
@@ -73,11 +76,20 @@ function toggleModal(state : boolean | undefined){
                     <TFormGroup label="Office Code" name="code">
                         <TInput v-model="state.code" />
                     </TFormGroup>
+
+<<<<<<< Updated upstream
+                    <TFormGroup label="Short Description" name="description">
+                        <TInput v-model="state.description" />
+                    </TFormGroup>
+=======
+                    <TInput type="file" size="sm" icon="i-heroicons-photo" />
+
+>>>>>>> Stashed changes
                     <div></div>
                     <TButton type="submit">
                         Submit
                     </TButton>
                 </TForm>
-        </div>
+        </div> 
     </TSlideover>
 </template>

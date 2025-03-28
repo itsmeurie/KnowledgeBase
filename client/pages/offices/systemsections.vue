@@ -1,26 +1,47 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
+import type { Section } from '~/types';
 
+const { $api } = useNuxtApp();
 const route = useRoute();
-const selectedOffice = ref(route.query.office || "City Mayor's Office");
+const router = useRouter();
+const selectedOffice = ref(route.query.office);
+const selectedOfficeDescription = ref(route.query.officeDescription);
+
+const officeSection = ref<Section[]>([])
+
+function fetchOfficeSectionList(title: string = "", description: string = "", ) {
+    $api.get('/sections', { params: { title, description } })
+        .then((response) => {
+            officeSection.value = response.data;
+        });
+}
+
+onMounted(() => {
+    fetchOfficeSectionList();
+});
 
 const links = [
   { label: 'Home', to: '/playground' },
   { label: 'Docs', to: '/systemsections' },
   { label: 'About', to: '/playground#about-documentation' }
 ];
-const manuals = [
+// const manuals = [
   
-  { "title": "Overview", "subtitle": "A quick summary of everything you need to know.", "to": "/articlepage" },
-  { "title": "Cedula", "subtitle": "Learn the Everything about cedula.", "to": "/articlepage" },
-  { "title": "How to Get", "subtitle": "Find out how to acquire what you need.", "to": "/articlepage" },
-  { "title": "Where to Get Cedula", "subtitle": "Discover where to get your Cedula.", "to": "/articlepage" },
-  { "title": "How to Get Cedula", "subtitle": "Ways how to get your Cedula.", "to": "/articlepage" },
-  { "title": "My Role and Responsibilities", "subtitle": "Understanding my role and responsibilities.", "to": "/articlepage" },
-  { "title": "The Importance of This Place", "subtitle": "Why this place matters and what it offers.", "to": "/articlepage" },
-  { "title": "Key Figures and Concepts", "subtitle": "A deeper look into an important figure or concept.", "to": "/articlepage" }
+//   { "title": "HAHAHA", "subtitle": "A quick summary of everything you need to know.", "to": "/articlepage" },
+//   // { "title": "Cedula", "subtitle": "Learn the Everything about cedula.", "to": "/articlepage" },
+//   // { "title": "How to Get", "subtitle": "Find out how to acquire what you need.", "to": "/articlepage" },
+//   // { "title": "Where to Get Cedula", "subtitle": "Discover where to get your Cedula.", "to": "/articlepage" },
+//   // { "title": "How to Get Cedula", "subtitle": "Ways how to get your Cedula.", "to": "/articlepage" },
+//   // { "title": "My Role and Responsibilities", "subtitle": "Understanding my role and responsibilities.", "to": "/articlepage" },
+//   // { "title": "The Importance of This Place", "subtitle": "Why this place matters and what it offers.", "to": "/articlepage" },
+//   // { "title": "Key Figures and Concepts", "subtitle": "A deeper look into an important figure or concept.", "to": "/articlepage" }
   
-];
+// ];
+
+const goToArticlePage = ()=>{
+  router.push('/articlepage');
+};
 
 </script>
 
@@ -28,8 +49,8 @@ const manuals = [
     <!-- Header -->
   <div class="flex flex-wrap items-center justify-between px-4 sm:grid sm:grid-cols-8 gap-4">
         <!-- Logo -->
-        <div class="flex items-center min-w-48 ">
-          <p class="text-2xl sm:text-3xl font-extrabold text-black font-Inter">Dokumentaryo</p>
+        <div class="flex items-center min-w-60 ">
+          <p class="text-2xl sm:text-3xl font-extrabold text-black font-Inter">Knowledge Base</p>
         </div>
 
         <!-- Spacing divs for layout balance (hidden on small screens) -->
@@ -55,25 +76,22 @@ const manuals = [
         <div class="flex justify-between items-center">
           <h5 class="text-4xl font-semibold">{{ selectedOffice }}</h5>
         </div>
-<p class="text-sm max-w-xl">
-  The City Mayor's Office serves as the central hub for local governance, overseeing public services, infrastructure development, and community initiatives. It is responsible for implementing policies, addressing citizen concerns, and ensuring the city's overall progress and welfare.
-</p>
+         <p class="text-sm max-w-xl"> {{ selectedOfficeDescription }}</p>
 
       </div>
     </div>
       <div class="flex flex-col items-center h-full p-4">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-7xl w-full">
       <div
-        v-for="manual in manuals"
-        :key="manual.to"
-        @click="navigateTo(manual.to)"
-        class="cursor-pointer hover:bg-gray-100 transition border border-gray-200 rounded-lg p-4 shadow-md"
-      >
-        <h5 class="text-lg font-semibold text-green-800">{{ manual.title }}</h5>
-        <p class="text-sm text-gray-600 transition duration-300 hover:underline">{{ manual.subtitle }}</p>
+        v-for="section in officeSection"
+        :key="section.id"
+        @click="goToArticlePage"
+        class="cursor-pointer hover:bg-gray-100 transition border border-gray-200 rounded-lg p-4 shadow-md">
+        <h5 class="text-lg font-semibold text-green-800">{{ section.title }}</h5>
+        <p class="text-sm text-gray-600 transition duration-300 hover:underline">{{ section.description }}</p>
       </div>
       <div
-        class="flex flex-col justify-center items-center cursor-pointer hover:bg-gray-100 transition border border-gray-200 rounded-lg p-4 shadow-md"
+        class="flex flex-col justify-center items-center cursor-pointer hover:bg-green-100 transition border border-gray-200 rounded-lg p-4 shadow-md"
       >
         <TIcon name="tabler:plus"></TIcon>
         <h5 class="text-lg font-semibold text-green-800">Create New Section/Manual</h5>
