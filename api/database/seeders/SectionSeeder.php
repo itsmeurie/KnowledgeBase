@@ -21,6 +21,12 @@ class SectionSeeder extends Seeder
                     'parent_id' => "1",
                     'office_id' => 1,
             ],
+            [
+                'title' => "News",
+                'description' => "sample news description",
+                'parent_id' => "2",
+                'office_id' => 2,
+        ],
           
         ];
         foreach($sections as $section){
