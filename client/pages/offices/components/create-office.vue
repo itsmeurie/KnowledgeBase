@@ -77,6 +77,9 @@ function toggleModal(state : boolean | undefined){
                         <TInput v-model="state.code" />
                     </TFormGroup>
 
+                    <TFormGroup label="Short Description" name="description">
+                        <TInput v-model="state.description" />
+                    </TFormGroup>
                     <TInput type="file" size="sm" icon="i-heroicons-photo" />
 
                     <div></div>
