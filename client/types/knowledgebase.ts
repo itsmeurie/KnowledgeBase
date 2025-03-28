@@ -1,6 +1,7 @@
 export type Office = {
     id: number
     name: string
+    description: string
     code: string
     deleted_at?: string
     updated_at?: string
@@ -10,6 +11,7 @@ export type Office = {
 export type Section = {
     id: number
     title: string
+    description: string
     office_id: number
     deleted_at?: string
     updated_at?: string
