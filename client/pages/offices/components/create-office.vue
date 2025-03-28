@@ -77,14 +77,11 @@ function toggleModal(state : boolean | undefined){
                         <TInput v-model="state.code" />
                     </TFormGroup>
 
-<<<<<<< Updated upstream
                     <TFormGroup label="Short Description" name="description">
                         <TInput v-model="state.description" />
                     </TFormGroup>
-=======
                     <TInput type="file" size="sm" icon="i-heroicons-photo" />
 
->>>>>>> Stashed changes
                     <div></div>
                     <TButton type="submit">
                         Submit
