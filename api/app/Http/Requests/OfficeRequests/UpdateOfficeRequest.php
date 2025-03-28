@@ -23,7 +23,8 @@ class UpdateOfficeRequest extends FormRequest
     {
         return [
             'name' => 'nullable',
-            'code' => 'nullable'
+            'code' => 'nullable',
+            'description' => 'nullable',
         ];
     }
 }

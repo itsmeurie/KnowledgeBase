@@ -13,6 +13,18 @@ class SectionSeeder extends Seeder
      */
     public function run(): void
     {
-        Section::factory(10)->create();
+        $sections =
+        [
+            [
+                    'title' => "Overview",
+                    'description' => "Provides a general summary of the department's functions, responsibilities, and objectives.",
+                    'parent_id' => "1",
+                    'office_id' => 1,
+            ],
+          
+        ];
+        foreach($sections as $section){
+            Section::create($section);
+        }
     }
 }

@@ -24,6 +24,7 @@ class CreateOfficeRequest extends FormRequest
         return [
             'name' => 'required', 
             'code' => 'nullable',
+            'description' => 'nullable',
         ];
     }
 }

@@ -20,6 +20,7 @@ class SectionFactory extends Factory
         return [
             'title' => $this->faker->name(),
             'office_id' => Office::inRandomOrder()->first()->id,
+            'description' => $this->faker->name(),
         ];
     }
 }

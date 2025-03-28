@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const selectedOffice = ref(route.query.office || "City Mayor's Office");
+
 const links = [
   { label: 'Home', to: '/playground' },
   { label: 'Docs', to: '/systemsections' },
@@ -46,9 +51,10 @@ const manuals = [
     <div class="flex flex-col gap-2 max-w-7xl w-full">
       <div class="bg-cover bg-center bg-no-repeat rounded-md shadow-lg" style="background-image: url('https://static.vecteezy.com/system/resources/previews/009/302/805/non_2x/silhouette-landscape-with-fog-forest-pine-trees-mountains-illustration-of-national-park-view-mist-black-and-white-good-for-wallpaper-background-banner-cover-poster-free-vector.jpg');">
       <div class="flex flex-col gap-4 rounded-md px-6 py-6">  
+        <!-- HEADER -->
         <div class="flex justify-between items-center">
-          <h5 class="text-4xl font-semibold">City Mayor's Office</h5>
-</div>
+          <h5 class="text-4xl font-semibold">{{ selectedOffice }}</h5>
+        </div>
 <p class="text-sm max-w-xl">
   The City Mayor's Office serves as the central hub for local governance, overseeing public services, infrastructure development, and community initiatives. It is responsible for implementing policies, addressing citizen concerns, and ensuring the city's overall progress and welfare.
 </p>
@@ -65,6 +71,13 @@ const manuals = [
       >
         <h5 class="text-lg font-semibold text-green-800">{{ manual.title }}</h5>
         <p class="text-sm text-gray-600 transition duration-300 hover:underline">{{ manual.subtitle }}</p>
+      </div>
+      <div
+        class="flex flex-col justify-center items-center cursor-pointer hover:bg-gray-100 transition border border-gray-200 rounded-lg p-4 shadow-md"
+      >
+        <TIcon name="tabler:plus"></TIcon>
+        <h5 class="text-lg font-semibold text-green-800">Create New Section/Manual</h5>
+        <p class="text-sm text-gray-600 transition duration-300 hover:underline">para masaya.</p>
       </div>
     </div>
   </div>

@@ -18,7 +18,8 @@ class OfficeFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'code' => $this->faker->name()
+            'code' => $this->faker->name(),
+            'description' => $this->faker->name()
         ];
     }
 }

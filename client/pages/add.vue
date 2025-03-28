@@ -58,11 +58,11 @@ const scrollToAbout = () => {
         <TInput size="md" placeholder="Enter here..." class="w-full mt-1" />
       </div>
       <div class="mt-2">
-        <label class="font-Inter text-black">System</label>
+        <label class="font-Inter text-black">Section</label>
         <TInput size="md" placeholder="Enter here..." class="w-full mt-1" />
       </div>
       <div class="mt-2">
-        <label class="font-Inter text-black">Feature</label>
+        <label class="font-Inter text-black">Subsection</label>
         <TInput size="md" placeholder="Enter here..." class="w-full mt-1" />
       </div>
       

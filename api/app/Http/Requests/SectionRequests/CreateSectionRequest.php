@@ -24,6 +24,7 @@ class CreateSectionRequest extends FormRequest
         return [
             'title' => 'required',
             'office_id' => 'nullable',
+            'description' => 'nullable',
         ];
     }
 }
