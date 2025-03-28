@@ -62,7 +62,7 @@ onMounted(() => {
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 justify-center">
                 <div v-for="office in offices" 
      :key="office.id" 
-     class="flex items-center py-8 hover:bg-gray-100 cursor-pointer hover:text-blue-500 gap-4 p-4 text-md font-bold rounded-lg"
+     class="flex items-center py-8 hover:bg-gray-100 cursor-pointer hover:text-green-700 gap-4 p-4 text-md font-bold rounded-lg"
      @click="goToSystemSection(office.name, office.description)">
     
     <img class="h-20 w-20" src="~/assets/image/default_seal.png" alt="Office Logo">

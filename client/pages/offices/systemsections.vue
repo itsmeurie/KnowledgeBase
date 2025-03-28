@@ -49,8 +49,8 @@ const goToArticlePage = ()=>{
     <!-- Header -->
   <div class="flex flex-wrap items-center justify-between px-4 sm:grid sm:grid-cols-8 gap-4">
         <!-- Logo -->
-        <div class="flex items-center min-w-48 ">
-          <p class="text-2xl sm:text-3xl font-extrabold text-black font-Inter">Dokumentaryo</p>
+        <div class="flex items-center min-w-60 ">
+          <p class="text-2xl sm:text-3xl font-extrabold text-black font-Inter">Knowledge Base</p>
         </div>
 
         <!-- Spacing divs for layout balance (hidden on small screens) -->
@@ -91,7 +91,7 @@ const goToArticlePage = ()=>{
         <p class="text-sm text-gray-600 transition duration-300 hover:underline">{{ section.description }}</p>
       </div>
       <div
-        class="flex flex-col justify-center items-center cursor-pointer hover:bg-gray-100 transition border border-gray-200 rounded-lg p-4 shadow-md"
+        class="flex flex-col justify-center items-center cursor-pointer hover:bg-green-100 transition border border-gray-200 rounded-lg p-4 shadow-md"
       >
         <TIcon name="tabler:plus"></TIcon>
         <h5 class="text-lg font-semibold text-green-800">Create New Section/Manual</h5>
