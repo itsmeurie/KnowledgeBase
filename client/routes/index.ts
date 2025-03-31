@@ -25,21 +25,49 @@ export default computed(() => [
           
         },
       },
+      {
+        path: "/offices/:slug",
+        name: "systemsections",
+        component: () => import('@/pages/offices/systemsections.vue'),
+         
+        meta: {
+          
+          title: "System Sections",
 
+          layout: 'public'
+          
+        },
+      },
       // {
-      //   path: "/sub-list",
-      //   name: "sub-list",
-      //   component: () => import('@/pages/sub_list.vue'),
+      //   path: "/add",
+      //   name: "add",
+      //   component: () => import('@/pages/add.vue'),
+      //   path: "/systemsections",
+      //   name: "systemsections",
+      //   component: () => import('@/pages/offices/systemsections.vue'),
          
       //   meta: {
           
-      //     title: "sub-list",
+      //     title: "System Sections",
 
       //     layout: 'public'
           
       //   },
       // },
+      {
+        path: "/add",
+        name: "add",
+        component: () => import('@/pages/add.vue'),
+         
+        meta: {
+          
+          title: "Create Article",
 
+          layout: 'public'
+          
+        },
+      },
+      
       {
         path: "/edit-article",
         name: "edit-article",
@@ -103,20 +131,6 @@ export default computed(() => [
       
 
 
-      // {
-      //   path: "/ced",
-      //   name: "ced",
-      //   component: () => import('@/pages/ced.vue'),
-         
-       //meta: {
-          
-      //     title: "ced",
-
-      // layout: 'public'
-          
-      //   },
-      // },
-      
       {
         path: "/why",
         name: "why",
