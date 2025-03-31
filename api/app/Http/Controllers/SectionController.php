@@ -10,15 +10,21 @@ use App\Models\Section;
 
 class SectionController extends Controller
 {
-    //
-    public function list (Request $request) : JsonResponse 
+    public function list (Request $request, $office_id) : JsonResponse 
     {
-        $sections = Section::when($request->query('title'), function($query) use ($request){
-            $query->title($request->query('title'));
-        })->get();
+        $sections = Section::where('office_id', $office_id)->get()->all();
 
         return response()->json($sections);
     }
+    //
+    // public function list (Request $request) : JsonResponse 
+    // {
+    //     $sections = Section::when($request->query('title'), function($query) use ($request){
+    //         $query->title($request->query('title'));
+    //     })->get();
+
+    //     return response()->json($sections);
+    // }
     public function show (Request $request, Section $section) : JsonResponse 
     {
 

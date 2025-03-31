@@ -26,7 +26,7 @@ export default computed(() => [
         },
       },
       {
-        path: "/systemsections",
+        path: "/offices/:slug",
         name: "systemsections",
         component: () => import('@/pages/offices/systemsections.vue'),
          
@@ -84,7 +84,7 @@ export default computed(() => [
 
       {
         path: "/systemsections",
-        name: "systemsections",
+        name: "systemsections1",
         component: () => import('~/pages/offices/systemsections.vue'),
          
         meta: {

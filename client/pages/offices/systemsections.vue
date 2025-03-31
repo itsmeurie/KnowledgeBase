@@ -1,23 +1,26 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
-import type { Section } from '~/types';
+import type { Section, Office } from '~/types';
 
 const { $api } = useNuxtApp();
 const route = useRoute();
 const router = useRouter();
-const selectedOffice = ref(route.query.office);
-const selectedOfficeDescription = ref(route.query.officeDescription);
 
+const office = ref<Office>();
 const officeSection = ref<Section[]>([])
 
-function fetchOfficeSectionList(title: string = "", description: string = "", ) {
-    $api.get('/sections', { params: { title, description } })
+function fetchOffice() {
+    $api.get('/offices/', { params: { code: route.params.slug } })
         .then((response) => {
-            officeSection.value = response.data;
+            office.value = response.data[0];
         });
 }
 
+function fetchOfficeSectionList(title: string = "", description: string = ""){
+
+}
+
 onMounted(() => {
+    fetchOffice();
     fetchOfficeSectionList();
 });
 
@@ -74,9 +77,9 @@ const goToArticlePage = ()=>{
       <div class="flex flex-col gap-4 rounded-md px-6 py-6">  
         <!-- HEADER -->
         <div class="flex justify-between items-center">
-          <h5 class="text-4xl font-semibold">{{ selectedOffice }}</h5>
+          <h5 class="text-4xl font-semibold">{{ office?.name }}</h5>
         </div>
-         <p class="text-sm max-w-xl"> {{ selectedOfficeDescription }}</p>
+         <p class="text-sm max-w-xl"> {{ office?.description }}</p>
 
       </div>
     </div>

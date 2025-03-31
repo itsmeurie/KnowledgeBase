@@ -30,6 +30,10 @@ class Office extends AppModel {
         $query->where('name', 'ilike', "%{$name}%");
     }
 
+    public function scopeCode(Builder $query, string $code){
+        $query->where('code', 'ilike', $code);
+    }
+
     public function sections() : HasMany
     {
         return $this->hasMany(Section::class);

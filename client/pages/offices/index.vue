@@ -16,8 +16,8 @@ const is_updating = ref(false);
 
 
 
-function fetchOfficeList(name: string = "", code: string = "", ) {
-    $api.get('/offices', { params: { name, code } })
+function fetchOfficeList(code: string ) {
+    $api.get('/offices', { params: { code } })
         .then((response) => {
             offices.value = response.data;
         });
@@ -27,8 +27,8 @@ function toggleCreate(state: boolean) {
     is_creating.value = state;
 }
 
-function goToSystemSection(officeName: string, officeDes: string) {
-    router.push({ path: '/systemsections', query: { office: officeName, officeDescription: officeDes} });
+function goToSystemSection(slug: string,) {
+    router.push({ name: 'systemsections', params: { slug: slug.toLowerCase()} });
 }
 
 
@@ -37,7 +37,7 @@ watchDebounced(search_term, (value) => {
 }, { debounce: 375, maxWait: 1000 });
 
 onMounted(() => {
-    fetchOfficeList();
+    fetchOfficeList('');
 });
 
 </script>
@@ -63,7 +63,7 @@ onMounted(() => {
                 <div v-for="office in offices" 
      :key="office.id" 
      class="flex items-center py-8 hover:bg-gray-100 cursor-pointer hover:text-green-700 gap-4 p-4 text-md font-bold rounded-lg"
-     @click="goToSystemSection(office.name, office.description)">
+     @click="goToSystemSection(office.code)">
     
     <img class="h-20 w-20" src="~/assets/image/default_seal.png" alt="Office Logo">
     <span>{{ office.name }}</span>
