@@ -6,7 +6,6 @@ const route = useRoute();
 const router = useRouter();
 
 const office = ref<Office>();
-<<<<<<< Updated upstream
 const officeSection = ref<Section[]>([])
 const aboutSection = ref<HTMLElement | null>(null);
 
@@ -15,9 +14,7 @@ const scrollToAbout = () => {
     aboutSection.value.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 };
-=======
-const officeSection = ref<Section[]>([]);
->>>>>>> Stashed changes
+
 
 function fetchOffice() {
     $api.get('/offices/', { params: { code: route.params.slug } })
