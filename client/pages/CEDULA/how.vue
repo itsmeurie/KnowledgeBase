@@ -37,6 +37,14 @@ const linksNav = [{
   to: 'playground#about-documentation'
 }]
 
+const aboutSection = ref<HTMLElement | null>(null);
+
+const scrollToAbout = () => {
+  if (aboutSection.value) {
+    aboutSection.value.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+};
+
 const items = ref([
   { 
     label: "CEDULA", 
@@ -71,27 +79,33 @@ const openItems = ref([]);
 
 <template>
 <!-- Header -->
-<div class="flex flex-wrap items-center justify-between px-4 sm:grid sm:grid-cols-8 gap-4">
-          <!-- Logo -->
-          <div class="flex items-center min-w-48 ">
-            <p class="text-2xl sm:text-3xl font-extrabold text-black font-Inter">Dokumentaryo</p>
-          </div>
+<div class="flex flex-wrap items-center justify-between px-4 sm:grid sm:grid-cols-8 gap-4 m-4">
+        <!-- Logo -->
+        <div class="flex items-center min-w-60 ">
+          <p class="text-2xl sm:text-3xl font-extrabold text-black font-Inter">Knowledge Base</p>
+        </div>
 
-           <!-- Spacing divs for layout balance (hidden on small screens) -->
-           <div class="hidden sm:block col-span-1 h-6.25"></div>
+        <!-- Spacing divs for layout balance (hidden on small screens) -->
+            <div class="hidden sm:block col-span-1 h-6.25"></div>
             <div class="hidden sm:block col-span-1 h-6.25"></div>
             <div class="hidden sm:block col-span-1 h-6.25"></div>
             <div class="hidden sm:block col-span-1 h-6.25"></div>
 
-          <!-- Navigation -->
-          <div class="w-full sm:w-auto col-span-3 flex justify-center sm:justify-end">
-            <THorizontalNavigation :links="linksNav">
-              <template #default="{ link }">
-                <span class="text-lg mx-4 sm:mx-8 text-black font-Inter font-bold group-hover:text-primary relative">{{ link.label }}</span>
-              </template>
+        <!-- Navigation -->
+        <div class="w-full sm:w-auto col-span-3 flex justify-center">
+          <THorizontalNavigation :links="linksNav"> <!-- Inayos-->
+                <template #default="{ link }">
+                  <a 
+                    :href="link.to" 
+                    @click.prevent="link.label === 'About' ? scrollToAbout() : null" 
+                    class="text-lg mx-4 sm:mx-8 text-black font-Inter font-bold group-hover:text-primary relative"
+                  >
+                    {{ link.label }}
+                  </a>
+                </template>
             </THorizontalNavigation>
-          </div>
-    </div>
+            </div>
+        </div>
          
 <div class="m-1 grid gap-2 sm:grid-cols-10">
         
