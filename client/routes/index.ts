@@ -56,7 +56,7 @@ export default computed(() => [
 
       {
         path: "/systemsections",
-        name: "systemsections",
+        name: "systemsections1",
         component: () => import('~/pages/offices/systemsections.vue'),
          
         meta: {

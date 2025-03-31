@@ -15,8 +15,12 @@ class OfficeController extends Controller
     {
 
         $offices = Office::when($request->query('name'), function($query) use ($request){
-                        $query->name($request->query('name'));
-                    })->get();
+                                $query->name($request->query('name'));
+                            })
+                            ->when($request->query('code'), function($query) use ($request){
+                                $query->code($request->query('code'));
+                            })
+                            ->get();
 
         return response()->json($offices);    
     }
