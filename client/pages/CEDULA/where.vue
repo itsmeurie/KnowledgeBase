@@ -80,11 +80,13 @@ const openItems = ref([]);
 
 <template>
   <!-- Header -->
-  <div class="flex flex-wrap items-center justify-between px-4 sm:grid sm:grid-cols-8 gap-4 m-4">
+  <div class="flex flex-wrap items-center justify-between px-4  gap-4 m-1">
         <!-- Logo -->
-        <div class="flex items-center min-w-60 ">
-          <p class="text-2xl sm:text-3xl font-extrabold text-black font-Inter">Knowledge Base</p>
+        <div class="flex items-center">
+            <img class="h-20 w-20 object-contain mt-6" src="@/assets/image/final-logo.png"/>
+              <p class="text-2xl sm:text-3xl font-extrabold text-black font-Inter">Knowledge Base</p>
         </div>
+
 
         <!-- Spacing divs for layout balance (hidden on small screens) -->
             <div class="hidden sm:block col-span-1 h-6.25"></div>
