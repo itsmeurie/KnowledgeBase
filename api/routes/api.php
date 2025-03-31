@@ -60,8 +60,7 @@ Route::prefix('offices')->group(function(){
 
 
 Route::prefix('sections')->group(function(){
-    Route::get('', [SectionController::class, 'list'])->name('sections.list');
-    Route::get('/offices/{office_id}', [SectionController::class, 'list'])->name('sections.list');
+    Route::get('{office_id}', [SectionController::class, 'list'])->name('sections.list');
     Route::get('{section}', [SectionController::class, 'show'])->name('sections.show');
     Route::post('', [SectionController::class, 'create'])->name('sections.create');
     Route::put('{section}', [SectionController::class, 'update'])->name('sections.update');
