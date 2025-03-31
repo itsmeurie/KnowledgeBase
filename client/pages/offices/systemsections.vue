@@ -22,6 +22,7 @@ function fetchOffice() {
             office.value = response.data[0];
         });
 }
+//
 
 function fetchOfficeSectionList() {
   console.log("Fetching sections for office_id:", office.value?.id);
