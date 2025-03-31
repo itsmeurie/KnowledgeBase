@@ -16,7 +16,17 @@ const router = createRouter({
   routes,
 });
 
-const links = [{
+const link = [{
+  label: 'CMO',
+  icon: 'i-heroicons-home',
+  to: 'articlepage'
+}, 
+  {
+  label: 'How to get Cedula',
+  icon: 'i-heroicons-document-text',
+}]
+
+const linksNav = [{
   label: 'Home',
   to: '/playground'
 }, {
@@ -26,7 +36,6 @@ const links = [{
   label: 'About',
   to: 'playground#about-documentation'
 }]
-
 
 const items = ref([
   { 
@@ -76,7 +85,7 @@ const openItems = ref([]);
 
           <!-- Navigation -->
           <div class="w-full sm:w-auto col-span-3 flex justify-center sm:justify-end">
-            <THorizontalNavigation :links="links">
+            <THorizontalNavigation :links="linksNav">
               <template #default="{ link }">
                 <span class="text-lg mx-4 sm:mx-8 text-black font-Inter font-bold group-hover:text-primary relative">{{ link.label }}</span>
               </template>
@@ -141,13 +150,7 @@ const openItems = ref([]);
       <div class="flex flex-wrap items-center justify-between px-4 sm:px-10 py-2 gap-4">
                     <!-- Breadcrumbs -->
             <nav class="flex flex-wrap items-center space-x-2 text-sm sm:text-base">
-              <NuxtLink to="/articlepage" external>
-                      Cedula
-              </NuxtLink>
-                <span class="text-gray-500">></span>
-                <NuxtLink to="/how" external>
-                      How to get Cedula
-              </NuxtLink>
+              <TBreadcrumb :links="link" />
             </nav>  
 
             <!-- Edit Icon -->
