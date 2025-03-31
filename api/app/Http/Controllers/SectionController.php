@@ -12,8 +12,10 @@ class SectionController extends Controller
 {
     public function list (Request $request, $office_id) : JsonResponse 
     {
-        $sections = Section::where('office_id', $office_id)->get()->all();
-
+        $sections = Section::where('office_id', $office_id)
+        ->get()
+        ->all();
+        
         return response()->json($sections);
     }
     //

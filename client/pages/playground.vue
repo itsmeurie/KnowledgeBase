@@ -50,8 +50,8 @@ const scrollToAbout = () => {
   <!-- Hero Section -->
   <div class="m-2 grid grid-cols-1 gap-4 sm:grid-cols-10 mx-8">
     <div class="sm:col-span-6 min-h-[370px] p-4 sm:p-8">
-      <h1 class="text-black text-4xl sm:text-5xl font-extrabold font-Inter">
-        Leadership and <br> Governance in Higher <br> Education: Roles and <br> Responsibilities
+      <h1 class="text-black text-6xl sm:text-6xl font-extrabold font-Inter">
+        Listen, Look <br> and Listen <br> and Learn!
       </h1>
       <p class="mt-4 text-lg">A centralized platform for obtaining knowledge on system documentation.</p>
       <a href="/offices">

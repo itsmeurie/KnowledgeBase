@@ -22,11 +22,17 @@ class SectionSeeder extends Seeder
                     'office_id' => 1,
             ],
             [
-                'title' => "News",
-                'description' => "sample news description",
-                'parent_id' => "2",
-                'office_id' => 2,
-        ],
+                    'title' => "News",
+                    'description' => "sample news description",
+                    'parent_id' => "2",
+                    'office_id' => 2,
+             ],
+             [
+                    'title' => "Update",
+                    'description' => "sample update description",
+                    'parent_id' => "2",
+                    'office_id' => 1,
+            ],
           
         ];
         foreach($sections as $section){

@@ -15,6 +15,7 @@ const scrollToAbout = () => {
   }
 };
 
+
 function fetchOffice() {
     $api.get('/offices/', { params: { code: route.params.slug } })
         .then((response) => {
@@ -22,13 +23,24 @@ function fetchOffice() {
         });
 }
 
-function fetchOfficeSectionList(title: string = "", description: string = ""){
+function fetchOfficeSectionList() {
+  console.log("Fetching sections for office_id:", office.value?.id);
+if (!office.value?.id) return; 
+$api.get(`/sections/${office.value.id}`)
+    .then(response => {
+        officeSection.value = response.data;
+    })
+    .catch(error => {
+        console.error("Error fetching sections:", error);
+    });
 
 }
 
 onMounted(() => {
     fetchOffice();
-    fetchOfficeSectionList();
+    watch(() => office.value, (newOffice) => {
+        if (newOffice) fetchOfficeSectionList();
+    });
 });
 
 const linksNav = [
@@ -36,23 +48,10 @@ const linksNav = [
   { label: 'Docs', to: '/systemsections' },
   { label: 'About', to: '/playground#about-documentation' }
 ];
-// const manuals = [
-  
-//   { "title": "HAHAHA", "subtitle": "A quick summary of everything you need to know.", "to": "/articlepage" },
-//   // { "title": "Cedula", "subtitle": "Learn the Everything about cedula.", "to": "/articlepage" },
-//   // { "title": "How to Get", "subtitle": "Find out how to acquire what you need.", "to": "/articlepage" },
-//   // { "title": "Where to Get Cedula", "subtitle": "Discover where to get your Cedula.", "to": "/articlepage" },
-//   // { "title": "How to Get Cedula", "subtitle": "Ways how to get your Cedula.", "to": "/articlepage" },
-//   // { "title": "My Role and Responsibilities", "subtitle": "Understanding my role and responsibilities.", "to": "/articlepage" },
-//   // { "title": "The Importance of This Place", "subtitle": "Why this place matters and what it offers.", "to": "/articlepage" },
-//   // { "title": "Key Figures and Concepts", "subtitle": "A deeper look into an important figure or concept.", "to": "/articlepage" }
-  
-// ];
 
-const goToArticlePage = ()=>{
+const goToArticlePage = () => {
   router.push('/articlepage');
 };
-
 </script>
 
 <template> 
@@ -98,23 +97,22 @@ const goToArticlePage = ()=>{
 
       </div>
     </div>
-      <div class="flex flex-col items-center h-full p-4">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-7xl w-full">
-      <div
-        v-for="section in officeSection"
-        :key="section.id"
-        @click="goToArticlePage"
-        class="cursor-pointer hover:bg-gray-100 transition border border-gray-200 rounded-lg p-4 shadow-md">
-        <h5 class="text-lg font-semibold text-green-800">{{ section.title }}</h5>
-        <p class="text-sm text-gray-600 transition duration-300 hover:underline">{{ section.description }}</p>
-      </div>
-      <div
-        class="flex flex-col justify-center items-center cursor-pointer hover:bg-green-100 transition border border-gray-200 rounded-lg p-4 shadow-md"
-      >
-        <TIcon name="tabler:plus"></TIcon>
-        <h5 class="text-lg font-semibold text-green-800">Create New Section/Manual</h5>
-        <p class="text-sm text-gray-600 transition duration-300 hover:underline">para masaya.</p>
-      </div>
+    <div class="flex flex-col items-center h-full p-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-7xl w-full">
+          <div
+            v-for="section in officeSection"
+            :key="section.id"
+            @click="goToArticlePage"
+            class="cursor-pointer hover:bg-gray-100 transition border border-gray-200 rounded-lg p-4 shadow-md">
+            <h5 class="text-lg font-semibold text-green-800">{{ section.title }}</h5>
+            <p class="text-sm text-gray-600 transition duration-300 hover:underline">{{ section.description }}</p>
+          </div>
+          <div
+            class="flex flex-col justify-center items-center cursor-pointer hover:bg-green-100 transition border border-gray-200 rounded-lg p-4 shadow-md">
+            <TIcon name="tabler:plus"></TIcon>
+            <h5 class="text-lg font-semibold text-green-800">Create New Section/Manual</h5>
+            <p class="text-sm text-gray-600 transition duration-300 hover:underline">para masaya.</p>
+          </div>
     </div>
   </div>
     </div>
