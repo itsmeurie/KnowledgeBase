@@ -55,7 +55,7 @@ export default computed(() => [
       //   },
       // },
       {
-        path: "/add",
+        path: "/offices/:slug/add",
         name: "add",
         component: () => import('@/pages/add.vue'),
          
