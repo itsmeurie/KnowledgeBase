@@ -1,8 +1,30 @@
 <script setup lang="ts"> 
-
+import type { Section, Office } from '~/types';
 import { useRouter } from 'vue-router';
 
+const office = ref<Office>();
+
 const router = useRouter();
+const { $api } = useNuxtApp();
+const route = useRoute();
+
+function fetchOffice() {
+    if (!route.params.slug) return;
+    
+    $api.get('/offices/', { params: { code: route.params.slug } })
+        .then((response) => {
+            office.value = response.data[0];
+        })
+        .catch(error => {
+            console.error("Error fetching office:", error);
+        });
+}
+
+
+
+onMounted(() => {
+  fetchOffice();
+});
 
 const goToEditPage = () => {
   router.push('/edit-article');
@@ -107,9 +129,9 @@ const openItems = ref([]);
               :trailing="false"
               placeholder="Search here..."/>
           </div>
-      <!-- title -->
-      <div class="flex flex-col justify-center ml-7 mt-3">
-        <h6>City Mayors Office</h6>
+      <!-- Office title -->
+      <div class="flex flex-col justify-center ml-7 mt-3" >
+        <h6>{{ office?.name }}</h6>
       </div>
   
           <div class="w-64 m-3">
@@ -150,7 +172,7 @@ const openItems = ref([]);
                     <!-- Breadcrumbs -->
             <nav class="flex flex-wrap items-center space-x-2 text-sm sm:text-base">
               <NuxtLink to="/articlepage" external>
-                      City Mayors Office
+                      {{ office?.name }}
               </NuxtLink>
             </nav>  
 

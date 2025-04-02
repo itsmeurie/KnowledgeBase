@@ -30,8 +30,8 @@ class SectionSeeder extends Seeder
              [
                     'title' => "Update",
                     'description' => "sample update description",
-                    'parent_id' => "2",
-                    'office_id' => 1,
+                    'parent_id' => "3",
+                    'office_id' => 3,
             ],
           
         ];

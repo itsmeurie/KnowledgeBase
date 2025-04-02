@@ -51,8 +51,11 @@ const linksNav = [
 ];
 
 const goToArticlePage = () => {
-  router.push('/articlepage');
+  if (office.value) {
+    router.push(`/articlepage/${office.value.code}`); // Ensure the route contains office code
+  }
 };
+
 </script>
 
 <template> 
@@ -98,6 +101,7 @@ const goToArticlePage = () => {
 
       </div>
     </div>
+    <!-- Section -->
     <div class="flex flex-col items-center h-full p-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-7xl w-full">
           <div
