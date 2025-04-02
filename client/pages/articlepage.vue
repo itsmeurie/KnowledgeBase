@@ -3,23 +3,52 @@ import type { Section, Office } from '~/types';
 import { useRouter } from 'vue-router';
 
 const office = ref<Office>();
+const section = ref<Section | null>(null); // Store active section
 
 const router = useRouter();
 const { $api } = useNuxtApp();
 const route = useRoute();
+const isHovered = ref(false);
 
-function fetchOffice() {
-    if (!route.params.slug) return;
+// function fetchOffice() {
+//     if (!route.params.slug) return;
     
-    $api.get('/offices/', { params: { code: route.params.slug } })
-        .then((response) => {
-            office.value = response.data[0];
-        })
-        .catch(error => {
-            console.error("Error fetching office:", error);
-        });
+//     $api.get('/offices/', { params: { code: route.params.slug } })
+//         .then((response) => {
+//             office.value = response.data[0];
+//         })
+//         .catch(error => {
+//             console.error("Error fetching office:", error);
+//         });
+// }
+
+async function fetchOffice() {
+  if (!route.params.slug) return;
+
+  try {
+    const response = await $api.get('/offices/', { params: { code: route.params.slug } });
+    office.value = response.data[0];
+
+    if (office.value?.id) {
+      fetchSection();
+    }
+  } catch (error) {
+    console.error("Error fetching office:", error);
+  }
 }
 
+// Fetch Section Details
+async function fetchSection() {
+  try {
+    const response = await $api.get(`/sections/${office.value?.id}`);
+    const sections = response.data;
+
+    // Assuming section data is available, pick the first section (or any logic needed)
+    section.value = sections.length ? sections[0] : null;
+  } catch (error) {
+    console.error("Error fetching section:", error);
+  }
+}
 
 
 onMounted(() => {
@@ -130,7 +159,7 @@ const openItems = ref([]);
               placeholder="Search here..."/>
           </div>
       <!-- Office title -->
-      <div class="flex flex-col justify-center ml-7 mt-3" >
+      <div class="flex flex-col justify-center ml-7 mt-3 font-bold" >
         <h6>{{ office?.name }}</h6>
       </div>
   
@@ -169,12 +198,32 @@ const openItems = ref([]);
       <div class="col-span-6 grid grid-cols-1 gap-4 ">
   
         <div class="flex flex-wrap items-center justify-between px-4 sm:px-10 py-2 gap-4">
-                    <!-- Breadcrumbs -->
+            <!-- Breadcrumbs Office and Sections-->
             <nav class="flex flex-wrap items-center space-x-2 text-sm sm:text-base">
-              <NuxtLink to="/articlepage" external>
-                      {{ office?.name }}
+              <NuxtLink 
+                to="/articlepage" 
+                external 
+                class="transition-colors"
+                :class="{ 'text-green-600': isHovered, 'hover:text-green-700': !isHovered }"
+                @mouseenter="isHovered = true" 
+                @mouseleave="isHovered = false"
+              >
+                {{ office?.name }}
               </NuxtLink>
-            </nav>  
+
+              <span v-if="section" class="text-gray-500"> > </span>
+
+              <NuxtLink 
+                v-if="section" 
+                :to="`/articlepage/${route.params.slug}/${section.id}`" 
+                class="transition-colors"
+                :class="{ 'text-green-600': !isHovered, 'hover:text-green-800': isHovered }"
+              >
+                {{ section.title }}
+              </NuxtLink>
+            </nav>
+
+
 
             <!-- Edit Icon -->
             <div class="flex items-center space-x-4">

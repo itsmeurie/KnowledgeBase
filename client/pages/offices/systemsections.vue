@@ -22,8 +22,8 @@ function fetchOffice() {
             office.value = response.data[0];
         });
 }
-//
 
+// fetching section
 function fetchOfficeSectionList() {
   console.log("Fetching sections for office_id:", office.value?.id);
 if (!office.value?.id) return; 
@@ -116,7 +116,6 @@ const goToArticlePage = () => {
             class="flex flex-col justify-center items-center cursor-pointer hover:bg-green-100 transition border border-gray-200 rounded-lg p-4 shadow-md">
             <TIcon name="tabler:plus"></TIcon>
             <h5 class="text-lg font-semibold text-green-800">Create New Section/Manual</h5>
-            <p class="text-sm text-gray-600 transition duration-300 hover:underline">para masaya.</p>
           </div>
     </div>
   </div>
