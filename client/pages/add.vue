@@ -1,6 +1,83 @@
 <script setup lang="ts">
 import MarkdownEditor from '@/pages/markdowneditor.vue'
 import { ref } from 'vue';
+import type { Section, Office } from '~/types';
+import type { FormError, FormSubmitEvent } from '#ui/types'
+import { z } from 'zod'
+
+const office = ref<Office>();
+const section = ref<Section | null>(null); 
+
+const router = useRouter();
+const { $api } = useNuxtApp();
+const route = useRoute();
+
+const emit = defineEmits(['update:show'])
+
+const validate = (state: any): FormError[] => {
+  const errors = []
+  if (!state.title) errors.push({ path: 'title', message: 'Required' })
+  if (!state.description) errors.push({ path: 'description', message: 'Required' })
+  return errors
+}
+
+const schema = z.object({
+  title: z.string(),
+  description: z.string(),
+})
+
+type Schema = z.output<typeof schema>
+
+const state = reactive({
+  title: undefined,
+  description: undefined
+})
+
+
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  // Do something with data
+  console.log(event.data)
+  $api.post('/sections', {
+          office_id: office.value?.id,
+          ...event.data
+        })
+        .then((response) => {
+            if(response.status == 200)
+                emit('update:show', false)
+        })
+}
+
+
+async function fetchOffice() {
+  if (!route.params.slug) return;
+
+  try {
+    const response = await $api.get('/offices/', { params: { code: route.params.slug } });
+    office.value = response.data[0];
+
+    if (office.value?.id) {
+      fetchSection();
+    }
+  } catch (error) {
+    console.error("Error fetching office:", error);
+  }
+}
+
+async function fetchSection() {
+  try {
+    const response = await $api.get(`/sections/${office.value?.id}`);
+    const sections = response.data;
+
+    section.value = sections.length ? sections[0] : null;
+  } catch (error) {
+    console.error("Error fetching section:", error);
+  }
+}
+
+
+onMounted(() => {
+  fetchOffice();
+});
 
 const links = [
   { label: 'Home', to: '/playground' },
@@ -54,27 +131,24 @@ const scrollToAbout = () => {
       <p class="font-Inter font-bold text-lg text-black">INFORMATION</p>
       
       <div class="mt-2">
-        <label class="font-Inter text-black">Office</label>
-        <TInput size="md" placeholder="Enter here..." class="w-full mt-1" />
+      <label class="font-Inter text-black">Office</label>
+      <TInput disabled size="md" :model-value="office?.name" />
       </div>
+
       <div class="mt-2">
-        <label class="font-Inter text-black">Section</label>
-        <TInput size="md" placeholder="Enter here..." class="w-full mt-1" />
-      </div>
-      <div class="mt-2">
-        <label class="font-Inter text-black">Subsection</label>
-        <TInput size="md" placeholder="Enter here..." class="w-full mt-1" />
-      </div>
-      
-      <p class="font-Inter font-bold text-lg text-black mt-4">ADDITIONAL RESOURCES</p>
-      <div class="mt-2">
-        <label class="font-Inter text-black">Upload File</label>
-        <TInput type="file" size="md" class="w-full mt-1" />
-      </div>
-      <div class="mt-2">
-        <label class="font-Inter text-black">Description</label>
-        <TInput size="md" placeholder="Enter here..." class="w-full mt-1" />
-      </div>
+        <TForm :schema="schema" :validate="validate" :state="state" class="space-y-4" @submit="onSubmit">
+                    <TFormGroup class="font-Inter text-black mt-2" label="Section" name="title">
+                        <TInput v-model="state.title" size="md"/>
+                    </TFormGroup>
+                    <TFormGroup label="Short Description" name="description">
+                        <TInput v-model="state.description" size="md"/>
+                    </TFormGroup>
+                    <div></div>
+                    <TButton type="submit">
+                        Submit
+                    </TButton>
+                </TForm>
+              </div>
     </div>
     
     <!-- Markdown Editor -->

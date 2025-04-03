@@ -1,8 +1,7 @@
 <?php
 
 namespace App\Models;
-
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\DAtabase\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -15,6 +14,8 @@ class Section extends AppModel {
     protected $fillable = [
         'title',
         'office_id',
+        'description',
+        'slug',
     ];
 
     /**
@@ -39,6 +40,11 @@ class Section extends AppModel {
     public function document() : HasOne
     {
         return $this->hasOne(Documents::class);
+    }
+
+    public function scopeSlug(Builder $query, string $slug) : void
+    {
+        $query->where('slug', $slug);
     }
     
     

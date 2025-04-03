@@ -10,17 +10,6 @@ const { $api } = useNuxtApp();
 const route = useRoute();
 const isHovered = ref(false);
 
-// function fetchOffice() {
-//     if (!route.params.slug) return;
-    
-//     $api.get('/offices/', { params: { code: route.params.slug } })
-//         .then((response) => {
-//             office.value = response.data[0];
-//         })
-//         .catch(error => {
-//             console.error("Error fetching office:", error);
-//         });
-// }
 
 async function fetchOffice() {
   if (!route.params.slug) return;
@@ -43,7 +32,6 @@ async function fetchSection() {
     const response = await $api.get(`/sections/${office.value?.id}`);
     const sections = response.data;
 
-    // Assuming section data is available, pick the first section (or any logic needed)
     section.value = sections.length ? sections[0] : null;
   } catch (error) {
     console.error("Error fetching section:", error);
@@ -236,8 +224,15 @@ const openItems = ref([]);
   
           <div class="ml-1 grid gap-2">
           <!-- Title of Article -->
-          <div class="col-span-1   ml-5">
-              <h1 class="text-black  font-Inter font-extrabold text-4xl p-4">City Mayor's Office</h1>
+          <div class="col-span-1   ml-5" >
+            <div 
+            
+            :key="section?.id"
+            >
+              <h1 class="text-black  font-Inter font-extrabold text-4xl p-4">
+                {{ section?.title }}
+              </h1>
+            </div>
           </div>
           
           <!-- Last update -->

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('description')->comment('description');
             $table->unsignedBigInteger('parent_id')->nullable();
+            $table->string('slug')->nullable();
             $table->foreignIdFor(Office::class)->references('id')->on('offices');
             $table->softDeletes();
             $table->timestamps();

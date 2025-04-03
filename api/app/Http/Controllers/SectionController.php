@@ -7,14 +7,17 @@ use App\Http\Requests\SectionRequests\UpdateSectionRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Section;
+use Illuminate\Support\Str;
 
 class SectionController extends Controller
 {
     public function list (Request $request, $office_id) : JsonResponse 
     {
         $sections = Section::where('office_id', $office_id)
-        ->get()
-        ->all();
+                        ->when($request->query('slug'), function($query) use ($request){
+                            $query->slug($request->query('slug'));
+                        })
+                        ->get();
         
         return response()->json($sections);
     }
@@ -37,7 +40,10 @@ class SectionController extends Controller
     public function create (CreateSectionRequest $request) : JsonResponse 
     {
         $fields = $request->validated();
-        $section = Section::create($fields);
+        $section = Section::create([
+            ...$fields,
+            'slug' => Str::slug($fields['title'], '-')
+        ]);
         
         return response()->json([
             'section' => $section
