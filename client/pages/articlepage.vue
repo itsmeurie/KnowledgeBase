@@ -241,7 +241,7 @@ const openItems = ref([]);
           </div>
           
           <!-- Last update -->
-          <div class="col-span-1 min-h-[20px] w-200 ml-20">
+          <div class="col-span-1 min-h-0.625 w-200 ml-20">
               Last update 04/18/2025
           </div>
   

@@ -49,7 +49,7 @@ const scrollToAbout = () => {
 
   <!-- Hero Section -->
   <div class="m-2 grid grid-cols-1 gap-4 sm:grid-cols-10 mx-8">
-    <div class="sm:col-span-6 min-h-[370px] p-4 sm:p-8">
+    <div class="sm:col-span-6 min-h-23 p-4 sm:p-8">
       <h1 class="text-black text-6xl sm:text-6xl font-extrabold font-Inter">
         Listen, Look <br> and Listen <br> and Learn!
       </h1>
@@ -63,7 +63,7 @@ const scrollToAbout = () => {
     
     <!-- Image -->
     <div class="sm:col-span-4 flex justify-center mr-26">
-      <img src="@/assets/image/image.png" class="h-[250px] w-auto sm:h-[300px] object-contain" />
+      <img src="@/assets/image/image.png" class="h-15 w-auto sm:h-18 object-contain" />
     </div>
   </div>
 
@@ -71,7 +71,7 @@ const scrollToAbout = () => {
   <div class="m-2 grid grid-cols-1 gap-4 sm:grid-cols-10">
     <!-- Image -->
     <div class="sm:col-span-4 flex justify-center">
-      <img src="@/assets/image/bgg.png" class="h-[290px] w-auto object-contain" />
+      <img src="@/assets/image/bgg.png" class="h-18 w-auto object-contain" />
     </div>
 
     <div class="sm:col-span-6 min-h-[300px] p-4 sm:p-8">
