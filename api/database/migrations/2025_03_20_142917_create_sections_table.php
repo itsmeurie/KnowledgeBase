@@ -21,6 +21,8 @@ return new class extends Migration
             $table->foreignIdFor(Office::class)->references('id')->on('offices');
             $table->softDeletes();
             $table->timestamps();
+
+            $table->unique(['slug', 'office_id']);
         });
     }
 
