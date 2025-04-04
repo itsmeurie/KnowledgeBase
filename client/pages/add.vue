@@ -5,6 +5,16 @@ import type { Section, Office } from '~/types';
 import type { FormError, FormSubmitEvent } from '#ui/types'
 import { z } from 'zod'
 
+
+
+
+const open = ref(true)
+
+defineShortcuts({
+  o: () => open.value = !open.value
+})
+
+
 const office = ref<Office>();
 const section = ref<Section | null>(null); 
 
@@ -133,6 +143,14 @@ const scrollToAbout = () => {
       <div class="mt-2">
       <label class="font-Inter text-black">Office</label>
       <TInput disabled size="md" :model-value="office?.name" />
+      </div>
+      
+
+      <!-- Dropdown Menu -->
+      <div class="mt-2 w-">
+        <TDropdown  v-model:open="open"  :popper="{ placement: 'bottom-start' }">
+            <TButton color="white" label="Office Section" trailing-icon="i-heroicons-chevron-down-20-solid" />
+        </TDropdown>
       </div>
 
       <div class="mt-2">
