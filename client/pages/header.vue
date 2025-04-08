@@ -1,14 +1,9 @@
 <script setup lang="ts">
-const linksNav = [{
-  label: 'Home',
-  to: '/playground'
-}, {
-  label: 'Docs',
-  to: '/articlepage'
-}, {
-  label: 'About',
-  to: 'playground#about-documentation'
-}]
+const linksNav = [
+  { label: 'Home', to: '/playground' },
+  { label: 'Docs', to: '/offices' },
+  { label: 'About', to: '/playground#about-documentation' }
+];
 
 const aboutSection = ref<HTMLElement | null>(null);
 

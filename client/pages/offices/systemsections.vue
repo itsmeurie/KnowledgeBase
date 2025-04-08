@@ -9,12 +9,6 @@ const office = ref<Office | null>(null);
 const officeSection = ref<Section[]>([]);
 const aboutSection = ref<HTMLElement | null>(null);
 
-const scrollToAbout = () => {
-  if (aboutSection.value) {
-    aboutSection.value.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-};
-
 const goToAdd = () => {
   if (route.params.slug) {
     router.push(`/offices/${route.params.slug}/add`);
@@ -57,38 +51,14 @@ onMounted(() => {
   fetchOffice();
 });
 
-const linksNav = [
-  { label: 'Home', to: '/playground' },
-  { label: 'Docs', to: '/systemsections' },
-  { label: 'About', to: '/playground#about-documentation' }
-];
+
+const OfficeHeader = defineAsyncComponent(() => import('~/pages/header.vue'))
 
 </script>
 
 <template> 
   <!-- Header -->
-  <div class="flex flex-wrap items-center justify-between px-4 gap-4 m-1">
-    <!-- Logo -->
-    <div class="flex items-center">
-      <img class="h-20 w-20 object-contain mt-6" src="@/assets/image/final-logo.png" />
-      <p class="text-2xl sm:text-3xl font-extrabold text-black font-Inter">Knowledge Base</p>
-    </div>
-
-    <!-- Navigation -->
-    <div class="w-full sm:w-auto col-span-3 flex justify-center">
-      <THorizontalNavigation :links="linksNav">
-        <template #default="{ link }">
-          <a 
-            :href="link.to" 
-            @click.prevent="link.label === 'About' ? scrollToAbout() : null" 
-            class="text-lg mx-4 sm:mx-8 text-black font-Inter font-bold group-hover:text-primary relative"
-          >
-            {{ link.label }}
-          </a>
-        </template>
-      </THorizontalNavigation>
-    </div>
-  </div>
+  <OfficeHeader />
 
   <!-- Office Details -->
   <div class="flex flex-col items-center h-full p-4">
