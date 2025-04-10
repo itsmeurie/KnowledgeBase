@@ -260,12 +260,12 @@ const goToEditPage = () => {
     <!-- More information -->
     <div class="sm:col-span-2 h-10">
           <p class="text-xl font-bold text-center ">More Information</p>
-              <div class="mx-6 mt-4 ">
+              <div class="mx-6 m-4 ">
                        <hr class="border-gray-700" />
               </div>
       </div>
-      <div class="flex justify-center">
-          <TIcon name="tabler:book" class="text-lg mr-2 mt-1.5"></TIcon>
+      <div class="flex justify-center m-4 items-center">
+          <TIcon name="tabler:book" class="text-lg m-1.5"></TIcon>
           <h1 class="text-black-100 font-Inter font-semibold text-lg">
               Documents
           </h1>
