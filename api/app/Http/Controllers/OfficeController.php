@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\OfficeRequests\CreateOfficeRequest;
 use App\Http\Requests\OfficeRequests\UpdateOfficeRequest;
+
+use App\Http\Resources\OfficeResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Intervention\Image\Colors\Rgb\Channels\Red;
@@ -22,13 +24,15 @@ class OfficeController extends Controller
                             })
                             ->get();
 
-        return response()->json($offices);    
+        
+
+        return response()->json( OfficeResource::collection($offices));    
     }
 
     public function show(Request $request, Office $office) : JsonResponse 
     {
         return response()->json([
-            'office' => $office
+            'office' => OfficeResource::make($office)
         ]);    
     }
 
@@ -39,7 +43,7 @@ class OfficeController extends Controller
         $office = Office::create($fields);
 
         return response()->json([
-            'office' => $office
+            'office' => OfficeResource::make($office)
         ]);    
     }
 
@@ -51,7 +55,7 @@ class OfficeController extends Controller
         $office->update($fields);
 
         return response()->json([
-            'office' => $office
+            'office' => OfficeResource::make($office)
         ]);    
     }
 

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SectionRequests\CreateSectionRequest;
 use App\Http\Requests\SectionRequests\UpdateSectionRequest;
+
+use App\Http\Resources\SectionResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Section;
@@ -19,7 +21,7 @@ class SectionController extends Controller
                         })
                         ->get();
         
-        return response()->json($sections);
+        return response()->json(SectionResource::collection($sections));
     }
     //
     // public function list (Request $request) : JsonResponse 
@@ -34,7 +36,7 @@ class SectionController extends Controller
     {
 
         return response()->json([
-            'section' => $section
+            'section' => SectionResource::make($section)
         ]);
     }
     public function create (CreateSectionRequest $request) : JsonResponse 
@@ -46,7 +48,7 @@ class SectionController extends Controller
         ]);
         
         return response()->json([
-            'section' => $section
+            'section' => SectionResource::make($section)
         ]);
     }
     public function update (UpdateSectionRequest $request, Section $section) : JsonResponse 
@@ -56,7 +58,7 @@ class SectionController extends Controller
         $section->update($fields);
 
         return response()->json([
-            'section' => $section
+            'section' => SectionResource::make($section)
         ]);
     }
 
