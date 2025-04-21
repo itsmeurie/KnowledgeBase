@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignIdFor(Office::class)->references('id')->on('offices');
             $table->string('title');
             $table->string('description')->comment('description');
-            $table->string('slug')->nullable();
+            $table->string('slug')->unique()->nullable();
             $table->softDeletes();
             $table->timestamps();
 

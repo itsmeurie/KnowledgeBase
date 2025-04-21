@@ -9,15 +9,18 @@ use App\Http\Resources\SectionResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Section;
+use App\Models\Office;
 use Illuminate\Support\Str;
 
 class SectionController extends Controller
 { 
-    public function list (Request $request, $office_id) : JsonResponse 
+    public function list (Request $request, string $office_id) : JsonResponse 
     {
         $limit = $request->input('limit', 25);
         $page = $request->input('page', 1);
-        $sections = Section::where('office_id', $office_id)
+        $id = Office::hashToId($office_id);
+
+        $sections = Section::where('office_id', $id)
                         ->when($request->query('slug'), function($query) use ($request){
                             $query->slug($request->query('slug'));
                         })
@@ -25,7 +28,8 @@ class SectionController extends Controller
 
         // $sections["data"] = SectionResource::collection($sections["data"]);
         
-        return response()->json(SectionResource::collection($sections));
+        $sections["data"] = SectionResource::collection($sections["data"]);
+        return response()->json($sections);
     }
     //
     // public function list (Request $request) : JsonResponse 
@@ -47,26 +51,22 @@ class SectionController extends Controller
     {
         $fields = $request->validated();
         $section = Section::create([
-            ...$fields,
-            'slug' => Str::slug($fields['title'], '-')
+            'title' => $fields['title'],
+            'description' => $fields['description'],
+            'office_id' => $fields['office_id'],
         ]);
         
         return response()->json([
             'section' => SectionResource::make($section)
         ]);
-    }
-    public function update (UpdateSectionRequest $request, Section $section) : JsonResponse 
+    }    public function update (UpdateSectionRequest $request, Section $section) : JsonResponse 
     {
         $fields = $request->validated();
 
         $section->update($fields);
 
         return response()->json([
-<<<<<<< Updated upstream
             'section' => SectionResource::make($section)
-=======
-        'section' => $section
->>>>>>> Stashed changes
         ]);
     }
 
