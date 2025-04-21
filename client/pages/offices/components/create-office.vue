@@ -80,7 +80,11 @@ function toggleModal(state : boolean | undefined){
                     <TFormGroup label="Short Description" name="description">
                         <TInput v-model="state.description" />
                     </TFormGroup>
-                    <TInput type="file" size="sm" icon="i-heroicons-photo" />
+                    <!-- <TInput type="file" size="sm" icon="i-heroicons-photo" /> -->
+                     <div>
+                        <label for="name">Office Logo</label>
+                        <input type="file" class="form-control-file">
+                     </div>
 
                     <div></div>
                     <TButton type="submit">

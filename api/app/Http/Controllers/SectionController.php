@@ -12,14 +12,18 @@ use App\Models\Section;
 use Illuminate\Support\Str;
 
 class SectionController extends Controller
-{
+{ 
     public function list (Request $request, $office_id) : JsonResponse 
     {
+        $limit = $request->input('limit', 25);
+        $page = $request->input('page', 1);
         $sections = Section::where('office_id', $office_id)
                         ->when($request->query('slug'), function($query) use ($request){
                             $query->slug($request->query('slug'));
                         })
-                        ->get();
+                        ->paginates(limit: $limit, page: $page);
+
+        // $sections["data"] = SectionResource::collection($sections["data"]);
         
         return response()->json(SectionResource::collection($sections));
     }
@@ -58,7 +62,11 @@ class SectionController extends Controller
         $section->update($fields);
 
         return response()->json([
+<<<<<<< Updated upstream
             'section' => SectionResource::make($section)
+=======
+        'section' => $section
+>>>>>>> Stashed changes
         ]);
     }
 

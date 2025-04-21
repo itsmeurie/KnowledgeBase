@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\File;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,11 +15,12 @@ return new class extends Migration
     {
         Schema::create('sections', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->longText('contents');
+            $table->foreignIdFor(Office::class)->references('id')->on('offices');
             $table->string('title');
             $table->string('description')->comment('description');
-            $table->unsignedBigInteger('parent_id')->nullable();
             $table->string('slug')->nullable();
-            $table->foreignIdFor(Office::class)->references('id')->on('offices');
             $table->softDeletes();
             $table->timestamps();
 

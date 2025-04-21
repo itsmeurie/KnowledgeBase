@@ -25,7 +25,7 @@ class CreateOfficeRequest extends FormRequest
             'name' => 'required', 
             'code' => 'nullable',
             'description' => 'nullable',
-            'office_id'=> 'required'
+            
         ];
     }
 }

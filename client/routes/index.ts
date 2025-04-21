@@ -174,7 +174,7 @@ export default computed(() => [
 
 
       {
-        path: '/articlepage/:slug',
+        path: '/offices/:code/articlepage/:slug',
         name: "Article",
         component: () => import('@/pages/articlepage.vue'),
          

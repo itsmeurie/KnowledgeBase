@@ -13,6 +13,8 @@ export type Section = {
     title: string
     description: string
     office_id: number
+    parent_id: number
+    slug: string
     deleted_at?: string
     updated_at?: string
     created_at?: string

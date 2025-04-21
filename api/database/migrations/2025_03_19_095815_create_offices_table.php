@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('offices', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('parent_id')->nullable();
             $table->string('name');
             $table->string('code')->nullable();
-            $table->string('description')->comment('description_column');
+            $table->string('description')->comment('description_column')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

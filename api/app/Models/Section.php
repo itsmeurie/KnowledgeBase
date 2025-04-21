@@ -4,19 +4,24 @@ namespace App\Models;
 use Illuminate\DAtabase\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\ModelSlugTrait;
 
 class Section extends AppModel {
 
-    use SoftDeletes;
+    use SoftDeletes, ModelSlugTrait;
 
     protected $fillable = [
         'title',
         'office_id',
+        'parent_id',
         'description',
+        'contents',
         'slug',
     ];
+
+    protected static $slug_target = 'title';
 
     /**
     * Get the attributes that should be cast.
@@ -37,9 +42,9 @@ class Section extends AppModel {
         return $this->hasMany(Section::class, 'parent_id');
     }
 
-    public function document() : HasOne
+    public function files() : MorphMany
     {
-        return $this->hasOne(Documents::class);
+        return $this->morphMany(File::class, 'fileable');
     }
 
     public function scopeSlug(Builder $query, string $slug) : void

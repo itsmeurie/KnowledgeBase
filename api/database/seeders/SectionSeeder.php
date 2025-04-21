@@ -16,22 +16,25 @@ class SectionSeeder extends Seeder
         $sections =
         [
             [
-                    'title' => "Overview",
+                    'title' => "System",
                     'description' => "Provides a general summary of the department's functions, responsibilities, and objectives.",
-                    'parent_id' => "1",
+                    'contents' => "sample docs",
                     'office_id' => 1,
+                    'slug' => "system",
             ],
             [
                     'title' => "News",
                     'description' => "sample news description",
-                    'parent_id' => "2",
+                    'contents' => "sample docs2",
                     'office_id' => 2,
+                    'slug' => "news",
              ],
              [
                     'title' => "Update",
                     'description' => "sample update description",
-                    'parent_id' => "3",
+                    'contents' => "sample docs3",
                     'office_id' => 3,
+                    'slug' => "update",
             ],
           
         ];

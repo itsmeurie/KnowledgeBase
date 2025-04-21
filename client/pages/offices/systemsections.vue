@@ -15,13 +15,23 @@ const goToAdd = () => {
   } 
 };
 
-const goToArticlePage = () => {
+const goToArticlePage = (slug: string) => {
   if (office.value?.code) {
-    router.push(`/articlepage/${office.value.code}`);
+    // router.push(`/offices/${office.value.code.toLowerCase()}/articlepage/`);
+    router.push({
+      name: 'Article',
+      params: {
+        code: office.value.code.toLowerCase(),
+        slug: slug
+      }
+    });
   } else {
     console.error("Office code is missing!");
   }
 };
+
+
+
 
 // Fetch Office Data
 async function fetchOffice() {
@@ -41,7 +51,7 @@ async function fetchOfficeSectionList() {
   if (!office.value?.id) return;
   try {
     const response = await $api.get(`/sections/${office.value.id}`);
-    officeSection.value = response.data;
+    officeSection.value = response.data.data;
   } catch (error) {
     console.error("Error fetching sections:", error);
   }
@@ -81,7 +91,7 @@ const OfficeHeader = defineAsyncComponent(() => import('~/pages/header.vue'))
           <div
             v-for="section in officeSection"
             :key="section.id"
-            @click="goToArticlePage"
+            @click="goToArticlePage(section.slug)"
             class="cursor-pointer hover:bg-gray-100 transition border border-gray-200 rounded-lg p-4 shadow-md">
             <h5 class="text-lg font-semibold text-green-800">{{ section.title }}</h5>
             <p class="text-sm text-gray-600 transition duration-300 hover:underline">{{ section.description }}</p>

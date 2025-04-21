@@ -3,7 +3,7 @@ import type { Section, Office } from '~/types';
 import { useRouter } from 'vue-router';
 
 const office = ref<Office>();
-const section = ref<Section | null>(null); // Store active section
+const section = ref<Section>(); // Store active section
 const OfficeHeader = defineAsyncComponent(() => import('./header.vue'))
 const Accordion = defineAsyncComponent(() => import('./accordion.vue'))
 
@@ -17,7 +17,7 @@ async function fetchOffice() {
   if (!route.params.slug) return;
 
   try {
-    const response = await $api.get('/offices/', { params: { code: route.params.slug } });
+    const response = await $api.get('/offices/', { params: { code: route.params.code} });
     office.value = response.data[0];
 
     if (office.value?.id) {
@@ -32,13 +32,20 @@ async function fetchOffice() {
 async function fetchSection() {
   try {
     const response = await $api.get(`/sections/${office.value?.id}`);
-    const sections = response.data;
+    const sections = response.data.data;
 
-    section.value = sections.length ? sections[0] : null;
+    section.value = sections.find((sec: Section) => sec.slug === route.params.slug) || null;
   } catch (error) {
     console.error("Error fetching section:", error);
   }
 }
+
+watch(() => route.params.slug, () => {
+  if (office.value) {
+    fetchSection();
+  }
+});
+
 
 
 onMounted(() => {
@@ -50,6 +57,35 @@ const goToEditPage = () => {
 };
 
 
+<<<<<<< Updated upstream
+=======
+const items = ref([
+  { 
+    label: "CEDULA",             
+    children: [
+      { label: "Why do we need Cedula", to: "/why" },
+      { label: "Where to use", to: "/where" },
+      { label: "How to get Cedula", to: "/how" }
+    ] 
+  },
+  { 
+    label: "CI Office", 
+    children: [
+      { label: "Campus Executive Director" },
+      { label: "Secretary" },
+      { label: "Administrative Aide" }
+    ] 
+  },
+  { 
+    label: "VP Office", 
+    children: [
+      { label: "Campus Executive Director" },
+      { label: "Secretary" },
+      { label: "Administrative Aide" }
+    ] 
+  },
+]);
+>>>>>>> Stashed changes
 
 </script>
 
@@ -78,8 +114,40 @@ const goToEditPage = () => {
         <h6>{{ office?.name }}</h6>
       </div>
   
+<<<<<<< Updated upstream
      <!-- Accordion-->
       <Accordion />
+=======
+          <div class="w-64 m-3">
+         <TAccordion v-model:open="openItems" :items="items" multiple>
+            <template #default="{ item, open }">
+              <TButton 
+                color="gray" 
+                variant="ghost" 
+                block 
+                class="flex justify-between items-center px-4 py-2 w-full text-left">
+                <span>{{ item.label }}</span>
+                <TIcon :name="open ? 'i-heroicons-chevron-down' : 'i-heroicons-chevron-right'" class="ml-2"/>
+              </TButton>
+            </template>
+  
+            <template #item="{ item }">
+              <ul v-if="item.children" class="pl-6 text-gray-600">
+                <li v-for="child in item.children" :key="child.label">
+                  <router-link v-if="child.to" :to="child.to">
+                    <TButton color="gray" variant="link" block class="flex justify-between items-center px-4 py-2 w-full text-left">
+                      {{ child.label }}
+                    </TButton>
+                  </router-link>
+                  <TButton v-else color="gray" variant="link" block class="flex justify-between items-center px-4 py-2 w-full text-left">
+                    {{ child.label }}
+                  </TButton>
+                </li>
+              </ul>
+            </template>
+        </TAccordion>
+    </div>
+>>>>>>> Stashed changes
       </div>
   
       <div class="col-span-6 grid grid-cols-1 gap-4 ">
@@ -128,9 +196,10 @@ const goToEditPage = () => {
             
             :key="section?.id"
             >
-              <h1 class="text-black  font-Inter font-extrabold text-4xl p-4">
-                {{ section?.title }}
-              </h1>
+            <h1 class="text-black font-Inter font-extrabold text-4xl p-4">
+  {{ section?.title }}
+</h1>
+
             </div>
           </div>
           
