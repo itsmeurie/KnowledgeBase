@@ -158,7 +158,7 @@ const fetchOffice = async (): Promise<void> => {
 
 const fetchSection = (): Promise<void> => {
   return $api
-    .get(`/sections/${office.value?.id}`)
+    .get(`/sections/office/${office.value?.id}`)
     .then((response) => {
       sections.value = response.data.data;
       section.value = sections.value.length ? sections.value[0] : undefined;
