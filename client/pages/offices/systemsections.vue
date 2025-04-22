@@ -11,13 +11,8 @@ const aboutSection = ref<HTMLElement | null>(null);
 
 const goToAdd = () => {
   if (route.params.slug) {
-<<<<<<< Updated upstream
-    router.push(`/offices/${route.params.slug}/add`);
-  }
-=======
     router.push(`/offices/systems/${route.params.slug}/create`);
   } 
->>>>>>> Stashed changes
 };
 
 const goToArticlePage = (slug: string) => {
@@ -65,25 +60,6 @@ onMounted(() => {
   fetchOffice();
 });
 
-<<<<<<< Updated upstream
-const OfficeHeader = defineAsyncComponent(() => import("~/pages/header.vue"));
-</script>
-
-<template>
-  <!-- Header -->
-  <OfficeHeader />
-
-  <!-- Office Details -->
-  <div class="flex h-full flex-col items-center p-4">
-    <div class="flex w-full max-w-7xl flex-col gap-2">
-      <div
-        class="rounded-md bg-cover bg-center bg-no-repeat shadow-lg"
-        style="
-          background-image: url(&quot;https://static.vecteezy.com/system/resources/previews/009/302/805/non_2x/silhouette-landscape-with-fog-forest-pine-trees-mountains-illustration-of-national-park-view-mist-black-and-white-good-for-wallpaper-background-banner-cover-poster-free-vector.jpg&quot;);
-        "
-      >
-        <div class="flex flex-col gap-4 rounded-md px-6 py-6">
-=======
 </script>
 
 <template> 
@@ -95,7 +71,6 @@ const OfficeHeader = defineAsyncComponent(() => import("~/pages/header.vue"));
            bg-[url('https://static.vecteezy.com/system/resources/previews/009/302/805/non_2x/silhouette-landscape-with-fog-forest-pine-trees-mountains-illustration-of-national-park-view-mist-black-and-white-good-for-wallpaper-background-banner-cover-poster-free-vector.jpg')]
            dark:bg-[url('https://nighteye.app/wp-content/uploads/2020/04/claudio-testa-fb_CZ4hZXWo-unsplash.jpg')]">
         <div class="flex flex-col gap-4 rounded-md px-6 py-6">  
->>>>>>> Stashed changes
           <!-- HEADER -->
           <div class="flex items-center justify-between">
             <h5 class="text-4xl font-semibold">{{ office?.name }}</h5>
@@ -113,22 +88,9 @@ const OfficeHeader = defineAsyncComponent(() => import("~/pages/header.vue"));
             v-for="section in officeSection"
             :key="section.id"
             @click="goToArticlePage(section.slug)"
-<<<<<<< Updated upstream
-            class="cursor-pointer rounded-lg border border-gray-200 p-4 shadow-md transition hover:bg-gray-100"
-          >
-            <h5 class="text-lg font-semibold text-green-800">
-              {{ section.title }}
-            </h5>
-            <p
-              class="text-sm text-gray-600 transition duration-300 hover:underline"
-            >
-              {{ section.description }}
-            </p>
-=======
             class="cursor-pointer transition border border-gray-200 rounded-lg p-4 shadow-md">
             <h5 class="text-lg font-semibold text-primary">{{ section.title }}</h5>
             <p class="text-sm transition duration-300 hover:underline">{{ section.description }}</p>
->>>>>>> Stashed changes
           </div>
 
           <!-- Add New Section -->
@@ -137,13 +99,7 @@ const OfficeHeader = defineAsyncComponent(() => import("~/pages/header.vue"));
             class="flex cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 p-4 shadow-md transition hover:bg-green-100"
           >
             <TIcon name="tabler:plus"></TIcon>
-<<<<<<< Updated upstream
-            <h5 class="text-lg font-semibold text-green-800">
-              Create New Section/Manual
-            </h5>
-=======
             <h5 class="text-lg font-semibold text-primary">Create New Section/Manual</h5>
->>>>>>> Stashed changes
           </div>
         </div>
       </div>

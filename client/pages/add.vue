@@ -7,11 +7,7 @@ import { z } from "zod";
 
 const open = ref(true);
 const office = ref<Office>();
-<<<<<<< Updated upstream
 const section = ref<Section>();
-=======
-const section = ref<Section | null>(null);
->>>>>>> Stashed changes
 const router = useRouter();
 const { $api } = useNuxtApp();
 const route = useRoute();
@@ -20,7 +16,6 @@ const sections = ref<Section[]>([]);
 const selectedSectionId = ref<"none" | number>("none");
 const aboutSection = ref<HTMLElement | null>(null);
 const toast = useToast();
-<<<<<<< Updated upstream
 const loading = ref(false);
 
 defineShortcuts({
@@ -80,78 +75,6 @@ const onSubmit = (event: FormSubmitEvent<Schema>): Promise<void> => {
       });
   });
 };
-=======
-
-defineShortcuts({
-  o: () => (open.value = !open.value),
-});
-
-const validate = (state: any): FormError[] => {
-  const errors = [];
-  if (!state.title) errors.push({ path: "title", message: "Required" });
-  if (!state.description)
-    errors.push({ path: "description", message: "Required" });
-  return errors;
-};
-
-const schema = z.object({
-  title: z.string(),
-  description: z.string(),
-});
-
-type Schema = z.output<typeof schema>;
-
-const state = reactive({
-  title: undefined as string | undefined,
-  description: undefined as string | undefined,
-});
-
-async function onSubmit(event: FormSubmitEvent<Schema>) {
-  try {
-    const response = await $api.post("/sections", {
-      office_id: office.value?.id,
-      ...event.data,
-    });
-
-    if (response.status === 200) {
-      emit("update:show", false);
-
-      // Resetting state and selectedSectionId
-      state.title = "";
-      state.description = "";
-      selectedSectionId.value = "none"; // Reset the section selection
-
-      // Showing the appropriate toast
-      toast.add({
-        title:
-          selectedSectionId.value === "none"
-            ? "Section Added"
-            : "Subsection Added",
-        color: "green",
-        icon: "i-heroicons-check-circle",
-      });
-    }
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      toast.add({
-        title: "Error submitting form",
-        description: error.message,
-        color: "red",
-        icon: "i-heroicons-x-circle",
-      });
-      console.error(error);
-    } else {
-      toast.add({
-        title: "Unknown Error",
-        description: "An unknown error occurred",
-        color: "red",
-        icon: "i-heroicons-x-circle",
-      });
-      console.error("Unknown error:", error);
-    }
-  }
-}
->>>>>>> Stashed changes
 
 // async function onSubmit(event: FormSubmitEvent<Schema>) {
 //   try {
@@ -202,18 +125,10 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 const fetchOffice = async (): Promise<void> => {
   if (!route.params.slug) return;
 
-<<<<<<< Updated upstream
   return $api
     .get("/offices/", { params: { code: route.params.slug } })
     .then((response) => {
       office.value = response.data[0];
-=======
-  try {
-    const response = await $api.get("/offices/", {
-      params: { code: route.params.slug },
-    });
-    office.value = response.data[0];
->>>>>>> Stashed changes
 
       if (office.value?.id) {
         fetchSection();
@@ -307,55 +222,6 @@ const scrollToAbout = () => {
 </script>
 
 <template>
-<<<<<<< Updated upstream
-  <!-- Header -->
-  <div
-    class="flex flex-wrap items-center justify-between gap-4 px-4 sm:grid sm:grid-cols-8"
-  >
-    <!-- Logo -->
-    <div class="flex min-w-60 items-center">
-      <p class="font-Inter text-2xl font-extrabold text-black sm:text-3xl">
-        Knowledge Base
-      </p>
-    </div>
-
-    <!-- Spacing divs for layout balance (hidden on small screens) -->
-    <div class="h-6.25 col-span-1 hidden sm:block"></div>
-    <div class="h-6.25 col-span-1 hidden sm:block"></div>
-    <div class="h-6.25 col-span-1 hidden sm:block"></div>
-    <div class="h-6.25 col-span-1 hidden sm:block"></div>
-
-    <!-- Navigation -->
-    <div class="col-span-3 flex w-full justify-center sm:w-auto sm:justify-end">
-      <THorizontalNavigation :links="links">
-        <!-- Inayos-->
-        <template #default="{ link }">
-          <a
-            :href="link.to"
-            @click.prevent="link.label === 'About' ? scrollToAbout() : null"
-            class="font-Inter group-hover:text-primary relative mx-4 text-lg font-bold text-black sm:mx-8"
-          >
-            {{ link.label }}
-          </a>
-        </template>
-      </THorizontalNavigation>
-    </div>
-  </div>
-
-  <!-- Body -->
-  <div class="m-2 grid gap-4 p-4 sm:grid-cols-4">
-    <!-- Input Section -->
-    <div
-      class="col-span-1 min-h-[400px] w-full rounded-lg border border-gray-300 p-4 sm:w-[300px]"
-    >
-      <p class="font-Inter text-lg font-bold text-black">INFORMATION</p>
-
-      <div class="mt-2">
-        <label class="font-Inter mt-2 text-black">Office</label>
-        <TInput disabled size="md" :model-value="office?.name" />
-      </div>
-
-=======
   <!-- Body -->
   <div class="m-2 grid gap-4 p-4 sm:grid-cols-4">
     <!-- Input Section -->
@@ -369,7 +235,6 @@ const scrollToAbout = () => {
         <TInput disabled size="md" :model-value="office?.name" />
       </div>
 
->>>>>>> Stashed changes
       <!-- Select Menu -->
       <div class="mt-2">
         <TSelect
@@ -381,20 +246,12 @@ const scrollToAbout = () => {
       <div class="mt-2">
         <TForm
           :schema="schema"
-<<<<<<< Updated upstream
-=======
-          :validate="validate"
->>>>>>> Stashed changes
           :state="state"
           class="space-y-4"
           @submit="onSubmit"
         >
           <TFormGroup
-<<<<<<< Updated upstream
-            class="font-Inter mt-2 text-black"
-=======
             class="font-Inter mt-2"
->>>>>>> Stashed changes
             :label="sectionLabel"
             name="title"
           >
@@ -408,19 +265,11 @@ const scrollToAbout = () => {
             <TInput v-model="state.description" size="md" />
           </TFormGroup>
           <div></div>
-<<<<<<< Updated upstream
-          <p class="font-Inter mt-4 text-lg font-bold text-black">
-            ADDITIONAL RESOURCES
-          </p>
-          <div class="mt-2">
-            <label class="font-Inter text-black">Upload File</label>
-=======
-          <p class="font-Inter text-l mt-4 font-bold">ADDITIONAL RESOURCES</p>
+          <!-- <p class="font-Inter text-l mt-4 font-bold">ADDITIONAL RESOURCES</p>
           <div class="mt-2">
             <label class="font-Inter">Upload File</label>
->>>>>>> Stashed changes
             <TInput type="file" size="md" class="mt-1 w-full" />
-          </div>
+          </div> -->
           <TButton class="mt-4" color="primary" variant="solid">Submit</TButton>
         </TForm>
       </div>

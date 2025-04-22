@@ -236,20 +236,4 @@ export default computed(() => [
       },
     ],
   },
-<<<<<<< Updated upstream
 ]);
-
-
-// <!-- <div class="mt-2">
-// <label class="font-Inter text-black">Section</label>
-// <TInput size="md" placeholder="Enter here..." class="w-full mt-1" />
-// </div>
-// <div class="mt-2">
-// <label class="font-Inter text-black">Short Description</label>
-// <TInput size="md" placeholder="Enter here..." class="w-full mt-1" />
-// </div>
-
-
-=======
-]);
->>>>>>> Stashed changes
