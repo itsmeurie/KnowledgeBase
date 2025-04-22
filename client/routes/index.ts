@@ -451,13 +451,4 @@ export default computed(() => [
 // <TInput size="md" placeholder="Enter here..." class="w-full mt-1" />
 // </div>
 
-// <p class="font-Inter font-bold text-lg text-black mt-4">ADDITIONAL RESOURCES</p>
-// <div class="mt-2">
-// <label class="font-Inter text-black">Upload File</label>
-// <TInput type="file" size="md" class="w-full mt-1" />
-// </div>
-// <div class="mt-2">
-// <label class="font-Inter text-black">Description</label>
-// <TInput size="md" placeholder="Enter here..." class="w-full mt-1" />
-// </div>
-// <TButton class="mt-4" color="primary" variant="solid">Submit</TButton> -->
+

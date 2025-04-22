@@ -12,27 +12,38 @@ use App\Models\Section;
 use App\Models\Office;
 use Illuminate\Support\Str;
 
-class SectionController extends Controller
-{ 
-    public function list (Request $request, string $office_id) : JsonResponse 
-    {
-        $limit = $request->input('limit', 25);
-        $page = $request->input('page', 1);
+class SectionController extends Controller {
+    public function list(Request $request, string $office_id, ?string $parent_id = null): JsonResponse {
+        $limit = $request->input("limit", 25);
+        $page = $request->input("page", 1);
         $id = Office::hashToId($office_id);
+        $parent_id = !!$parent_id ? Section::hashToId($parent_id) : null;
 
-        $sections = Section::where('office_id', $id)
-                        ->when($request->query('slug'), function($query) use ($request){
-                            $query->slug($request->query('slug'));
-                        })
-                        ->paginates(limit: $limit, page: $page);
+        $sections = Section::where("office_id", $id)
+            ->when($parent_id, function ($query) use ($parent_id) {
+                $query->where("parent_id", $parent_id);
+            })
+            ->when(!$parent_id, function ($query) use ($parent_id) {
+                $query->whereNull("parent_id");
+            })
+            ->when($request->query("slug"), function ($query) use ($request) {
+                $query->slug($request->query("slug"));
+            })
+            ->paginates(limit: $limit, page: $page);
 
         // $sections["data"] = SectionResource::collection($sections["data"]);
-        
+
         $sections["data"] = SectionResource::collection($sections["data"]);
         return response()->json($sections);
     }
+    public function show(string $office_id, string $slug) {
+        $id = Office::hashToId($office_id);
+
+        $section = Section::where("office_id", $id)->where("slug", $slug)->first();
+        return response()->json($section);
+    }
     //
-    // public function list (Request $request) : JsonResponse 
+    // public function list (Request $request) : JsonResponse
     // {
     //     $sections = Section::when($request->query('title'), function($query) use ($request){
     //         $query->title($request->query('title'));
@@ -40,66 +51,55 @@ class SectionController extends Controller
 
     //     return response()->json($sections);
     // }
-    public function show (Request $request, Section $section) : JsonResponse 
-    {
-
-        return response()->json([
-            'section' => SectionResource::make($section)
-        ]);
-    }
-    public function create (CreateSectionRequest $request) : JsonResponse 
-    {
+    // public function show(Request $request, string $slug): JsonResponse {
+    //     return response()->json([
+    //         "section" => SectionResource::make($slug),
+    //     ]);
+    // }
+    public function create(CreateSectionRequest $request): JsonResponse {
         $fields = $request->validated();
         $section = Section::create([
-            'title' => $fields['title'],
-            'description' => $fields['description'],
-            'office_id' => $fields['office_id'],
+            "title" => $fields["title"],
+            "description" => $fields["description"],
+            "office_id" => $fields["office_id"],
         ]);
-        
+
         return response()->json([
-            'section' => SectionResource::make($section)
+            "section" => SectionResource::make($section),
         ]);
-    }    public function update (UpdateSectionRequest $request, Section $section) : JsonResponse 
-    {
+    }
+    public function update(UpdateSectionRequest $request, Section $section): JsonResponse {
         $fields = $request->validated();
 
-        $section->update($fields);
+        $section->update([
+            "title" => $fields["title"],
+            "description" => $fields["description"],
+            "office_id" => $fields["office_id"],
+        ]);
 
         return response()->json([
-            'section' => SectionResource::make($section)
+            "section" => SectionResource::make($section),
         ]);
     }
 
-    public function delete (Request $request, Section $section) : JsonResponse 
-    {
+    public function delete(Request $request, Section $section): JsonResponse {
         $section->delete();
 
-
         return response()->json([
-            'message' => "{$section->title} #{$section->hash} has been deleted."
+            "message" => "{$section->title} #{$section->hash} has been deleted.",
         ]);
     }
-    public function restore (Request $request, string | int $section) : JsonResponse 
-    {
-
-        if(!is_numeric($section)){
+    public function restore(Request $request, string $section): JsonResponse {
+        if (!is_numeric($section)) {
             //expecting hash
             $section = Section::withTrashed()->byHash($section);
-        
-        }else {
+        } else {
             //expecting id
             $section = Section::withTrashed()->find($section);
             $section->restore();
         }
         return response()->json([
-            'message' => "{$section->name}#{$section->hash} has been restored"
+            "message" => "{$section->name}#{$section->hash} has been restored",
         ]);
     }
-    
-
-
-
-
-
-
 }

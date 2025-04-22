@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\VerificationController;
@@ -24,50 +23,41 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\SectionController;
 
-Route::post('give-me-data', function (Request $request){
-    $validated_data = Validator::make(
-        $request->all(),
-        ['price' => 'required|decimal:0,99999.99',
-        'message' => 'nullable'
-        ]
-    );
-     dd($request->input(), $validated_data->validate());
+Route::post("give-me-data", function (Request $request) {
+    $validated_data = Validator::make($request->all(), ["price" => "required|decimal:0,99999.99", "message" => "nullable"]);
+    dd($request->input(), $validated_data->validate());
 });
 
-
-Route::prefix('documents')->group(function(){
-    Route::get('', [DocumentsController::class, 'list'])->name('documents.list');
-    Route::get('{document}', [DocumentsController::class, 'show'])->name('documents.show');
-    Route::post('', [DocumentsController::class, 'create'])->name('documents.create');
-    Route::put('{document}', [DocumentsController::class, 'update'])->name('documents.update');
-    Route::delete('{document}', [DocumentsController::class, 'delete'])->name('documents.delete');
-    Route::patch('{document}', [DocumentsController::class, 'restore'])->name('documents.restore');
+Route::prefix("documents")->group(function () {
+    Route::get("", [DocumentsController::class, "list"])->name("documents.list");
+    Route::get("{document}", [DocumentsController::class, "show"])->name("documents.show");
+    Route::post("", [DocumentsController::class, "create"])->name("documents.create");
+    Route::put("{document}", [DocumentsController::class, "update"])->name("documents.update");
+    Route::delete("{document}", [DocumentsController::class, "delete"])->name("documents.delete");
+    Route::patch("{document}", [DocumentsController::class, "restore"])->name("documents.restore");
 });
 
-
-Route::prefix("genders")->group(function() {
+Route::prefix("genders")->group(function () {
     Route::get("", [GenderController::class, "list"])->name("genders.list");
 });
 
-Route::prefix('offices')->group(function(){
-    Route::get('', [OfficeController::class, 'list'])->name('offices.list');
-    Route::get('{office}', [OfficeController::class, 'show'])->name('offices.show');
-    Route::post('', [OfficeController::class, 'create'])->name('offices.create');
-    Route::put('{office}', [OfficeController::class, 'update'])->name('offices.update');
-    Route::delete('{office}', [OfficeController::class, 'delete'])->name('offices.delete');
-    Route::patch('{office}', [OfficeController::class, 'restore'])->name('offices.restore');
+Route::prefix("offices")->group(function () {
+    Route::get("", [OfficeController::class, "list"])->name("offices.list");
+    Route::get("{office}", [OfficeController::class, "show"])->name("offices.show");
+    Route::post("", [OfficeController::class, "create"])->name("offices.create");
+    Route::put("{office}", [OfficeController::class, "update"])->name("offices.update");
+    Route::delete("{office}", [OfficeController::class, "delete"])->name("offices.delete");
+    Route::patch("{office}", [OfficeController::class, "restore"])->name("offices.restore");
 });
 
-
-Route::prefix('sections')->group(function(){
-    Route::get('{office_id}', [SectionController::class, 'list'])->name('sections.list');
-    Route::get('{section}', [SectionController::class, 'show'])->name('sections.show');
-    Route::post('', [SectionController::class, 'create'])->name('sections.create');
-    Route::put('{section}', [SectionController::class, 'update'])->name('sections.update');
-    Route::delete('{section}', [SectionController::class, 'delete'])->name('sections.delete');
-    Route::patch('{section}', [SectionController::class, 'restore'])->name('sections.restore');
+Route::prefix("sections")->group(function () {
+    Route::get("office/{office_id}/{parent_id?}", [SectionController::class, "list"])->name("sections.list");
+    Route::get("section/{office_id}/{slug}", [SectionController::class, "show"])->name("sections.show");
+    Route::post("", [SectionController::class, "create"])->name("sections.create");
+    Route::put("{section}", [SectionController::class, "update"])->name("sections.update");
+    Route::delete("{section}", [SectionController::class, "delete"])->name("sections.delete");
+    Route::patch("{section}", [SectionController::class, "restore"])->name("sections.restore");
 });
-
 
 Route::middleware(["auth:sanctum", "throttle:90,1", "isActive"])->group(function () {
     Route::middleware(["verified", "SPAOnly"])->group(function () {
@@ -163,7 +153,7 @@ Route::middleware(["auth:sanctum", "throttle:90,1", "isActive"])->group(function
         Route::post("/test/upload", [TestController::class, "upload"]);
         #endregion
     });
-       
+
     Route::prefix("auth")->group(function () {
         Route::patch("profile-update", [ProfileController::class, "updateProfile"])->name("auth.profile.update.forced");
         Route::post("logout", [AuthenticationController::class, "logout"]);
@@ -225,9 +215,3 @@ Route::middleware(["api", "throttle:60,1"])->prefix("v1.0")->group(function () {
 Route::middleware(["auth:sanctum", "throttle:60,1"])->prefix("v1.0")->group(function () {
     Route::middleware(["verified"])->group(function () {});
 });
-
-
-
-
-
-    

@@ -7,7 +7,7 @@
     },
     "devDependencies": {
         "@prettier/plugin-php": "0.22.4",
-        "prettier": "3.4.2"
+        "prettier": "3.5.2"
     },
     "prettier": {
         "parser": "php",
@@ -16,8 +16,5 @@
         ],
         "braceStyle": "1tbs",
         "printWidth": 160
-    },
-    "dependencies": {
-        "@nuxt/ui": "^3.0.0"
     }
 }

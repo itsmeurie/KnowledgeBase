@@ -19,6 +19,15 @@ class SectionResource extends JsonResource
             "id" => $this->hash,
             "description"=>$this->description,
             "slug"=>$this->slug,
+            "office"=>OfficeResource::make($this->office),
+            "subsections"=>$this->subSections->map(function($section){
+                return[
+                    "title"=>$section->title,
+                    "id"=>$section->hash,
+                    "description"=>$section->description,
+                    "slug"=>$section->slug,
+                ];
+            }),
         ];
     }
 }
