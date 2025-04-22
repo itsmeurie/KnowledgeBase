@@ -11,10 +11,6 @@ const formState = reactive({
   code: ''
 });
 
-
-const OfficeHeader = defineAsyncComponent(() => import('@/pages/header.vue'))
-
-
 const columns = ['Offices', 'View', 'Action']
 
 const article = ref([
@@ -79,8 +75,6 @@ const confirmDelete = () => {
 </script>
 
 <template>
-  <!-- HEader-->
-    <OfficeHeader />
   <div class="p-4">
     <div class="max-w-4xl mx-auto p-4">
       <input

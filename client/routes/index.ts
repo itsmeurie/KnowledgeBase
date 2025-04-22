@@ -9,274 +9,71 @@ export * from "./settings";
 
 export default computed(() => [
   // Debug
-	{
-		children: [
-      
-      {
-        path: "/playground",
-        name: "playground",
-        component: () => import('@/pages/playground.vue'),
-         
-        meta: {
-          
-          title: "Playground",
-
-          layout: 'public'
-          
-        },
-      },
-      {
-        path: "/offices/:slug",
-        name: "systemsections",
-        component: () => import('@/pages/offices/systemsections.vue'),
-         
-        meta: {
-          
-          title: "System Sections",
-
-          layout: 'public'
-          
-        },
-      },
-      // {
-      //   path: "/add",
-      //   name: "add",
-      //   component: () => import('@/pages/add.vue'),
-      //   path: "/systemsections",
-      //   name: "systemsections",
-      //   component: () => import('@/pages/offices/systemsections.vue'),
-         
-      //   meta: {
-          
-      //     title: "System Sections",
-
-      //     layout: 'public'
-          
-      //   },
-      // },
-      {
-        path: "/offices/:slug/add",
-        name: "add",
-        component: () => import('@/pages/add.vue'),
-         
-        meta: {
-          
-          title: "Create Article",
-
-          layout: 'public'
-          
-        },
-      },
-      
-      {
-        path: "/edit-article",
-        name: "edit-article",
-        component: () => import('~/pages/edit.vue'),
-         
-        meta: {
-          
-          title: "edit-article",
-
-          layout: 'public'
-          
-        },
-      },
-
-      {
-        path: "/systemsections",
-        name: "systemsections1",
-        component: () => import('~/pages/offices/systemsections.vue'),
-         
-        meta: {
-          
-          title: "System Sections",
-
-          layout: 'public'
-          
-        },
-      },
-
-      {
-        path: "/offices",
-        meta: {
-          title: 'office landing page',
-          layout: 'office'
-        },
-        children: [
-          {
-            path: "",
-            component: () => import('@/pages/offices/index.vue')
-          },
-          {
-            path: "articles",
-            component: () => import('@/pages/offices/articles.vue')
-          },
-          {
-            path: "system/sections",
-            component: () => import('@/pages/offices/systemsections.vue')
-          },
-          {
-            path: "articles",
-            component: () => import('@/pages/offices/articles.vue')
-          },
-          {
-            path: "articles/add",
-            meta: {
-              title: 'Create new Article',
-            },
-            component: () => import('~/pages/add.vue')
-          },
-        ]
-      },
-      
-
-
-      {
-        path: "/why",
-        name: "why",
-        component: () => import('@/pages/CEDULA/why.vue'),
-         
-       meta: {
-          
-          title: "why",
-
-         layout: 'public'
-          
-        },
-      },
-
-      {
-        path: "/where",
-        name: "where",
-        component: () => import('@/pages/CEDULA/where.vue'),
-        meta: {
-          
-          title: "where",
-
-          layout: 'public'
-          
-        },
-      },
-
-      {
-        path: "/how",
-        name: "how",
-        component: () => import('@/pages/CEDULA/how.vue'),
-         
-        meta: {
-          
-          title: "how",
-
-          layout: 'public'
-          
-        },
-      },
-
-
-      {
-        path: '/offices/:code/articlepage/:slug',
-        name: "Article",
-        component: () => import('@/pages/articlepage.vue'),
-         
-        meta: {
-          
-          title: "Article",
-
-          layout: 'public'
-          
-        },
-      },
-
-			{
-				path: "/tickets",
-				name: "tickets-index",
-				component: () => import("@/pages/tickets/index.vue"),
-				meta: {
-					title: "Tickets: Index",
-				},
-
-			},
-			{
-				path: "/tickets/view/:id?",
-				name: "tickets-view",
-				component: () => import("@/pages/tickets/view.vue"),
-				meta: {
-					title: "Tickets: View",
-				},
-			},
-		],
-	},
-   {
-				path: "/violations",
-				name: "violations-index",
-				component: () => import("@/pages/violations/index.vue"),
-				meta: {
-					title: "Violations: Index",
-				},
-			},
-
-      {
-				path: "/violations/view/:id?",
-				name: "violations-view",
-				component: () => import("~/pages/violations/view.vue"),
-				meta: {
-					title: "Violations: View",
-				},
-			},
-
-      {
-				path: "/violations/archived",
-				name: "violations-archived",
-				component: () => import("~/pages/violations/index-archived.vue"),
-				meta: {
-					title: "Violations: Index",
-				},
-			},
-
-      {
-				path: "/violations/archived/view/:id?",
-				name: "violations-view-archived",
-				component: () => import("~/pages/violations/view-archived.vue"),
-				meta: {
-					title: "Violations: View Archived",
-				},
-			},
-
   {
     children: [
       {
-        path: "/violators",
-        name: "violators-index",
-        component: () => import("@/pages/violators/index.vue"),
+        path: "/offices",
         meta: {
-          title: "Violators: Index",
+          title: "office landing page",
+          layout: "office",
         },
-      },
-      {
-        path: "/violators/view/:id?",
-        name: "violators-view",
-        component: () => import("@/pages/violators/view.vue"),
-        meta: {
-          title: "Violators: Index",
-        },
-      },
-      {
-        path: "/violators/trashed",
-        name: "violators-bin",
-        component: () => import("@/pages/violators/trashed.vue"),
-        meta: {
-          title: "Violators: Bin",
-        },
+        children: [
+          {
+            path: "/",
+            name: "home-page",
+            component: () => import("@/pages/playground.vue"),
+            meta: {
+              title: "Home Page",
+
+              layout: "office",
+            },
+          },
+          {
+            path: "/offices",
+            name: "offices",
+            component: () => import("@/pages/offices/index.vue"),
+            meta: {
+              title: "Offices",
+
+              layout: "office",
+            },
+          },
+          {
+            path: "/offices/systems/:slug",
+            name: "system-sections",
+            component: () => import("@/pages/offices/systemsections.vue"),
+
+            meta: {
+              title: "System Sections",
+
+              layout: "office",
+            },
+          },
+          {
+            path: "/offices/systems/:slug/create",
+            name: "create-article",
+            component: () => import("@/pages/add.vue"),
+
+            meta: {
+              title: "Create Article",
+
+              layout: "office",
+            },
+          },
+          {
+            path: "/offices/systems/:code/articlepage/:slug",
+            name: "Article",
+            component: () => import("@/pages/articlepage.vue"),
+
+            meta: {
+              title: "Article",
+
+              layout: "office",
+            },
+          },
+        ],
       },
     ],
-  },
-  {
-    path: "/t",
-    name: "tests",
-    component: () => import("@/pages/_tests/index.vue"),
-    meta: {
-      requiresAuth: true,
-    },
   },
   {
     path: "/",
@@ -439,6 +236,7 @@ export default computed(() => [
       },
     ],
   },
+<<<<<<< Updated upstream
 ]);
 
 
@@ -452,3 +250,6 @@ export default computed(() => [
 // </div>
 
 
+=======
+]);
+>>>>>>> Stashed changes

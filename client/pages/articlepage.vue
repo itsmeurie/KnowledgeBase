@@ -5,7 +5,10 @@ import { useRouter } from "vue-router";
 const office = ref<Office>();
 const officeSection = ref<Section[]>([]);
 const section = ref<Section>(); // Store active section
+<<<<<<< Updated upstream
 const OfficeHeader = defineAsyncComponent(() => import("./header.vue"));
+=======
+>>>>>>> Stashed changes
 const Accordion = defineAsyncComponent(() => import("./accordion.vue"));
 
 const router = useRouter();
@@ -13,6 +16,7 @@ const { $api } = useNuxtApp();
 const route = useRoute();
 const isHovered = ref(false);
 
+<<<<<<< Updated upstream
 const fetchOffice = () => {
   if (!route.params.slug) return;
 
@@ -22,6 +26,16 @@ const fetchOffice = () => {
     })
     .then((response) => {
       office.value = response.data[0];
+=======
+async function fetchOffice() {
+  if (!route.params.slug) return;
+
+  try {
+    const response = await $api.get("/offices/", {
+      params: { code: route.params.code },
+    });
+    office.value = response.data[0];
+>>>>>>> Stashed changes
 
       if (office.value?.id) {
         fetchSection();
@@ -33,6 +47,7 @@ const fetchOffice = () => {
 };
 
 // Fetch Section Details
+<<<<<<< Updated upstream
 const fetchSection = () => {
   $api
     .get(`/sections/section/${office.value?.id}/${route.params.slug}`)
@@ -43,6 +58,19 @@ const fetchSection = () => {
       console.error("Error fetching section:", error);
     });
 };
+=======
+async function fetchSection() {
+  try {
+    const response = await $api.get(`/sections/${office.value?.id}`);
+    const sections = response.data.data;
+
+    section.value =
+      sections.find((sec: Section) => sec.slug === route.params.slug) || null;
+  } catch (error) {
+    console.error("Error fetching section:", error);
+  }
+}
+>>>>>>> Stashed changes
 
 watch(
   () => route.params.slug,
@@ -52,14 +80,18 @@ watch(
     }
   },
 );
+<<<<<<< Updated upstream
 
 const goToEditPage = () => {
   router.push("/edit-article");
 };
+=======
+>>>>>>> Stashed changes
 
 onMounted(() => {
   fetchOffice();
 });
+<<<<<<< Updated upstream
 </script>
 
 <template>
@@ -67,6 +99,16 @@ onMounted(() => {
   <OfficeHeader />
 
   <div class="m-1 grid gap-2 sm:grid-cols-10">
+=======
+
+const goToEditPage = () => {
+  router.push("/offices/systems/:slug/create");
+};
+</script>
+
+<template>
+  <div class="mt-12 grid gap-2 sm:grid-cols-10">
+>>>>>>> Stashed changes
     <!-- Accordion Navigation -->
     <div class="sm:col-span-2">
       <!-- Search Bar -->
