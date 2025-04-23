@@ -11,6 +11,7 @@ const { $api } = useNuxtApp();
 const route = useRoute();
 const isHovered = ref(false);
 
+
 const items = ref([
   {
     label: "CEDULA",
@@ -18,6 +19,7 @@ const items = ref([
   },
 ]);
 
+// nabago
 const openItems = ref([]);
 const fetchOffice = () => {
   if (!route.params.slug) return;
