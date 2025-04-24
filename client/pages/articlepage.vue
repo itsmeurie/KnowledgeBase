@@ -10,18 +10,6 @@ const { $api } = useNuxtApp();
 const route = useRoute();
 const isHovered = ref(false);
 
-<<<<<<< Updated upstream
-
-const items = ref([
-  {
-    label: "CEDULA",
-    children: [{ label: "Why do we need Cedula", to: "/why" }],
-  },
-]);
-
-// nabago
-const openItems = ref([]);
-=======
 const openItems = ref<string[]>([]);
 
 // Fetch Office Sections
@@ -66,7 +54,6 @@ const handleParentSectionClick = (slug: string) => {
     .finally(() => {});
 };
 
->>>>>>> Stashed changes
 const fetchOffice = () => {
   if (!route.params.slug) return;
 
