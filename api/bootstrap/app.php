@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use App\Http\Middleware\TeamsPermission;
 
 use App\Http\Middleware\CheckDisabled;
 
@@ -11,12 +12,15 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->statefulApi();
         $middleware->append(CheckDisabled::class);
+        $middleware->append(TeamsPermission::class);
         $middleware->alias([
+            "teams" => \App\Http\Middleware\TeamsPermission::class,
+            "isActive" => \App\Http\Middleware\CheckDisabled::class,
+            "SPAOnly" => \App\Http\Middleware\SPAOnly::class,
+
             "role" => \Spatie\Permission\Middleware\RoleMiddleware::class,
             "permission" => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             "role_or_permission" => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
-            "isActive" => \App\Http\Middleware\CheckDisabled::class,
-            "SPAOnly" => \App\Http\Middleware\SPAOnly::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

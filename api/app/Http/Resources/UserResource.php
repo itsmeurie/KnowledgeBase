@@ -42,6 +42,8 @@ class UserResource extends JsonResource {
 
             "roles" => $roles->toArray(),
             "permissions" => $permissions, // For own account (Profile)
+
+            "office" => OfficeResource::make($this->office),
         ];
     }
 }

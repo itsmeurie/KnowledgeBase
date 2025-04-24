@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { Section, Office } from "~/types";
 import { useRouter } from "vue-router";
-
 const office = ref<Office>();
 const officeSection = ref<Section[]>([]);
 const section = ref<Section>(); // Store active section
@@ -11,6 +10,7 @@ const { $api } = useNuxtApp();
 const route = useRoute();
 const isHovered = ref(false);
 
+<<<<<<< Updated upstream
 
 const items = ref([
   {
@@ -21,6 +21,52 @@ const items = ref([
 
 // nabago
 const openItems = ref([]);
+=======
+const openItems = ref<string[]>([]);
+
+// Fetch Office Sections
+
+const fetchOfficeSectionList = () => {
+  if (!office.value?.id) return Promise.resolve();
+  return $api
+    .get(`/sections/office/${office.value.id}`)
+    .then((response) => {
+      officeSection.value = response.data.data;
+    })
+    .catch((error) => {
+      console.error("Error fetching sections:", error);
+    });
+};
+
+const handleParentSectionClick = (slug: string) => {
+  const matched = officeSection.value.find((s) => s.slug === slug);
+  if (!matched) return;
+
+  const isOpen = openItems.value.includes(slug);
+
+  if (isOpen) {
+    openItems.value = openItems.value.filter((item) => item !== slug);
+    return;
+  }
+  openItems.value = [slug];
+
+  Promise.resolve()
+    .then(() => {
+      return router.push({ params: { slug: matched.slug } });
+    })
+    .then(() => {
+      return $api.get(`/sections/section/${office.value?.id}/${matched.slug}`);
+    })
+    .then((response) => {
+      section.value = response.data;
+    })
+    .catch((error) => {
+      console.error(error);
+    })
+    .finally(() => {});
+};
+
+>>>>>>> Stashed changes
 const fetchOffice = () => {
   if (!route.params.slug) return;
 
@@ -30,6 +76,7 @@ const fetchOffice = () => {
     })
     .then((response) => {
       office.value = response.data[0];
+      fetchOfficeSectionList();
 
       if (office.value?.id) {
         fetchSection();
@@ -40,12 +87,11 @@ const fetchOffice = () => {
     });
 };
 
-// Fetch Section Details
 const fetchSection = () => {
   $api
     .get(`/sections/section/${office.value?.id}/${route.params.slug}`)
     .then((response) => {
-      section.value = response.data; // Update the section ref
+      section.value = response.data;
     })
     .catch((error) => {
       console.error("Error fetching section:", error);
@@ -57,9 +103,18 @@ watch(
   () => {
     if (office.value) {
       fetchSection();
+
+      // Update openItems when slug changes
+      const matchedSection = officeSection.value.find(
+        (s) => s.slug === route.params.slug,
+      );
+      if (matchedSection) {
+        openItems.value = [matchedSection.title];
+      }
     }
   },
 );
+
 onMounted(() => {
   fetchOffice();
 });
@@ -90,18 +145,37 @@ const goToEditPage = () => {
 
       <!-- Accordion-->
       <div class="m-3 w-64">
-        <TAccordion v-model:open="openItems" :items="items" multiple>
-          <template #default="{ item, open }">
+        <TAccordion
+          v-model:open="openItems"
+          :items="
+            officeSection.map((section) => ({
+              label: section.slug,
+              displayTitle: section.title,
+              children: [
+                {
+                  label: 'Sample Child Item',
+                  to: `/articlepage/${section.slug}/${section.id}`,
+                },
+              ],
+            }))
+          "
+          multiple
+        >
+          <template #default="{ item }">
             <TButton
               color="gray"
               variant="ghost"
               block
               class="flex w-full items-center justify-between px-4 py-2 text-left"
+              :class="{
+                'text-primary font-bold': item.label === route.params.slug,
+              }"
+              @click="handleParentSectionClick(item.label)"
             >
-              <span>{{ item.label }}</span>
+              <span>{{ item.displayTitle }}</span>
               <TIcon
                 :name="
-                  open
+                  openItems.includes(item.label)
                     ? 'i-heroicons-chevron-down'
                     : 'i-heroicons-chevron-right'
                 "
@@ -123,15 +197,6 @@ const goToEditPage = () => {
                     {{ child.label }}
                   </TButton>
                 </router-link>
-                <TButton
-                  v-else
-                  color="gray"
-                  variant="link"
-                  block
-                  class="flex w-full items-center justify-between px-4 py-2 text-left"
-                >
-                  {{ child.label }}
-                </TButton>
               </li>
             </ul>
           </template>

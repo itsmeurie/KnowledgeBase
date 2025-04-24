@@ -76,52 +76,6 @@ const onSubmit = (event: FormSubmitEvent<Schema>): Promise<void> => {
   });
 };
 
-// async function onSubmit(event: FormSubmitEvent<Schema>) {
-//   try {
-//     const response = await $api.post("/sections", {
-//       office_id: office.value?.id,
-//       ...event.data,
-//     });
-
-//     if (response.status === 200) {
-//       emit("update:show", false);
-
-//       // Resetting state and selectedSectionId
-//       state.title = "";
-//       state.description = "";
-//       selectedSectionId.value = "none"; // Reset the section selection
-
-//       // Showing the appropriate toast
-//       toast.add({
-//         title:
-//           selectedSectionId.value === "none"
-//             ? "Section Added"
-//             : "Subsection Added",
-//         color: "green",
-//         icon: "i-heroicons-check-circle",
-//       });
-//     }
-//   } catch (error: unknown) {
-//     if (error instanceof Error) {
-//       toast.add({
-//         title: "Error submitting form",
-//         description: error.message,
-//         color: "red",
-//         icon: "i-heroicons-x-circle",
-//       });
-//       console.error(error);
-//     } else {
-//       toast.add({
-//         title: "Unknown Error",
-//         description: "An unknown error occurred",
-//         color: "red",
-//         icon: "i-heroicons-x-circle",
-//       });
-//       console.error("Unknown error:", error);
-//     }
-//   }
-// }
-
 const fetchOffice = async (): Promise<void> => {
   if (!route.params.slug) return;
 
@@ -139,23 +93,6 @@ const fetchOffice = async (): Promise<void> => {
     });
 };
 
-// async function fetchOffice() {
-//   if (!route.params.slug) return;
-
-//   try {
-//     const response = await $api.get("/offices/", {
-//       params: { code: route.params.slug },
-//     });
-//     office.value = response.data[0];
-
-//     if (office.value?.id) {
-//       fetchSection();
-//     }
-//   } catch (error) {
-//     console.error("Error fetching office:", error);
-//   }
-// }
-
 const fetchSection = (): Promise<void> => {
   return $api
     .get(`/sections/office/${office.value?.id}`)
@@ -167,15 +104,6 @@ const fetchSection = (): Promise<void> => {
       console.error("Error fetching section:", error);
     });
 };
-// async function fetchSection() {
-//   try {
-//     const response = await $api.get(`/sections/${office.value?.id}`);
-//     sections.value = response.data.data;
-//     section.value = sections.value.length ? sections.value[0] : null;
-//   } catch (error) {
-//     console.error("Error fetching section:", error);
-//   }
-// }
 
 const sectionOptions = computed(() => {
   const defaultOption = { label: "Select Office Section", value: "none" };
@@ -265,11 +193,6 @@ const scrollToAbout = () => {
             <TInput v-model="state.description" size="md" />
           </TFormGroup>
           <div></div>
-          <!-- <p class="font-Inter text-l mt-4 font-bold">ADDITIONAL RESOURCES</p>
-          <div class="mt-2">
-            <label class="font-Inter">Upload File</label>
-            <TInput type="file" size="md" class="mt-1 w-full" />
-          </div> -->
           <TButton class="mt-4" color="primary" variant="solid">Submit</TButton>
         </TForm>
       </div>

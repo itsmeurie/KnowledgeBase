@@ -42,6 +42,15 @@ class SectionController extends Controller {
         $section = Section::where("office_id", $id)->where("slug", $slug)->first();
         return response()->json($section);
     }
+
+    public function getByParentId(string $office_id, string $parent_id, string $slug) {
+        $id = Office::hashToId($office_id);
+        $parent_id = Section::hashToId($parent_id);
+
+        $subSections = Section::where("office_id", $id)->where("parent_id", $parent_id)->where("slug", $slug)->paginate();
+
+        return response()->json($subSections);
+    }
     //
     // public function list (Request $request) : JsonResponse
     // {

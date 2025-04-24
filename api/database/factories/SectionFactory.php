@@ -21,6 +21,7 @@ class SectionFactory extends Factory {
             "office_id" => Office::inRandomOrder()->first()->id,
             "description" => $this->faker->name(),
             "contents" => $this->faker->text(),
+            "slug" => $this->faker->slug(),
         ];
     }
 }

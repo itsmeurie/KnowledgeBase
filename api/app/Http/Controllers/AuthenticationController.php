@@ -43,10 +43,7 @@ class AuthenticationController extends Controller {
         if ($fromFrontend) {
             $request->session()->regenerate();
         } else {
-            $user
-                ->tokens()
-                ->where("name", $request->device_name)
-                ->delete();
+            $user->tokens()->where("name", $request->device_name)->delete();
             $token = $user->createToken($validated["device_name"])->plainTextToken;
             $result->additional(["token" => $token]);
         }
@@ -65,6 +62,12 @@ class AuthenticationController extends Controller {
         if ($result["message"] !== null) {
             return response(["disabled" => $result["disabled"], "message" => $result["message"]], 401);
         }
+
+        if ($user->office) {
+            $request->session()->put("team_id", $user->office->id);
+            setPermissionsTeamId(session("team_id"));
+        }
+
         $user->resetFailedLoginAttempts();
         $request->session()->regenerate();
 
@@ -84,10 +87,7 @@ class AuthenticationController extends Controller {
             return response(["disabled" => $result["disabled"], "message" => $result["message"]], 401);
         }
         $user->resetFailedLoginAttempts();
-        $user
-            ->tokens()
-            ->where("name", $request->device_name)
-            ->delete();
+        $user->tokens()->where("name", $request->device_name)->delete();
         $token = $user->createToken($validated["device_name"])->plainTextToken;
 
         return (new UserResource($user))->additional(["token" => $token]);

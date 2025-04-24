@@ -40,26 +40,30 @@ Route::prefix("documents")->group(function () {
 Route::prefix("genders")->group(function () {
     Route::get("", [GenderController::class, "list"])->name("genders.list");
 });
-
-Route::prefix("offices")->group(function () {
-    Route::get("", [OfficeController::class, "list"])->name("offices.list");
-    Route::get("{office}", [OfficeController::class, "show"])->name("offices.show");
-    Route::post("", [OfficeController::class, "create"])->name("offices.create");
-    Route::put("{office}", [OfficeController::class, "update"])->name("offices.update");
-    Route::delete("{office}", [OfficeController::class, "delete"])->name("offices.delete");
-    Route::patch("{office}", [OfficeController::class, "restore"])->name("offices.restore");
+Route::middleware(["auth:web,sanctum", "throttle:90,1", "isActive", "teams"])->group(function () {
+    Route::prefix("offices")->group(function () {
+        Route::get("", [OfficeController::class, "list"])->name("offices.list");
+        Route::get("{office}", [OfficeController::class, "show"])->name("offices.show");
+        Route::post("", [OfficeController::class, "create"])->name("offices.create");
+        Route::put("{office}", [OfficeController::class, "update"])->name("offices.update");
+        Route::delete("{office}", [OfficeController::class, "delete"])->name("offices.delete");
+        Route::patch("{office}", [OfficeController::class, "restore"])->name("offices.restore");
+    });
 });
 
-Route::prefix("sections")->group(function () {
-    Route::get("office/{office_id}/{parent_id?}", [SectionController::class, "list"])->name("sections.list");
-    Route::get("section/{office_id}/{slug}", [SectionController::class, "show"])->name("sections.show");
-    Route::post("", [SectionController::class, "create"])->name("sections.create");
-    Route::put("{section}", [SectionController::class, "update"])->name("sections.update");
-    Route::delete("{section}", [SectionController::class, "delete"])->name("sections.delete");
-    Route::patch("{section}", [SectionController::class, "restore"])->name("sections.restore");
+Route::middleware(["auth:web,sanctum", "throttle:90,1", "isActive", "teams"])->group(function () {
+    Route::prefix("sections")->group(function () {
+        Route::get("office/{office_id}/{parent_id?}", [SectionController::class, "list"])->name("sections.list");
+        Route::get("section/{office_id}/{slug}", [SectionController::class, "show"])->name("sections.show");
+        Route::get("subsection/{office_id}/sub/{parent_id}/{slug}", [SectionController::class, "getByParentId"])->name("subsections.getByParentId");
+        Route::post("", [SectionController::class, "create"])->name("sections.create");
+        Route::put("{section}", [SectionController::class, "update"])->name("sections.update");
+        Route::delete("{section}", [SectionController::class, "delete"])->name("sections.delete");
+        Route::patch("{section}", [SectionController::class, "restore"])->name("sections.restore");
+    });
 });
 
-Route::middleware(["auth:sanctum", "throttle:90,1", "isActive"])->group(function () {
+Route::middleware(["auth:web,sanctum", "throttle:90,1", "isActive", "teams"])->group(function () {
     Route::middleware(["verified", "SPAOnly"])->group(function () {
         #region Permissions Management
         Route::prefix("permissions")->group(function () {
@@ -169,7 +173,7 @@ Route::middleware(["auth:sanctum", "throttle:90,1", "isActive"])->group(function
 /**
  * Unthrottled private routes
  */
-Route::middleware(["auth:sanctum"])->group(function () {
+Route::middleware(["auth:sanctum", "teams"])->group(function () {
     Route::middleware(["verified", "SPAOnly"])->group(function () {});
 });
 /**
@@ -212,6 +216,6 @@ Route::middleware(["api", "throttle:60,1"])->prefix("v1.0")->group(function () {
  * Mobile Routes
  * prettier-ignore
  */
-Route::middleware(["auth:sanctum", "throttle:60,1"])->prefix("v1.0")->group(function () {
+Route::middleware(["auth:sanctum", "throttle:60,1", "teams"])->prefix("v1.0")->group(function () {
     Route::middleware(["verified"])->group(function () {});
 });

@@ -24,7 +24,7 @@ class User extends Authenticatable {
      *
      * @var array<int, string>
      */
-    protected $fillable = ["username", "email", "password", "fails", "email_verified_at", "disabled_at"];
+    protected $fillable = ["username", "email", "password", "team_id", "fails", "email_verified_at", "disabled_at"];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -44,6 +44,14 @@ class User extends Authenticatable {
             "disabled_at" => "datetime",
             "password" => "hashed",
         ];
+    }
+
+    public function office() {
+        return $this->belongsTo(Office::class, "team_id", "id");
+    }
+
+    public function getSessionOffice() {
+        return Office::findOrFail(session("office_id") ?? $this->office_id);
     }
 
     public function isSuperman(): bool {
