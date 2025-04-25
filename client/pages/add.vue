@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import MarkdownEditor from "@/pages/markdowneditor.vue";
 import { ref } from "vue";
-import type { Section, Office } from "~/types";
+import type { Section } from "~/types";
 import type { FormError, FormSubmitEvent } from "#ui/types";
 import { z } from "zod";
 
 const open = ref(true);
-const office = ref<Office>();
 const section = ref<Section>();
-const router = useRouter();
 const { $api } = useNuxtApp();
 const route = useRoute();
 const emit = defineEmits(["update:show"]);
@@ -17,6 +15,8 @@ const selectedSectionId = ref<"none" | number>("none");
 const aboutSection = ref<HTMLElement | null>(null);
 const toast = useToast();
 const loading = ref(false);
+
+const { office } = useAuthStore();
 
 defineShortcuts({
   o: () => (open.value = !open.value),
@@ -46,7 +46,7 @@ const onSubmit = (event: FormSubmitEvent<Schema>): Promise<void> => {
     loading.value = true;
     $api
       .post("/sections", {
-        office_id: office.value?.id,
+        office_id: office?.id,
         ...event.data,
       })
       .then((response) => {
@@ -76,26 +76,24 @@ const onSubmit = (event: FormSubmitEvent<Schema>): Promise<void> => {
   });
 };
 
-const fetchOffice = async (): Promise<void> => {
-  if (!route.params.slug) return;
+// const fetchOffice = async (): Promise<void> => {
+//   if (!route.params.slug) return;
 
-  return $api
-    .get("/offices/", { params: { code: route.params.slug } })
-    .then((response) => {
-      office.value = response.data[0];
-
-      if (office.value?.id) {
-        fetchSection();
-      }
-    })
-    .catch((error) => {
-      console.error("Error fetching office:", error);
-    });
-};
-
+//   return $api
+//     .get("/offices/", { params: { code: route.params.slug } })
+//     .then((response) => {
+//       response.data[0];
+//       if (office?.id) {
+//         fetchSection();
+//       }
+//     })
+//     .catch((error) => {
+//       console.error("Error fetching office:", error);
+//     });
+// };
 const fetchSection = (): Promise<void> => {
   return $api
-    .get(`/sections/office/${office.value?.id}`)
+    .get(`/subsection/sub/${office?.id}`)
     .then((response) => {
       sections.value = response.data.data;
       section.value = sections.value.length ? sections.value[0] : undefined;
@@ -133,7 +131,7 @@ const showDescriptionField = computed(() => {
 });
 
 onMounted(() => {
-  fetchOffice();
+  fetchSection();
 });
 
 const links = [

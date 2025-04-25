@@ -2,7 +2,22 @@
 import avatarOptions from "../default/config/avatarOptions";
 import aMenus from "../default/config/avatarOptions";
 const aboutSection = ref<HTMLElement | null>(null);
+import { useRouter } from "vue-router";
+import type { Office } from "~/types";
+const router = useRouter();
+const offices = ref<Office>();
 
+const { office } = useAuthStore();
+
+function goToSystemSection(code: string) {
+  router.push({
+    name: "system-sections",
+    params: {
+      code: office?.code?.toLowerCase(),
+      slug: code.toLowerCase(),
+    },
+  });
+}
 // const linksNav = ref([
 //   { label: "Home", to: { name: "home-page" } },
 //   { label: "Docs", to: { name: "offices" } },
@@ -33,7 +48,7 @@ const aboutSection = ref<HTMLElement | null>(null);
           <TButton
             label="Docs"
             icon="tabler:book-2"
-            :to="{ name: 'offices' }"
+            @click="goToSystemSection(office?.code!)"
           />
         </div>
       </TopNav>

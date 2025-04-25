@@ -46,7 +46,7 @@ class SectionController extends Controller {
         return response()->json($section);
     }
 
-    public function getSectionByParentId(Request $request, string $parent_id) {
+    public function getSectionByParentId(Request $request, ?string $parent_id = null) {
         $parent_id = Section::hashToId($parent_id);
         $user = $request->user();
         $office = $user->getSessionOffice();

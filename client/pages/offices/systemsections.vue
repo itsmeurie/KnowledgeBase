@@ -11,11 +11,8 @@ const { office } = useAuthStore();
 const officeSection = ref<Section[]>([]);
 const aboutSection = ref<HTMLElement | null>(null);
 
-
-const goToAdd = () => {
-  if (route.params.slug) {
-    router.push(`/offices/systems/${route.params.slug}/create`);
-  }
+const goToAdd = (code: string) => {
+  router.push(`/systems/${office?.code.toLowerCase()}/create`);
 };
 
 const goToArticlePage = (slug: string) => {
@@ -101,7 +98,7 @@ onMounted(() => {
 
           <!-- Add New Section -->
           <div
-            @click="goToAdd"
+            @click="goToAdd(office?.code!)"
             class="flex cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 p-4 shadow-md transition hover:bg-green-100"
           >
             <TIcon name="tabler:plus"></TIcon>

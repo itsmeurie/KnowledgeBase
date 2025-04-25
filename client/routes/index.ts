@@ -39,7 +39,7 @@ export default computed(() => [
             },
           },
           {
-            path: "/offices/systems/:slug",
+            path: "/:code/systems",
             name: "system-sections",
             component: () => import("@/pages/offices/systemsections.vue"),
 
@@ -50,7 +50,7 @@ export default computed(() => [
             },
           },
           {
-            path: "/offices/systems/:slug/create",
+            path: "/systems/:code/create",
             name: "create-article",
             component: () => import("@/pages/add.vue"),
 
@@ -61,7 +61,7 @@ export default computed(() => [
             },
           },
           {
-            path: "/offices/systems/:code/articlepage/:slug",
+            path: "/:code/systems/articlepage/:slug",
             name: "Article",
             component: () => import("@/pages/articlepage.vue"),
 
