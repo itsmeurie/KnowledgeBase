@@ -2,6 +2,7 @@ import type { HasKey } from "../utils";
 import type { BaseModel, Common } from "./base";
 import type { PermissionItem } from "./permission";
 import type { RoleItem } from "./roles";
+import type { Office } from "../knowledgebase";
 
 export type Gender = HasKey &
   Common & {
@@ -55,6 +56,7 @@ export type User = HasKey &
     roles: Array<UserRole | string>;
     permissions: Array<UserPermission | string>;
     profile?: Profile | null;
+    office?: Office;
   };
 
 export type ProfileImage = HasKey & {

@@ -5,6 +5,7 @@ import type {
   ProfileImage,
   UserRole,
 } from "~/types/models/users";
+import type { Office } from "~/types/knowledgebase";
 
 export const useAuthStore = defineStore("auth", () => {
   const email = ref<string | null>();
@@ -15,9 +16,11 @@ export const useAuthStore = defineStore("auth", () => {
   const permissions = ref<StringList>([]);
   const images = ref<Array<ProfileImage>>([]);
 
+  const office = ref<Office>();
+
   const profile = ref<Profile | null>();
 
-  const isLoggedIn = computed(() => username.value !== null);
+  const isLoggedIn = computed(() => username.value != null);
   const hasProfileName = computed(() => !!profile.value?.full_name);
 
   const reset = () => {
@@ -41,6 +44,7 @@ export const useAuthStore = defineStore("auth", () => {
       ...data.profile,
     } as Profile;
     images.value = (data.profile?.images as Array<ProfileImage>) ?? [];
+    office.value = data.office;
   };
 
   const login = async (payload: Object) => {
@@ -102,6 +106,7 @@ export const useAuthStore = defineStore("auth", () => {
     roles,
     permissions,
     profile,
+    office,
     login,
     logout,
     getPermissions,

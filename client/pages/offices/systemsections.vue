@@ -5,23 +5,25 @@ const { $api } = useNuxtApp();
 const route = useRoute();
 const router = useRouter();
 
-const office = ref<Office | null>(null);
+const { office } = useAuthStore();
+
+// const office = ref<Office | null>(null);
 const officeSection = ref<Section[]>([]);
 const aboutSection = ref<HTMLElement | null>(null);
 
 const goToAdd = () => {
   if (route.params.slug) {
     router.push(`/offices/systems/${route.params.slug}/create`);
-  } 
+  }
 };
 
 const goToArticlePage = (slug: string) => {
-  if (office.value?.code) {
+  if (office?.code) {
     // router.push(`/offices/${office.value.code.toLowerCase()}/articlepage/`);
     router.push({
       name: "Article",
       params: {
-        code: office.value.code.toLowerCase(),
+        code: office.code.toLowerCase(),
         slug: slug,
       },
     });
@@ -30,26 +32,26 @@ const goToArticlePage = (slug: string) => {
   }
 };
 
-// Fetch Office Data
-async function fetchOffice() {
-  try {
-    const response = await $api.get("/offices/", {
-      params: { code: route.params.slug },
-    });
-    if (response.data.length > 0) {
-      office.value = response.data[0];
-      fetchOfficeSectionList(); // Ensure sections are fetched after office data is set
-    }
-  } catch (error) {
-    console.error("Error fetching office:", error);
-  }
-}
+// // Fetch Office Data
+// async function fetchOffice() {
+//   try {
+//     const response = await $api.get("/offices/", {
+//       params: { code: route.params.slug },
+//     });
+//     if (response.data.length > 0) {
+//       // office.value = response.data[0];
+//       fetchOfficeSectionList(); // Ensure sections are fetched after office data is set
+//     }
+//   } catch (error) {
+//     console.error("Error fetching office:", error);
+//   }
+// }
 
 // Fetch Office Sections
 async function fetchOfficeSectionList() {
-  if (!office.value?.id) return;
+  if (!office?.id) return;
   try {
-    const response = await $api.get(`/sections/office/${office.value.id}`);
+    const response = await $api.get(`/sections/office`);
     officeSection.value = response.data.data;
   } catch (error) {
     console.error("Error fetching sections:", error);
@@ -57,20 +59,18 @@ async function fetchOfficeSectionList() {
 }
 
 onMounted(() => {
-  fetchOffice();
+  fetchOfficeSectionList();
 });
-
 </script>
 
-<template> 
+<template>
   <!-- Office Details -->
-  <div class="flex flex-col items-center h-full p-4">
-    <div class="flex flex-col gap-2 max-w-7xl w-full">
-      <div 
-        class="bg-cover bg-center bg-no-repeat rounded-md shadow-lg 
-           bg-[url('https://static.vecteezy.com/system/resources/previews/009/302/805/non_2x/silhouette-landscape-with-fog-forest-pine-trees-mountains-illustration-of-national-park-view-mist-black-and-white-good-for-wallpaper-background-banner-cover-poster-free-vector.jpg')]
-           dark:bg-[url('https://nighteye.app/wp-content/uploads/2020/04/claudio-testa-fb_CZ4hZXWo-unsplash.jpg')]">
-        <div class="flex flex-col gap-4 rounded-md px-6 py-6">  
+  <div class="flex h-full flex-col items-center p-4">
+    <div class="flex w-full max-w-7xl flex-col gap-2">
+      <div
+        class="rounded-md bg-[url('https://static.vecteezy.com/system/resources/previews/009/302/805/non_2x/silhouette-landscape-with-fog-forest-pine-trees-mountains-illustration-of-national-park-view-mist-black-and-white-good-for-wallpaper-background-banner-cover-poster-free-vector.jpg')] bg-cover bg-center bg-no-repeat shadow-lg dark:bg-[url('https://nighteye.app/wp-content/uploads/2020/04/claudio-testa-fb_CZ4hZXWo-unsplash.jpg')]"
+      >
+        <div class="flex flex-col gap-4 rounded-md px-6 py-6">
           <!-- HEADER -->
           <div class="flex items-center justify-between">
             <h5 class="text-4xl font-semibold">{{ office?.name }}</h5>
@@ -88,9 +88,14 @@ onMounted(() => {
             v-for="section in officeSection"
             :key="section.id"
             @click="goToArticlePage(section.slug)"
-            class="cursor-pointer transition border border-gray-200 rounded-lg p-4 shadow-md">
-            <h5 class="text-lg font-semibold text-primary">{{ section.title }}</h5>
-            <p class="text-sm transition duration-300 hover:underline">{{ section.description }}</p>
+            class="cursor-pointer rounded-lg border border-gray-200 p-4 shadow-md transition"
+          >
+            <h5 class="text-primary text-lg font-semibold">
+              {{ section.title }}
+            </h5>
+            <p class="text-sm transition duration-300 hover:underline">
+              {{ section.description }}
+            </p>
           </div>
 
           <!-- Add New Section -->
@@ -99,7 +104,9 @@ onMounted(() => {
             class="flex cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 p-4 shadow-md transition hover:bg-green-100"
           >
             <TIcon name="tabler:plus"></TIcon>
-            <h5 class="text-lg font-semibold text-primary">Create New Section/Manual</h5>
+            <h5 class="text-primary text-lg font-semibold">
+              Create New Section/Manual
+            </h5>
           </div>
         </div>
       </div>

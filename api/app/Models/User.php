@@ -51,7 +51,7 @@ class User extends Authenticatable {
     }
 
     public function getSessionOffice() {
-        return Office::findOrFail(session("office_id") ?? $this->office_id);
+        return Office::findOrFail(session("team_id") ?? $this->office_id);
     }
 
     public function isSuperman(): bool {

@@ -53,9 +53,9 @@ Route::middleware(["auth:web,sanctum", "throttle:90,1", "isActive", "teams"])->g
 
 Route::middleware(["auth:web,sanctum", "throttle:90,1", "isActive", "teams"])->group(function () {
     Route::prefix("sections")->group(function () {
-        Route::get("office/{office_id}/{parent_id?}", [SectionController::class, "list"])->name("sections.list");
+        Route::get("office/{parent_id?}", [SectionController::class, "list"])->name("sections.list");
         Route::get("section/{office_id}/{slug}", [SectionController::class, "show"])->name("sections.show");
-        Route::get("subsection/{office_id}/sub/{parent_id}/{slug}", [SectionController::class, "getByParentId"])->name("subsections.getByParentId");
+        Route::get("subsection/sub/{parent_id}", [SectionController::class, "getSectionByParentId"])->name("sections.getSectionByParentId");
         Route::post("", [SectionController::class, "create"])->name("sections.create");
         Route::put("{section}", [SectionController::class, "update"])->name("sections.update");
         Route::delete("{section}", [SectionController::class, "delete"])->name("sections.delete");

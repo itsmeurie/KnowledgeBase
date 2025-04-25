@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SectionRequests\CreateSectionRequest;
 use App\Http\Requests\SectionRequests\UpdateSectionRequest;
-
+use App\Http\Resources\GetSectionResource;
 use App\Http\Resources\SectionResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,13 +13,16 @@ use App\Models\Office;
 use Illuminate\Support\Str;
 
 class SectionController extends Controller {
-    public function list(Request $request, string $office_id, ?string $parent_id = null): JsonResponse {
+    public function list(Request $request, ?string $parent_id = null): JsonResponse {
         $limit = $request->input("limit", 25);
         $page = $request->input("page", 1);
-        $id = Office::hashToId($office_id);
+
         $parent_id = !!$parent_id ? Section::hashToId($parent_id) : null;
 
-        $sections = Section::where("office_id", $id)
+        $user = $request->user();
+        $office = $user->getSessionOffice();
+
+        $sections = Section::where("office_id", $office->id)
             ->when($parent_id, function ($query) use ($parent_id) {
                 $query->where("parent_id", $parent_id);
             })
@@ -43,13 +46,14 @@ class SectionController extends Controller {
         return response()->json($section);
     }
 
-    public function getByParentId(string $office_id, string $parent_id, string $slug) {
-        $id = Office::hashToId($office_id);
+    public function getSectionByParentId(Request $request, string $parent_id) {
         $parent_id = Section::hashToId($parent_id);
+        $user = $request->user();
+        $office = $user->getSessionOffice();
 
-        $subSections = Section::where("office_id", $id)->where("parent_id", $parent_id)->where("slug", $slug)->paginate();
+        $sections = Section::select("id", "title", "slug")->where("parent_id", $parent_id)->where("office_id", $office->id)->get();
 
-        return response()->json($subSections);
+        return response()->json(GetSectionResource::collection($sections));
     }
     //
     // public function list (Request $request) : JsonResponse
