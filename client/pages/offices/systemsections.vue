@@ -11,6 +11,7 @@ const { office } = useAuthStore();
 const officeSection = ref<Section[]>([]);
 const aboutSection = ref<HTMLElement | null>(null);
 
+
 const goToAdd = () => {
   if (route.params.slug) {
     router.push(`/offices/systems/${route.params.slug}/create`);

@@ -39,7 +39,7 @@ onMounted(() => {
     <div
       class="relative flex flex-auto items-center justify-between gap-1.5 px-6 py-3"
     >
-      <slot name="prepend">
+      <!-- <slot name="prepend">
         <div class="">
           <TButton
             color="gray"
@@ -51,7 +51,7 @@ onMounted(() => {
             @click="$system.sidebar.collapsed = !$system.sidebar.collapsed"
           />
         </div>
-      </slot>
+      </slot> -->
       <div class="flex flex-auto items-center gap-1.5">
         <slot></slot>
       </div>

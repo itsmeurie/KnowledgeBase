@@ -14,7 +14,7 @@
       </p>
       <a href="/offices">
         <button
-          class="mt-6 rounded-full border-2  px-6 py-2 font-bold hover:bg-primary hover:text-white"
+          class="hover:bg-primary mt-6 rounded-full border-2 px-6 py-2 font-bold hover:text-white"
         >
           Get Started
         </button>
@@ -50,9 +50,7 @@
 
   <!-- About Documentation -->
   <div id="about-documentation" ref="aboutSection" class="m-2 px-4">
-    <h1 class="font-Inter text-3xl font-extrabold ">
-      About Documentation
-    </h1>
+    <h1 class="font-Inter text-3xl font-extrabold">About Documentation</h1>
   </div>
 
   <div class="m-2 px-4">
@@ -71,5 +69,4 @@
       amet! Repellat, ea incidunt?
     </p>
   </div>
-
 </template>

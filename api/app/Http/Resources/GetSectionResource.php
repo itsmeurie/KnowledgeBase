@@ -20,7 +20,6 @@ class GetSectionResource extends JsonResource {
                 return [
                     "title" => $section->title,
                     "id" => $section->hash,
-                    "description" => $section->description,
                     "slug" => $section->slug,
                 ];
             }),

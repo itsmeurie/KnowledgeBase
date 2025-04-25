@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import type { AvatarOptions } from "~/types";
+import { useRouter } from "vue-router";
+import { ref, computed } from "vue";
 
 const props = defineProps<{ menus?: AvatarOptions[] }>();
 
+const router = useRouter();
 const $auth = useAuthStore();
 
 const signingOut = ref(false);
@@ -30,6 +33,8 @@ const profile_name_short = computed(() => {
 
 const avatar = computed(() => $auth.profile?.images?.find((i) => i.primary));
 
+const isLoggedIn = computed(() => !!$auth.profile || !!$auth.username);
+
 const _menus = computed<AvatarOptions[]>(
   () => props.menus?.filter((m) => toValue(m.hidden) !== true) || [],
 );
@@ -39,6 +44,10 @@ const logout = () => {
   $auth.logout().finally(() => {
     signingOut.value = false;
   });
+};
+
+const goToLogin = () => {
+  router.push("/login?redirect=/");
 };
 </script>
 <template>
@@ -51,7 +60,7 @@ const logout = () => {
       color="gray"
       size="lg"
       square
-      class="seelct-none p-0"
+      class="select-none p-0"
       :ui="{ rounded: 'rounded-full' }"
     >
       <TAvatar
@@ -61,6 +70,7 @@ const logout = () => {
         class="bg-gray-200 dark:bg-gray-600"
       />
     </TButton>
+
     <template #panel="{ close }">
       <div class="flex items-center gap-2 p-4">
         <TAvatar
@@ -73,7 +83,9 @@ const logout = () => {
           {{ profile_name }}
         </span>
       </div>
+
       <TDivider />
+
       <template v-if="_menus?.length! > 0">
         <div class="flex flex-col gap-2 p-4">
           <template v-for="menu in _menus" :key="menu">
@@ -88,21 +100,32 @@ const logout = () => {
               color="gray"
               size="md"
               variant="ghost"
-              @click="menu.action?.(), close()"
+              @click="(menu.action?.(), close())"
             />
           </template>
         </div>
         <TDivider />
       </template>
+
       <div class="flex flex-col gap-2 p-4">
         <TButton
+          v-if="isLoggedIn"
           icon="tabler:logout"
           color="gray"
           label="Logout"
           size="md"
           variant="ghost"
           :loading="signingOut"
-          @click="logout(), close()"
+          @click="(logout(), close())"
+        />
+        <TButton
+          v-else
+          icon="tabler:login"
+          color="gray"
+          label="Login"
+          size="md"
+          variant="ghost"
+          @click="(goToLogin(), close())"
         />
       </div>
     </template>
