@@ -19,6 +19,7 @@ export type Section = {
   deleted_at?: string;
   updated_at?: string;
   created_at?: string;
+  subsections?: Section[];
 };
 
 export type Documents = {

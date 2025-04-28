@@ -47,40 +47,56 @@ class SectionController extends Controller {
     }
 
     public function getSectionByParentId(Request $request, ?string $parent_id = null) {
-        $parent_id = Section::hashToId($parent_id);
         $user = $request->user();
         $office = $user->getSessionOffice();
 
-        $sections = Section::select("id", "title", "slug")->where("parent_id", $parent_id)->where("office_id", $office->id)->get();
+        $sections = Section::select("id", "title", "contents", "slug")
+            ->where("office_id", $office->id)
+
+            ->when($parent_id, function ($query) use ($parent_id) {
+                $query->where("parent_id", Section::hashToId($parent_id));
+            })
+            ->when(!$parent_id, function ($query) {
+                $query->whereNull("parent_id");
+            })
+            ->get();
 
         return response()->json(GetSectionResource::collection($sections));
     }
-    //
-    // public function list (Request $request) : JsonResponse
-    // {
-    //     $sections = Section::when($request->query('title'), function($query) use ($request){
-    //         $query->title($request->query('title'));
-    //     })->get();
+    public function create(Request $request): JsonResponse {
+        $user = $request->user();
+        $office = $user->getSessionOffice();
 
-    //     return response()->json($sections);
-    // }
-    // public function show(Request $request, string $slug): JsonResponse {
-    //     return response()->json([
-    //         "section" => SectionResource::make($slug),
-    //     ]);
-    // }
-    public function create(CreateSectionRequest $request): JsonResponse {
-        $fields = $request->validated();
-        $section = Section::create([
-            "title" => $fields["title"],
-            "description" => $fields["description"],
-            "office_id" => $fields["office_id"],
+        $fields = $request->validate([
+            "title" => "required|string",
+            "description" => "nullable|string",
+            "contents" => "nullable|string",
+            "parent_id" => "nullable|string",
         ]);
+
+        $section = Section::create([
+            "office_id" => $office->id,
+            "title" => $fields["title"],
+            "description" => $fields["description"] ?? null,
+            "contents" => $fields["contents"] ?? null,
+            "slug" => Str::slug($fields["title"]),
+            "parent_id" => isset($fields["parent_id"]) && $fields["parent_id"] !== "none" ? Section::hashToId($fields["parent_id"]) : null, // <-- ADD THIS
+        ]);
+
+        $parentSection = $section->parent_id
+            ? Section::with([
+                "office",
+                "subSections" => function ($query) {
+                    $query->select("id", "title", "description", "slug", "contents", "parent_id");
+                },
+            ])->find($section->parent_id)
+            : $section;
 
         return response()->json([
-            "section" => SectionResource::make($section),
+            "section" => new GetSectionResource($parentSection),
         ]);
     }
+
     public function update(UpdateSectionRequest $request, Section $section): JsonResponse {
         $fields = $request->validated();
 
@@ -116,3 +132,25 @@ class SectionController extends Controller {
         ]);
     }
 }
+// {
+//     "section": {
+//         "title": "Sample Main Section",
+//         "id": "mainsectionid",
+//         "description": "Sample Main Section Description",
+//         "slug": "sample-main-section",
+//         "contents": "Sample Main Section Contents",
+//         "office": {
+//             "id": "1GNPXNP2",
+//             "name": "Sangguniang Panlungsod ng Baguio",
+//             "code": "SP",
+//             "description": "The legislative body responsible for creating local policies and ordinances."
+//         },
+//         "subsections": [{
+//             "title": "Sample Subsection in Main Section",
+//             "id": "subsectionid",
+//             "description": null,
+//             "slug": "sample-subsection-in-main-section",
+//             "contents": "Sample Subsection Contents in Subsection",
+//         }]
+//     }
+// }

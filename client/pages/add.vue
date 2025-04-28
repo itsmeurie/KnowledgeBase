@@ -4,6 +4,7 @@ import { ref } from "vue";
 import type { Section } from "~/types";
 import type { FormError, FormSubmitEvent } from "#ui/types";
 import { z } from "zod";
+import { content } from "#tailwind-config";
 
 const open = ref(true);
 const section = ref<Section>();
@@ -11,7 +12,7 @@ const { $api } = useNuxtApp();
 const route = useRoute();
 const emit = defineEmits(["update:show"]);
 const sections = ref<Section[]>([]);
-const selectedSectionId = ref<"none" | number>("none");
+// const selectedSectionId = ref<"none" | number>("none");
 const aboutSection = ref<HTMLElement | null>(null);
 const toast = useToast();
 const loading = ref(false);
@@ -26,9 +27,9 @@ const schema = z.object({
   title: z
     .string({ message: "Title is required" })
     .min(1, { message: "Title is required" }),
-  description: z
-    .string({ message: "Description is required" })
-    .min(1, { message: "Description is required" }),
+  description: z.string().optional().nullable(),
+  contents: z.string().optional().nullable(),
+  parent_id: z.string().optional().nullable(),
 });
 
 type Schema = z.output<typeof schema>;
@@ -36,9 +37,13 @@ type Schema = z.output<typeof schema>;
 const state = ref<{
   title?: string;
   description?: string;
+  contents?: string;
+  parent_id?: string;
 }>({
   title: "",
   description: "",
+  contents: "",
+  parent_id: "none",
 });
 
 const onSubmit = (event: FormSubmitEvent<Schema>): Promise<void> => {
@@ -46,24 +51,15 @@ const onSubmit = (event: FormSubmitEvent<Schema>): Promise<void> => {
     loading.value = true;
     $api
       .post("/sections", {
-        office_id: office?.id,
         ...event.data,
       })
       .then((response) => {
         emit("update:show", false);
 
+        state.value.contents = "";
         state.value.title = "";
         state.value.description = "";
-        selectedSectionId.value = "none"; // Reset the section selection
-
-        toast.add({
-          title:
-            selectedSectionId.value === "none"
-              ? "Section Added"
-              : "Subsection Added",
-          color: "green",
-          icon: "i-heroicons-check-circle",
-        });
+        state.value.parent_id = "none"; // Also reset dropdown properly
 
         resolve();
       })
@@ -91,11 +87,11 @@ const onSubmit = (event: FormSubmitEvent<Schema>): Promise<void> => {
 //       console.error("Error fetching office:", error);
 //     });
 // };
-const fetchSection = (): Promise<void> => {
-  return $api
-    .get(`/subsection/sub/${office?.id}`)
+const fetchSection = (): void => {
+  $api
+    .get(`sections/section`)
     .then((response) => {
-      sections.value = response.data.data;
+      sections.value = response.data;
       section.value = sections.value.length ? sections.value[0] : undefined;
     })
     .catch((error) => {
@@ -123,22 +119,16 @@ const sectionOptions = computed(() => {
 });
 
 const sectionLabel = computed(() => {
-  return selectedSectionId.value !== "none" ? "Subsection" : "Section";
+  return state.value.parent_id !== "none" ? "Subsection" : "Section";
 });
 
 const showDescriptionField = computed(() => {
-  return selectedSectionId.value === "none";
+  return state.value.parent_id === "none";
 });
 
 onMounted(() => {
   fetchSection();
 });
-
-const links = [
-  { label: "Home", to: "/playground" },
-  { label: "Docs", to: "/add" },
-  { label: "About", to: "#about-documentation" },
-];
 
 const scrollToAbout = () => {
   if (aboutSection.value) {
@@ -164,7 +154,7 @@ const scrollToAbout = () => {
       <!-- Select Menu -->
       <div class="mt-2">
         <TSelect
-          v-model="selectedSectionId"
+          v-model="state.parent_id"
           :options="sectionOptions"
           :popper="{ placement: 'bottom-start' }"
         />
@@ -191,7 +181,9 @@ const scrollToAbout = () => {
             <TInput v-model="state.description" size="md" />
           </TFormGroup>
           <div></div>
-          <TButton class="mt-4" color="primary" variant="solid">Submit</TButton>
+          <TButton type="submit" class="mt-4" color="primary" variant="solid"
+            >Submit</TButton
+          >
         </TForm>
       </div>
     </div>
@@ -199,7 +191,7 @@ const scrollToAbout = () => {
     <div
       class="border-black-500 col-span-3 min-h-[500px] w-full rounded-lg border-4 p-4"
     >
-      <MarkdownEditor />
+      <MarkdownEditor v-model="state.contents" />
     </div>
   </div>
 </template>

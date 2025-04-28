@@ -9,55 +9,41 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\ModelSlugTrait;
 
 class Section extends AppModel {
-
     use SoftDeletes, ModelSlugTrait;
 
-    protected $fillable = [
-        'title',
-        'office_id',
-        'parent_id',
-        'description',
-        'contents',
-        'slug',
-    ];
+    protected $fillable = ["title", "office_id", "parent_id", "description", "contents", "slug"];
 
-    protected static $slug_target = 'title';
+    protected static $slug_target = "title";
 
     /**
-    * Get the attributes that should be cast.
-    *
-    * @return array<string, string>
-    */
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
     protected function casts(): array {
-        return [ ];
+        return [];
     }
 
-    public function office() : BelongsTo
-    {
+    public function office(): BelongsTo {
         return $this->belongsTo(Office::class);
     }
 
-    public function subSections() : HasMany
-    {
-        return $this->hasMany(Section::class, 'parent_id');
+    public function subSections(): HasMany {
+        return $this->hasMany(Section::class, "parent_id");
     }
 
-    public function files() : MorphMany
-    {
-        return $this->morphMany(File::class, 'fileable');
+    public function files(): MorphMany {
+        return $this->morphMany(File::class, "fileable");
     }
 
-    public function scopeSlug(Builder $query, string $slug) : void
-    {
-        $query->where('slug', $slug);
+    public function scopeSlug(Builder $query, string $slug): void {
+        $query->where("slug", $slug);
     }
-    
-    
+
     /**
-    * Prepare a date for array / JSON serialization.
-    */
+     * Prepare a date for array / JSON serialization.
+     */
     // protected function serializeDate(DateTimeInterface $date): string {
     //     return $date->format('Y-m-d');
     // }
-    
 }

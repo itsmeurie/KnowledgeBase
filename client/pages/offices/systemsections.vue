@@ -17,7 +17,6 @@ const goToAdd = (code: string) => {
 
 const goToArticlePage = (slug: string) => {
   if (office?.code) {
-    // router.push(`/offices/${office.value.code.toLowerCase()}/articlepage/`);
     router.push({
       name: "Article",
       params: {
