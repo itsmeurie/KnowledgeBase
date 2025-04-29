@@ -1,58 +1,26 @@
 <script setup lang="ts">
 import type { Section, Office } from "~/types";
 import { useRouter } from "vue-router";
-const office = ref<Office>();
+import { marked } from "marked";
+import { computed } from "vue";
+
+const renderedContent = computed(() =>
+  marked(activeSubsection.value?.contents || section.value?.contents || ""),
+);
+
+const offices = ref<Office>();
+const { office } = useAuthStore();
 const officeSection = ref<Section[]>([]); // List of office sections
 const section = ref<Section>(); // Store active section
+const activeSubsection = ref<Section | null>(null); // Currently active subsection
 
 const router = useRouter();
 const { $api } = useNuxtApp();
 const route = useRoute();
 const isHovered = ref(false);
-
 const openItems = ref<string[]>([]);
 
 // Fetch Office Sections
-const fetchOfficeSectionList = () => {
-  if (!office.value?.id) return Promise.resolve();
-  return $api
-    .get(`/sections/office/${office.value.id}`)
-    .then((response) => {
-      officeSection.value = response.data.data;
-    })
-    .catch((error) => {
-      console.error("Error fetching sections:", error);
-    });
-};
-
-const handleParentSectionClick = (slug: string) => {
-  const matched = officeSection.value.find((s) => s.slug === slug);
-  if (!matched) return;
-
-  const isOpen = openItems.value.includes(slug);
-
-  if (isOpen) {
-    openItems.value = openItems.value.filter((item) => item !== slug);
-    return;
-  }
-  openItems.value = [slug];
-
-  Promise.resolve()
-    .then(() => {
-      return router.push({ params: { slug: matched.slug } });
-    })
-    .then(() => {
-      return $api.get(`/sections/section/${office.value?.id}/${matched.slug}`);
-    })
-    .then((response) => {
-      section.value = response.data;
-    })
-    .catch((error) => {
-      console.error(error);
-    })
-    .finally(() => {});
-};
-
 const fetchOffice = () => {
   if (!route.params.slug) return;
 
@@ -61,10 +29,8 @@ const fetchOffice = () => {
       params: { code: route.params.code },
     })
     .then((response) => {
-      office.value = response.data[0];
-      fetchOfficeSectionList();
-
-      if (office.value?.id) {
+      offices.value = response.data[0];
+      if (office?.id) {
         fetchSection();
       }
     })
@@ -74,23 +40,30 @@ const fetchOffice = () => {
 };
 
 const fetchSection = () => {
+  if (!route.params.slug) return;
+
   $api
-    .get(`/sections/section/${office.value?.id}/${route.params.slug}`)
+    .get(`/sections/slug/${route.params.slug}`)
     .then((response) => {
       section.value = response.data;
+      if (section.value?.title) {
+        openItems.value = [section.value.title];
+      }
     })
     .catch((error) => {
       console.error("Error fetching section:", error);
     });
 };
 
+onMounted(() => {
+  fetchOffice();
+});
+
 watch(
   () => route.params.slug,
   () => {
-    if (office.value) {
+    if (office) {
       fetchSection();
-
-      // Update openItems when slug changes
       const matchedSection = officeSection.value.find(
         (s) => s.slug === route.params.slug,
       );
@@ -101,9 +74,26 @@ watch(
   },
 );
 
-onMounted(() => {
-  fetchOffice();
+const formattedUpdatedAt = computed(() => {
+  const dateStr =
+    activeSubsection.value?.updated_at || section.value?.updated_at;
+  if (!dateStr) return "Unknown";
+
+  const date = new Date(dateStr);
+  return date.toLocaleDateString("en-US", {
+    month: "numeric",
+    day: "numeric",
+    year: "numeric",
+  });
 });
+
+const selectSubsection = (subsection: Section) => {
+  activeSubsection.value = subsection;
+};
+
+const clearSubsection = () => {
+  activeSubsection.value = null;
+};
 
 const goToEditPage = () => {
   router.push("/systems/:code/create");
@@ -125,29 +115,42 @@ const goToEditPage = () => {
         />
       </div>
 
-      <!-- Office title -->
+      <!-- Section title (clickable to reset subsection) -->
       <div class="mb-6">
-        <h6 class="text-lg font-bold">Main Section</h6>
+        <h6
+          class="hover:text-primary cursor-pointer text-lg font-bold"
+          @click="clearSubsection"
+        >
+          {{ section?.title }}
+        </h6>
       </div>
 
-      <!-- Sub-sections List with Scrollbar -->
-      <div class="max-h-96 overflow-y-auto space-y-2 pr-2 scrollbar-thin"> 
-        <div>
-          SubSection
+      <!-- Subsections List -->
+      <div class="max-h-96 space-y-2 overflow-y-auto pr-2 scrollbar-thin">
+        <div
+          v-for="sub in section?.subsections || []"
+          :key="sub.id"
+          @click="selectSubsection(sub)"
+          class="hover:text-primary cursor-pointer rounded px-2 py-1 transition-colors"
+          :class="{ 'text-primary': sub.id === activeSubsection?.id }"
+        >
+          {{ sub.title }}
         </div>
       </div>
-
-
     </aside>
 
     <!-- Main Content -->
-    <main class="col-span-full flex flex-col gap-6 mx-4 sm:col-span-6">
-      <!-- Breadcrumbs and Edit Icon -->
-      <div class="flex flex-wrap items-center justify-between gap-2 px-2 sm:px-6">
+    <main class="col-span-full mx-4 flex flex-col gap-6 sm:col-span-6">
+      <!-- Breadcrumbs -->
+      <div
+        class="flex flex-wrap items-center justify-between gap-2 px-2 sm:px-6"
+      >
         <nav class="flex flex-wrap items-center space-x-2 text-sm sm:text-base">
           <NuxtLink
-            to="/articlepage"
-            external
+            :to="{
+              name: 'system-sections',
+              params: { code: office?.code?.toLowerCase() },
+            }"
             class="transition-colors"
             :class="{
               'text-primary': isHovered,
@@ -160,15 +163,20 @@ const goToEditPage = () => {
           </NuxtLink>
 
           <span v-if="section" class="mx-2 text-gray-500">></span>
-
-          <NuxtLink
+          <button
             v-if="section"
-            :to="`/articlepage/${route.params.slug}/${section.id}`"
-            class="hover:text-primary text-primary transition-colors"
+            @click="clearSubsection"
+            class="hover:text-primary transition-colors"
           >
-            <!-- {{ section.title }} -->
-            Main Section
-          </NuxtLink>
+            {{ section?.title }}
+          </button>
+
+          <span v-if="activeSubsection" class="mx-2 text-gray-500">></span>
+
+          <!-- Subsection Title -->
+          <span v-if="activeSubsection" class="font-semibold">
+            {{ activeSubsection?.title }}
+          </span>
         </nav>
 
         <!-- Edit Icon -->
@@ -182,14 +190,15 @@ const goToEditPage = () => {
       <!-- Article Content -->
       <section class="space-y-6">
         <div>
-          <h1 class="text-2xl font-extrabold sm:text-4xl">Main Section</h1>
+          <h1 class="text-2xl font-extrabold sm:text-4xl">
+            {{ activeSubsection?.title || section?.title }}
+          </h1>
         </div>
+        <!-- Update Date-->
+        <div class="text-sm">Last update: {{ formattedUpdatedAt }}</div>
 
-        <div class="text-sm text-gray-500 sm:text-base">
-          Last update 04/18/2025
-        </div>
-
-        <div v-html="section?.contents" class="max-w-full"></div>
+        <!-- Markdown -->
+        <div v-html="renderedContent" class="prose max-w-full"></div>
       </section>
     </main>
 

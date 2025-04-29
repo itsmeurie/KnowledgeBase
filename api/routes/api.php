@@ -54,7 +54,7 @@ Route::middleware(["auth:web,sanctum", "throttle:90,1", "isActive"])->group(func
 Route::middleware(["auth:web,sanctum", "throttle:90,1", "isActive"])->group(function () {
     Route::prefix("sections")->group(function () {
         Route::get("office/{parent_id?}", [SectionController::class, "list"])->name("sections.list");
-        Route::get("section/{office_id}/{slug}", [SectionController::class, "show"])->name("sections.show");
+        Route::get("slug/{slug}", [SectionController::class, "show"])->name("sections.show");
         Route::get("section/{parent_id?}", [SectionController::class, "getSectionByParentId"])->name("sections.getSectionByParentId");
         Route::post("", [SectionController::class, "create"])->name("sections.create");
         Route::put("{section}", [SectionController::class, "update"])->name("sections.update");

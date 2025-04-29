@@ -12,7 +12,6 @@ const { $api } = useNuxtApp();
 const route = useRoute();
 const emit = defineEmits(["update:show"]);
 const sections = ref<Section[]>([]);
-// const selectedSectionId = ref<"none" | number>("none");
 const aboutSection = ref<HTMLElement | null>(null);
 const toast = useToast();
 const loading = ref(false);
@@ -59,7 +58,7 @@ const onSubmit = (event: FormSubmitEvent<Schema>): Promise<void> => {
         state.value.contents = "";
         state.value.title = "";
         state.value.description = "";
-        state.value.parent_id = "none"; // Also reset dropdown properly
+        state.value.parent_id = "none";
 
         resolve();
       })

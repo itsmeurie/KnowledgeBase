@@ -18,13 +18,16 @@ class GetSectionResource extends JsonResource {
             "slug" => $this->slug,
             "contents" => $this->contents,
             "office" => new OfficeResource($this->whenLoaded("office")),
-            "subsections" => $this->subSections->map(function ($section) {
-                return [
-                    "title" => $section->title,
-                    "id" => $section->hash,
-                    "slug" => $section->slug,
-                    "contents" => $section->contents,
-                ];
+            "updated_at" => $this->updated_at,
+            "subsections" => $this->whenLoaded("subSections", function () {
+                return $this->subSections->map(function ($section) {
+                    return [
+                        "title" => $section->title,
+                        "id" => $section->hash,
+                        "slug" => $section->slug,
+                        "contents" => $section->contents,
+                    ];
+                });
             }),
         ];
     }

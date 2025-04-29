@@ -18,11 +18,6 @@ function goToSystemSection(code: string) {
     },
   });
 }
-// const linksNav = ref([
-//   { label: "Home", to: { name: "home-page" } },
-//   { label: "Docs", to: { name: "offices" } },
-//   { label: "About", to: { name: "offices" } },
-// ]);
 </script>
 
 <template>

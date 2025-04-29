@@ -39,11 +39,16 @@ class SectionController extends Controller {
         $sections["data"] = SectionResource::collection($sections["data"]);
         return response()->json($sections);
     }
-    public function show(string $office_id, string $slug) {
-        $id = Office::hashToId($office_id);
+    public function show(Request $request, string $slug) {
+        $user = $request->user();
+        $office = $user->getSessionOffice();
 
-        $section = Section::where("office_id", $id)->where("slug", $slug)->first();
-        return response()->json($section);
+        $section = Section::with("subSections") // eager load subsections
+            ->where("office_id", $office->id)
+            ->where("slug", $slug)
+            ->firstOrFail();
+
+        return response()->json(new GetSectionResource($section));
     }
 
     public function getSectionByParentId(Request $request, ?string $parent_id = null) {
@@ -79,7 +84,7 @@ class SectionController extends Controller {
             "title" => $fields["title"],
             "description" => $fields["description"] ?? null,
             "contents" => $fields["contents"] ?? null,
-            "slug" => Str::slug($fields["title"]),
+            "slug" => Section::slugify($fields["title"]),
             "parent_id" => isset($fields["parent_id"]) && $fields["parent_id"] !== "none" ? Section::hashToId($fields["parent_id"]) : null, // <-- ADD THIS
         ]);
 
@@ -132,25 +137,3 @@ class SectionController extends Controller {
         ]);
     }
 }
-// {
-//     "section": {
-//         "title": "Sample Main Section",
-//         "id": "mainsectionid",
-//         "description": "Sample Main Section Description",
-//         "slug": "sample-main-section",
-//         "contents": "Sample Main Section Contents",
-//         "office": {
-//             "id": "1GNPXNP2",
-//             "name": "Sangguniang Panlungsod ng Baguio",
-//             "code": "SP",
-//             "description": "The legislative body responsible for creating local policies and ordinances."
-//         },
-//         "subsections": [{
-//             "title": "Sample Subsection in Main Section",
-//             "id": "subsectionid",
-//             "description": null,
-//             "slug": "sample-subsection-in-main-section",
-//             "contents": "Sample Subsection Contents in Subsection",
-//         }]
-//     }
-// }
