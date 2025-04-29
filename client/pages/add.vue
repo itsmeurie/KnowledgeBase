@@ -48,6 +48,9 @@ const state = ref<{
 const onSubmit = (event: FormSubmitEvent<Schema>): Promise<void> => {
   return new Promise((resolve, reject) => {
     loading.value = true;
+
+    const wasSubsection = state.value.parent_id !== "none"; // capture before resetting
+
     $api
       .post("/sections", {
         ...event.data,
@@ -55,6 +58,14 @@ const onSubmit = (event: FormSubmitEvent<Schema>): Promise<void> => {
       .then((response) => {
         emit("update:show", false);
 
+        // Toast message on success using previous value
+        toast.add({
+          title: wasSubsection ? "Subsection Created" : "Section Created",
+          description: `The ${wasSubsection ? "subsection" : "section"} has been created successfully!`,
+          color: "green",
+        });
+
+        // Reset the form after toast logic
         state.value.contents = "";
         state.value.title = "";
         state.value.description = "";
@@ -63,6 +74,11 @@ const onSubmit = (event: FormSubmitEvent<Schema>): Promise<void> => {
         resolve();
       })
       .catch((error) => {
+        toast.add({
+          title: "Error",
+          description: "An error occurred while creating the section.",
+          color: "red",
+        });
         reject(error);
       })
       .finally(() => {
