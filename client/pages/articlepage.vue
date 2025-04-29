@@ -2,7 +2,7 @@
 import type { Section, Office } from "~/types";
 import { useRouter } from "vue-router";
 const office = ref<Office>();
-const officeSection = ref<Section[]>([]);
+const officeSection = ref<Section[]>([]); // List of office sections
 const section = ref<Section>(); // Store active section
 
 const router = useRouter();
@@ -13,7 +13,6 @@ const isHovered = ref(false);
 const openItems = ref<string[]>([]);
 
 // Fetch Office Sections
-
 const fetchOfficeSectionList = () => {
   if (!office.value?.id) return Promise.resolve();
   return $api
@@ -112,98 +111,51 @@ const goToEditPage = () => {
 </script>
 
 <template>
-  <div class="mt-12 grid gap-2 sm:grid-cols-10">
+  <div class="mt-12 grid gap-4 sm:grid-cols-10">
     <!-- Accordion Navigation -->
-    <div class="sm:col-span-2">
+    <aside class="px-4 sm:col-span-2 sm:px-6">
       <!-- Search Bar -->
-      <div class="ml-6 rounded-md sm:col-span-2">
+      <div class="mb-4">
         <TInput
           icon="i-heroicons-magnifying-glass-20-solid"
           size="sm"
           color="white"
           :trailing="false"
           placeholder="Search here..."
+          class="w-full"
         />
       </div>
+
       <!-- Office title -->
-      <div class="ml-7 mt-3 flex flex-col justify-center font-bold">
-        <h6>{{ office?.name }}</h6>
+      <div class="mb-6">
+        <h6 class="text-lg font-bold">Main Section</h6>
       </div>
 
-      <!-- Accordion-->
-      <div class="m-3 w-64">
-        <TAccordion
-          v-model:open="openItems"
-          :items="
-            officeSection.map((section) => ({
-              label: section.slug,
-              displayTitle: section.title,
-              children: [
-                {
-                  label: 'Sample Child Item',
-                  to: `/articlepage/${section.slug}/${section.id}`,
-                },
-              ],
-            }))
-          "
-          multiple
+      <!-- Sub-sections List with Scrollbar -->
+      <div class="h-auto overflow-y-auto space-y-2 pr-2 scrollbar-thin"> <!-- added h-[400px] and overflow-y-auto -->
+        <div
+          v-for="sub in officeSection"
+          :key="sub.id"
+          @click="handleParentSectionClick(sub.slug)"
+          class="hover:text-primary cursor-pointer rounded-md px-3 py-2"
         >
-          <template #default="{ item }">
-            <TButton
-              color="gray"
-              variant="ghost"
-              block
-              class="flex w-full items-center justify-between px-4 py-2 text-left"
-              :class="{
-                'text-primary font-bold': item.label === route.params.slug,
-              }"
-              @click="handleParentSectionClick(item.label)"
-            >
-              <span>{{ item.displayTitle }}</span>
-              <TIcon
-                :name="
-                  openItems.includes(item.label)
-                    ? 'i-heroicons-chevron-down'
-                    : 'i-heroicons-chevron-right'
-                "
-                class="ml-2"
-              />
-            </TButton>
-          </template>
-
-          <template #item="{ item }">
-            <ul v-if="item.children" class="pl-6 text-gray-600">
-              <li v-for="child in item.children" :key="child.label">
-                <router-link v-if="child.to" :to="child.to">
-                  <TButton
-                    color="gray"
-                    variant="link"
-                    block
-                    class="flex w-full items-center justify-between px-4 py-2 text-left"
-                  >
-                    {{ child.label }}
-                  </TButton>
-                </router-link>
-              </li>
-            </ul>
-          </template>
-        </TAccordion>
+          {{ sub.title }}
+        </div>
       </div>
-    </div>
+    </aside>
 
-    <div class="col-span-6 grid grid-cols-1 gap-4">
-      <div
-        class="flex flex-wrap items-center justify-between gap-4 px-4 py-2 sm:px-10"
-      >
-        <!-- Breadcrumbs Office and Sections-->
+    <!-- Main Content -->
+    <main class="col-span-full flex flex-col gap-6 mx-4 sm:col-span-6">
+      <!-- Breadcrumbs and Edit Icon -->
+      <div class="flex flex-wrap items-center justify-between gap-2 px-2 sm:px-6">
         <nav class="flex flex-wrap items-center space-x-2 text-sm sm:text-base">
           <NuxtLink
             to="/articlepage"
             external
             class="transition-colors"
             :class="{
-              'text-green-600': isHovered,
-              'hover:text-green-700': !isHovered,
+              'text-primary': isHovered,
+              'hover:text-primary': !isHovered,
             }"
             @mouseenter="isHovered = true"
             @mouseleave="isHovered = false"
@@ -211,65 +163,51 @@ const goToEditPage = () => {
             {{ office?.name }}
           </NuxtLink>
 
-          <span v-if="section" class="text-gray-500"> > </span>
+          <span v-if="section" class="mx-2 text-gray-500">></span>
 
           <NuxtLink
             v-if="section"
             :to="`/articlepage/${route.params.slug}/${section.id}`"
-            class="transition-colors"
-            :class="{
-              'text-green-600': !isHovered,
-              'hover:text-green-800': isHovered,
-            }"
+            class="hover:text-primary text-primary transition-colors"
           >
-            {{ section.title }}
+            <!-- {{ section.title }} -->
+            Main Section
           </NuxtLink>
         </nav>
 
         <!-- Edit Icon -->
-        <div class="flex items-center space-x-4">
-          <TIcon
-            name="i-heroicons-pencil-square"
-            class="h-5 w-5 cursor-pointer text-gray-600 transition hover:text-black"
-            @click="goToEditPage"
-          />
-        </div>
+        <TIcon
+          name="i-heroicons-pencil-square"
+          class="h-6 w-6 cursor-pointer text-gray-600 hover:text-black"
+          @click="goToEditPage"
+        />
       </div>
 
-      <div class="ml-1 grid gap-2">
-        <!-- Title of Article -->
-        <div class="col-span-1 ml-5">
-          <div :key="section?.id">
-            <h1 class="font-Inter p-4 text-4xl font-extrabold text-black">
-              {{ section?.title }}
-            </h1>
-          </div>
+      <!-- Article Content -->
+      <section class="space-y-6">
+        <div>
+          <h1 class="text-2xl font-extrabold sm:text-4xl">Main Section</h1>
         </div>
 
-        <!-- Last update -->
-        <div class="min-h-0.625 w-200 col-span-1 ml-20">
+        <div class="text-sm text-gray-500 sm:text-base">
           Last update 04/18/2025
         </div>
 
-        <div class="col-span-1" v-html="section?.contents"></div>
-      </div>
-    </div>
+        <div v-html="section?.contents" class="max-w-full"></div>
+      </section>
+    </main>
 
-    <!-- Documents -->
-    <div class="sm:col-span-2">
-      <!-- More information -->
-      <div class="h-10 sm:col-span-2">
-        <p class="text-center text-xl font-bold">More Information</p>
-        <div class="m-4 mx-6">
-          <hr class="border-gray-700" />
-        </div>
+    <!-- Documents Sidebar -->
+    <aside class="col-span-full mt-8 px-4 sm:col-span-2 sm:mt-0 sm:px-6">
+      <div class="text-center">
+        <p class="mb-2 text-xl font-bold">More Information</p>
+        <hr class="mb-4 border-gray-300" />
       </div>
-      <div class="m-4 flex items-center justify-center">
-        <TIcon name="tabler:book" class="m-1.5 text-lg"></TIcon>
-        <h1 class="text-black-100 font-Inter text-lg font-semibold">
-          Documents
-        </h1>
+
+      <div class="flex items-center justify-center gap-2">
+        <TIcon name="tabler:book" class="text-lg" />
+        <h2 class="text-lg font-semibold">Documents</h2>
       </div>
-    </div>
+    </aside>
   </div>
 </template>
