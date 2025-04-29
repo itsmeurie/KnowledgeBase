@@ -24,12 +24,14 @@ function goToSystemSection(code: string) {
   <Layout>
     <LayoutBody>
       <TopNav fixed :avatarOptions="aMenus">
-        <div class="flex items-center">
+        <div class="mr-4 flex items-center">
           <img
-            class="mt-6 h-20 w-20 object-contain"
+            class="mt-6 h-20 w-20 gap-5 object-contain"
             src="@/assets/image/final-logo.png"
           />
-          <p class="font-Inter text-2xl font-extrabold sm:text-3xl">
+          <p
+            class="font-Inter ml-2 hidden text-2xl font-extrabold sm:block sm:text-3xl"
+          >
             Knowledge Base
           </p>
         </div>
@@ -39,12 +41,18 @@ function goToSystemSection(code: string) {
             label="Home"
             icon="tabler:home"
             :to="{ name: 'home-page' }"
-          />
+            class="flex sm:inline-flex"
+          >
+            <span class="hidden sm:inline">Home</span>
+          </TButton>
           <TButton
             label="Docs"
             icon="tabler:book-2"
             @click="goToSystemSection(office?.code!)"
-          />
+            class="flex sm:inline-flex"
+          >
+            <span class="hidden sm:inline">Docs</span>
+          </TButton>
         </div>
       </TopNav>
       <!-- Top Bar -->

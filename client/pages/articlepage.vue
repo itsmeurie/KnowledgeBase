@@ -162,7 +162,7 @@ const goToEditPage = () => {
             {{ office?.name }}
           </NuxtLink>
 
-          <span v-if="section" class="mx-2 text-gray-500">></span>
+          <span v-if="section" class="mx-2">></span>
           <button
             v-if="section"
             @click="clearSubsection"
@@ -171,7 +171,7 @@ const goToEditPage = () => {
             {{ section?.title }}
           </button>
 
-          <span v-if="activeSubsection" class="mx-2 text-gray-500">></span>
+          <span v-if="activeSubsection" class="mx-2">></span>
 
           <!-- Subsection Title -->
           <span v-if="activeSubsection" class="font-semibold">
@@ -198,7 +198,7 @@ const goToEditPage = () => {
         <div class="text-sm">Last update: {{ formattedUpdatedAt }}</div>
 
         <!-- Markdown -->
-        <div v-html="renderedContent" class="prose max-w-full"></div>
+        <div v-html="renderedContent" class="prose max-w-full dark:prose-invert"></div>
       </section>
     </main>
 
