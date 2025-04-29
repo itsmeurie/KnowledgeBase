@@ -106,15 +106,14 @@ onMounted(() => {
 });
 
 const goToEditPage = () => {
-  router.push("/offices/systems/:slug/create");
+  router.push("/systems/:code/create");
 };
 </script>
 
 <template>
   <div class="mt-12 grid gap-4 sm:grid-cols-10">
-    <!-- Accordion Navigation -->
+    <!-- Left Side Bar -->
     <aside class="px-4 sm:col-span-2 sm:px-6">
-      <!-- Search Bar -->
       <div class="mb-4">
         <TInput
           icon="i-heroicons-magnifying-glass-20-solid"
@@ -132,16 +131,13 @@ const goToEditPage = () => {
       </div>
 
       <!-- Sub-sections List with Scrollbar -->
-      <div class="h-auto overflow-y-auto space-y-2 pr-2 scrollbar-thin"> <!-- added h-[400px] and overflow-y-auto -->
-        <div
-          v-for="sub in officeSection"
-          :key="sub.id"
-          @click="handleParentSectionClick(sub.slug)"
-          class="hover:text-primary cursor-pointer rounded-md px-3 py-2"
-        >
-          {{ sub.title }}
+      <div class="max-h-96 overflow-y-auto space-y-2 pr-2 scrollbar-thin"> 
+        <div>
+          SubSection
         </div>
       </div>
+
+
     </aside>
 
     <!-- Main Content -->
@@ -178,7 +174,7 @@ const goToEditPage = () => {
         <!-- Edit Icon -->
         <TIcon
           name="i-heroicons-pencil-square"
-          class="h-6 w-6 cursor-pointer text-gray-600 hover:text-black"
+          class="h-6 w-6 cursor-pointer hover:text-black"
           @click="goToEditPage"
         />
       </div>

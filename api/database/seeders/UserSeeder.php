@@ -37,6 +37,13 @@ class UserSeeder extends Seeder {
                 "role" => "Admin",
                 "team_id" => 3,
             ],
+            [
+                "username" => "joncarlo",
+                "email" => null,
+                "password" => Hash::make("carlo12345"),
+                "role" => "Admin",
+                "team_id" => 3,
+            ],
         ];
 
         $office_ids = Office::select("id")->get()->pluck("id");
