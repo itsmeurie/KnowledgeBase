@@ -180,7 +180,7 @@ watch(
       <!-- Main Section -->
       <div class="mb-1">
         <h6
-          class="hover:text-primary text-md cursor-pointer font-bold"
+          class="hover:text-primary text-md cursor-pointer font-extrabold"
           @click="clearSubsection"
         >
           {{ section?.title }}
@@ -188,12 +188,12 @@ watch(
       </div>
 
       <!-- Subsections List -->
-      <div class="ml-1 max-h-96 overflow-y-auto pr-2 scrollbar-thin">
+      <div class="ml-1 max-h-96 overflow-y-auto pr-2 text-sm scrollbar-thin">
         <div
           v-for="sub in section?.subsections || []"
           :key="sub.id"
           @click="selectSubsection(sub)"
-          class="hover:text-primary cursor-pointer rounded px-2 py-1 transition-colors"
+          class="cursor-pointer rounded px-2 py-1 font-semibold transition-colors hover:underline"
           :class="{ 'text-primary': sub.id === activeSubsection?.id }"
         >
           {{ sub.title }}
@@ -204,9 +204,7 @@ watch(
     <!-- Main Content -->
     <main class="col-span-full mx-4 flex flex-col gap-6 sm:col-span-6">
       <!-- Breadcrumbs -->
-      <div
-        class="flex flex-wrap items-center justify-between gap-2 px-2 sm:px-6"
-      >
+      <div class="flex flex-wrap items-center justify-between text-sm">
         <nav class="flex flex-wrap items-center space-x-2 text-sm sm:text-base">
           <NuxtLink
             :to="{
@@ -247,40 +245,58 @@ watch(
           class="h-6 w-6 cursor-pointer hover:text-black"
           @click="openEditModal"
         />
-        <TModal v-model="showEditModal" title="Edit Section">
-          <form @submit.prevent="submitEdit">
-            <div class="mb-4">
-              <label class="block text-sm font-medium text-gray-700"
-                >Title</label
-              >
-              <input
-                v-model="editForm.title"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                required
-              />
-            </div>
+        <TModal
+          v-model="showEditModal"
+          prevent-close
+          :ui="{ width: 'w-screen-500 max-w-sm sm:max-w-sm' }"
+        >
+          <template #default>
+            <!-- Close Icon (upper-right) -->
+            <button
+              @click="showEditModal = false"
+              class="absolute right-4 top-4 text-gray-500 hover:text-black"
+              aria-label="Close"
+            >
+              <TIcon name="i-heroicons-x-mark" class="h-6 w-6" />
+            </button>
 
-            <div class="mb-4">
-              <label class="block text-sm font-medium text-gray-700"
-                >Contents</label
-              >
-              <textarea
-                v-model="editForm.contents"
-                rows="8"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
-                required
-              ></textarea>
-            </div>
+            <form @submit.prevent="submitEdit" class="pt-10">
+              <div class="m-4 mb-4">
+                <label class="block text-sm font-bold">Title</label>
+                <input
+                  v-model="editForm.title"
+                  class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                  required
+                />
+              </div>
 
-            <div class="flex justify-end">
-              <button
-                type="submit"
-                class="bg-primary hover:bg-primary-dark rounded px-4 py-2 text-white"
-              >
-                Save
-              </button>
-            </div>
-          </form>
+              <div class="m-4">
+                <label class="block text-sm font-bold">Contents</label>
+                <textarea
+                  v-model="editForm.contents"
+                  rows="8"
+                  class="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm"
+                  required
+                ></textarea>
+              </div>
+
+              <div class="m-4 flex justify-end gap-2">
+                <button
+                  type="button"
+                  @click="showEditModal = false"
+                  class="rounded border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-100"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  class="bg-primary hover:bg-primary-dark rounded px-4 py-2 text-white"
+                >
+                  Update
+                </button>
+              </div>
+            </form>
+          </template>
         </TModal>
       </div>
 
