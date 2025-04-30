@@ -4,13 +4,11 @@ namespace App\Http\Requests\SectionRequests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateSectionRequest extends FormRequest
-{
+class UpdateSectionRequest extends FormRequest {
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
-    {
+    public function authorize(): bool {
         return true;
     }
 
@@ -19,12 +17,10 @@ class UpdateSectionRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
-    {
+    public function rules(): array {
         return [
-            'title' => 'required',
-            'office_id' => 'nullable|numeric|exists:offices,id', 
-            'description' =>'nullable',
+            "title" => "required|string|max:255",
+            "contents" => "required|string",
         ];
     }
 }

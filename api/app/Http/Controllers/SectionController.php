@@ -105,10 +105,10 @@ class SectionController extends Controller {
     public function update(UpdateSectionRequest $request, Section $section): JsonResponse {
         $fields = $request->validated();
 
+        // Only allow editing title and contents for both types
         $section->update([
             "title" => $fields["title"],
-            "description" => $fields["description"],
-            "office_id" => $fields["office_id"],
+            "contents" => $fields["contents"],
         ]);
 
         return response()->json([

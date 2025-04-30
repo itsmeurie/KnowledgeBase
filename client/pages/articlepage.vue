@@ -2,25 +2,49 @@
 import type { Section, Office } from "~/types";
 import { useRouter } from "vue-router";
 import { marked } from "marked";
-import { computed } from "vue";
+import { computed, ref, onMounted, watch } from "vue";
+
+const router = useRouter();
+const { $api } = useNuxtApp();
+const route = useRoute();
+const { office } = useAuthStore();
+
+const offices = ref<Office>();
+const officeSection = ref<Section[]>([]);
+const section = ref<Section>();
+const activeSubsection = ref<Section | null>(null);
+
+const isHovered = ref(false);
+const openItems = ref<string[]>([]);
+
+const showEditModal = ref(false);
+const editForm = ref<{
+  id: number | null;
+  title: string;
+  contents: string;
+}>({
+  id: null,
+  title: "",
+  contents: "",
+});
 
 const renderedContent = computed(() =>
   marked(activeSubsection.value?.contents || section.value?.contents || ""),
 );
 
-const offices = ref<Office>();
-const { office } = useAuthStore();
-const officeSection = ref<Section[]>([]); // List of office sections
-const section = ref<Section>(); // Store active section
-const activeSubsection = ref<Section | null>(null); // Currently active subsection
+const formattedUpdatedAt = computed(() => {
+  const dateStr =
+    activeSubsection.value?.updated_at || section.value?.updated_at;
+  if (!dateStr) return "Unknown";
 
-const router = useRouter();
-const { $api } = useNuxtApp();
-const route = useRoute();
-const isHovered = ref(false);
-const openItems = ref<string[]>([]);
+  const date = new Date(dateStr);
+  return date.toLocaleDateString("en-US", {
+    month: "numeric",
+    day: "numeric",
+    year: "numeric",
+  });
+});
 
-// Fetch Office Sections
 const fetchOffice = () => {
   if (!route.params.slug) return;
 
@@ -55,6 +79,69 @@ const fetchSection = () => {
     });
 };
 
+const selectSubsection = (subsection: Section) => {
+  activeSubsection.value = subsection;
+};
+
+const clearSubsection = () => {
+  activeSubsection.value = null;
+};
+
+const openEditModal = () => {
+  const target = activeSubsection.value || section.value;
+  if (!target) return;
+
+  editForm.value = {
+    id: target.id,
+    title: target.title,
+    contents: target.contents,
+  };
+
+  showEditModal.value = true;
+};
+
+const submitEdit = async () => {
+  try {
+    if (!editForm.value.id) return;
+
+    const response = await $api.put(`/sections/${editForm.value.id}`, {
+      title: editForm.value.title,
+      contents: editForm.value.contents,
+    });
+
+    const updated = response.data.section;
+
+    // Update activeSubsection
+    if (activeSubsection.value && activeSubsection.value.id === updated.id) {
+      activeSubsection.value.title = updated.title;
+      activeSubsection.value.contents = updated.contents;
+    }
+
+    // Update subsection
+    if (section.value?.subsections) {
+      const index = section.value.subsections.findIndex(
+        (s) => s.id === updated.id,
+      );
+      if (index !== -1) {
+        section.value.subsections[index] = {
+          ...section.value.subsections[index],
+          ...updated,
+        };
+      }
+    }
+
+    // Update main section
+    if (section.value && section.value.id === updated.id) {
+      section.value.title = updated.title;
+      section.value.contents = updated.contents;
+    }
+
+    showEditModal.value = false;
+  } catch (error) {
+    console.error("Failed to update section:", error);
+  }
+};
+
 onMounted(() => {
   fetchOffice();
 });
@@ -73,31 +160,6 @@ watch(
     }
   },
 );
-
-const formattedUpdatedAt = computed(() => {
-  const dateStr =
-    activeSubsection.value?.updated_at || section.value?.updated_at;
-  if (!dateStr) return "Unknown";
-
-  const date = new Date(dateStr);
-  return date.toLocaleDateString("en-US", {
-    month: "numeric",
-    day: "numeric",
-    year: "numeric",
-  });
-});
-
-const selectSubsection = (subsection: Section) => {
-  activeSubsection.value = subsection;
-};
-
-const clearSubsection = () => {
-  activeSubsection.value = null;
-};
-
-const goToEditPage = () => {
-  router.push("/systems/:code/create");
-};
 </script>
 
 <template>
@@ -115,10 +177,10 @@ const goToEditPage = () => {
         />
       </div>
 
-      <!-- Section title (clickable to reset subsection) -->
-      <div class="mb-6">
+      <!-- Main Section -->
+      <div class="mb-1">
         <h6
-          class="hover:text-primary cursor-pointer text-lg font-bold"
+          class="hover:text-primary text-md cursor-pointer font-bold"
           @click="clearSubsection"
         >
           {{ section?.title }}
@@ -126,7 +188,7 @@ const goToEditPage = () => {
       </div>
 
       <!-- Subsections List -->
-      <div class="max-h-96 space-y-2 overflow-y-auto pr-2 scrollbar-thin">
+      <div class="ml-1 max-h-96 overflow-y-auto pr-2 scrollbar-thin">
         <div
           v-for="sub in section?.subsections || []"
           :key="sub.id"
@@ -174,7 +236,7 @@ const goToEditPage = () => {
           <span v-if="activeSubsection" class="mx-2">></span>
 
           <!-- Subsection Title -->
-          <span v-if="activeSubsection" class="font-semibold">
+          <span v-if="activeSubsection" class="text-sm font-semibold">
             {{ activeSubsection?.title }}
           </span>
         </nav>
@@ -183,8 +245,43 @@ const goToEditPage = () => {
         <TIcon
           name="i-heroicons-pencil-square"
           class="h-6 w-6 cursor-pointer hover:text-black"
-          @click="goToEditPage"
+          @click="openEditModal"
         />
+        <TModal v-model="showEditModal" title="Edit Section">
+          <form @submit.prevent="submitEdit">
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700"
+                >Title</label
+              >
+              <input
+                v-model="editForm.title"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                required
+              />
+            </div>
+
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700"
+                >Contents</label
+              >
+              <textarea
+                v-model="editForm.contents"
+                rows="8"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+                required
+              ></textarea>
+            </div>
+
+            <div class="flex justify-end">
+              <button
+                type="submit"
+                class="bg-primary hover:bg-primary-dark rounded px-4 py-2 text-white"
+              >
+                Save
+              </button>
+            </div>
+          </form>
+        </TModal>
       </div>
 
       <!-- Article Content -->
@@ -198,7 +295,10 @@ const goToEditPage = () => {
         <div class="text-sm">Last update: {{ formattedUpdatedAt }}</div>
 
         <!-- Markdown -->
-        <div v-html="renderedContent" class="prose max-w-full dark:prose-invert"></div>
+        <div
+          v-html="renderedContent"
+          class="prose dark:prose-invert max-w-full"
+        ></div>
       </section>
     </main>
 
