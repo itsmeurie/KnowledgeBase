@@ -25,6 +25,7 @@ class SectionResource extends JsonResource {
                     "id" => $section->hash,
                     "description" => $section->description,
                     "slug" => $section->slug,
+                    "contents" => $section->contents,
                 ];
             }),
         ];
