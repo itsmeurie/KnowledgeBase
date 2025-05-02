@@ -17,8 +17,6 @@ class UserResource extends JsonResource {
         $currentID = $this->id;
         $sameUser = $currentID == $userID;
 
-        $permissions = $sameUser ? $this->getAllPermissions()->pluck("name") : PermissionResource::collection($this->getDirectPermissions());
-
         $roles = $this->roles
             ->map(function ($role) use ($sameUser) {
                 $res = [
@@ -32,7 +30,7 @@ class UserResource extends JsonResource {
             })
             ->sortBy("name");
 
-        return [
+        $result = [
             "id" => $this->when(!$sameUser, $this->hash),
             "email" => $this->email,
             "username" => $this->username,
@@ -41,9 +39,14 @@ class UserResource extends JsonResource {
             "profile" => new ProfileResource($this->profile),
 
             "roles" => $roles->toArray(),
-            "permissions" => $permissions, // For own account (Profile)
-
-            "office" => OfficeResource::make($this->office),
+            "permissions" => $this->when($sameUser, $this->getAllPermissions()->pluck("name"), PermissionResource::collection($this->getDirectPermissions())), // For own account (Profile)
         ];
+
+        if (config("permission.teams") && $sameUser) {
+            $team = app(config("mitd.permission.teams_provider"))::find(getPermissionsTeamId());
+            $result = array_merge($result, ["team" => app(config("mitd.permission.teams_resource"), ["resource" => $team])]);
+        }
+
+        return $result;
     }
 }

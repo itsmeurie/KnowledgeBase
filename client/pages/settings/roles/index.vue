@@ -128,6 +128,8 @@ const onDelete = (data: RoleItem) => {
   modal.value.show = false;
 };
 
+useTeams(search);
+
 onMounted(() => {
   search();
 });

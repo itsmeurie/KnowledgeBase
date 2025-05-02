@@ -33,6 +33,9 @@ const crumbs = computed<Array<BreadcrumbLink>>(() =>
           variant="ghost"
           :to="{ name: 'home' }"
         />
+        <div class="flex flex-auto items-center justify-end">
+          <TTeamSelect />
+        </div>
       </TopNav>
       <TPageTitle
         v-if="false"

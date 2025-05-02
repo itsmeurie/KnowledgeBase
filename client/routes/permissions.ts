@@ -9,6 +9,7 @@ export const settings = {
   ],
   "settings-permissions": [],
   "settings-roles": ["roles_list", "roles_add", "roles_edit", "roles_delete"],
+  "settings-logs": [],
 };
 
 export const dasboard = {};

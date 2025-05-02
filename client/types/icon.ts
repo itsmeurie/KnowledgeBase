@@ -1,4 +1,4 @@
-import type { HasKey } from "./utils";
+import type { HasKey, Prettify } from "./utils";
 
 export type IIconProps = {
   name: string;
@@ -7,10 +7,12 @@ export type IIconProps = {
   customize?: Function | null;
 };
 
-export type IUseIcon = HasKey & {
-  strokeWidth?: number;
-  strokeColor?: string;
-  fill?: string;
-  animationDuration?: number;
-  opacity?: number;
-};
+export type IUseIcon = Prettify<
+  HasKey & {
+    strokeWidth?: number;
+    strokeColor?: string;
+    fill?: string;
+    animationDuration?: number;
+    opacity?: number;
+  }
+>;

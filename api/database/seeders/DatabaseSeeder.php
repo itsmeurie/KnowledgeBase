@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Dom\Document;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,11 +13,10 @@ class DatabaseSeeder extends Seeder {
      */
     public function run(): void {
         $this->call([
+            OfficeSeeder::class,
             GenderSeeder::class,
             PermissionSeeder::class,
             RoleSeeder::class,
-
-            OfficeSeeder::class,
             UserSeeder::class,
             AddressSeeder::class,
             PrivacyPolicySeeder::class,
@@ -25,5 +24,4 @@ class DatabaseSeeder extends Seeder {
             DocumentsSeeder::class,
         ]);
     }
-    //merge
 }

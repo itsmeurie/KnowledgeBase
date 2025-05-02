@@ -28,6 +28,7 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "@nuxt/image",
     "dayjs-nuxt",
+    "nuxt-gtag",
   ],
 
   imports: {
@@ -39,6 +40,7 @@ export default defineNuxtConfig({
     { path: "~/components/sidebar", pathPrefix: false },
     { path: "~/components/nav", pathPrefix: false },
     { path: "~/components/pwa", pathPrefix: false },
+    { path: "~/components/teams", pathPrefix: false },
     "~/components",
   ],
 
@@ -85,6 +87,9 @@ export default defineNuxtConfig({
       description: process.env.NUXT_PUBLIC_DESCRIPTION || "",
       office_name: process.env.NUXT_PUBLIC_OFFICE_NAME || "",
       openweather_api_key: process.env.NUXT_OPENWEATHER_API_KEY || "",
+      tasks: {
+        enabled: process.env.NUXT_TASKS_ENABLED?.toLowerCase() == "true",
+      },
       store: {
         encrypt: process.env.NUXT_STORE_ENCRYPT || "auto",
         salt: process.env.NUXT_STORE_SALT || "",
@@ -175,6 +180,13 @@ export default defineNuxtConfig({
       //   },
       // ],
     },
+  },
+
+  gtag: {
+    enabled:
+      process.env.NODE_ENV != "development" &&
+      !!process.env.NUXT_PUBLIC_GTAG_ID,
+    id: process.env.NUXT_PUBLIC_GTAG_ID,
   },
 
   vite: {

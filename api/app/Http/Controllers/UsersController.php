@@ -17,6 +17,7 @@ use App\Http\Requests\User\UpdateUserPasswordRequest;
 use App\Http\Requests\User\UpdateUserProfileRequest;
 use App\Http\Requests\User\UpdateUserAddressRequest;
 use App\Http\Requests\User\UpdateUserPermissionRequest;
+use App\Http\Requests\User\UpdateUserTeamRequest;
 
 use App\Http\Requests\FileUploadRequest;
 
@@ -44,27 +45,28 @@ class UsersController extends Controller implements HasMiddleware {
     public function getUsers(ListUserRequest $request) {
         $search = $request->input("search");
         $limit = $request->input("limit");
+        $page = $request->input("page");
 
-        $isSuperman = Auth::user()->hasRole(config("mitd.superman"));
+        $user = $request->user();
+        $isSuperman = $user->hasRole(config("mitd.superman"));
 
-        $users = User::paginates($limit, null, function ($query) use ($search, $isSuperman) {
-            $query
-                ->where("id", "!=", Auth::id())
-                ->when(!$isSuperman, function ($q) {
-                    $q->whereDoesntHave("roles", function ($qq) {
-                        $qq->where("name", config("mitd.superman"));
-                    });
-                })
-                ->when($search, function ($q) use ($search) {
-                    $q->where(function ($qq) use ($search) {
-                        $qq->where("username", "ilike", "%{$search}%")->orWhere(
-                            "email",
-                            "ilike",
-                            "%{$search}%"
-                        );
-                    });
+        $users = User::where("id", "!=", $user->id)
+            ->when(!$isSuperman, function ($q) {
+                $q->whereDoesntHave("roles", function ($qq) {
+                    $qq->where("name", config("mitd.superman"));
                 });
-        });
+            })
+            ->when(config("permission.teams"), function ($q) {
+                $q->whereTeam(getPermissionsTeamId());
+            })
+            ->when($search, function ($q) use ($search) {
+                $q->where(function ($qq) use ($search) {
+                    $qq->where("username", "ilike", "%{$search}%")->orWhere("email", "ilike", "%{$search}%");
+                })->whereHas("profile", function ($qq) use ($search) {
+                    $qq->orWhere("first_name", "ilike", "%{$search}%")->orWhere("last_name", "ilike", "%{$search}%");
+                });
+            })
+            ->paginates($limit, $page);
 
         $users["data"] = UserResource::collection($users["data"]);
 
@@ -88,7 +90,7 @@ class UsersController extends Controller implements HasMiddleware {
             "email_verified_at" => now(),
         ]);
 
-        $user->roles()->attach($data["roles"]);
+        $user->assignRole($data["roles"]);
 
         return ["data" => new UserResource($user), "message" => "User created successfully!"];
     }
@@ -96,18 +98,31 @@ class UsersController extends Controller implements HasMiddleware {
     public function getRoles(Request $request) {
         $userRole = Auth::user()->roles->sortBy("level")->first();
         $withPermissions = $request->input("perms", false);
+        $fromTeam = $request->input("team", null);
+
+        $teams = config("permission.teams");
+        $superman = $request->user()->isSuperman();
+
         $roles = Role::select("name", "id", "level", "color")
-            ->when(!Auth::user()->hasRole(config("mitd.superman")), function ($q) {
+            ->when(!$superman || ($superman && !!$fromTeam), function ($q) {
                 $q->where("name", "!=", config("mitd.superman"));
             })
             ->where("level", ">=", $userRole->level)
-            ->with("permissions")
+            ->when($teams, function ($query) use ($fromTeam, $superman) {
+                $col = config("permission.column_names.team_foreign_key");
+                $id = $superman && !!$fromTeam ? app(config("mitd.permission.teams_provider"))::hashToId($fromTeam) : getPermissionsTeamId();
+
+                $query->whereNull($col)->orWhere($col, $id);
+            })
+            ->when($withPermissions, function ($q) {
+                $q->with("permissions");
+            })
             ->get();
 
         return [
             "data" => $roles->map(function ($role) use ($withPermissions) {
                 $perms = $withPermissions ? ["permissions" => PermissionResource::collection($role->permissions)] : [];
-                return array_merge([ "color" => $role->color, "name" => $role->name, "id" => $role->hash ], $perms );
+                return array_merge(["color" => $role->color, "name" => $role->name, "id" => $role->hash], $perms);
             }),
             "default" => $userRole->hash,
         ];
@@ -149,24 +164,21 @@ class UsersController extends Controller implements HasMiddleware {
         return new UserResource($updated);
     }
 
-    public function setMainAddress(User $user, Address $address){
+    public function setMainAddress(User $user, Address $address) {
         Gate::authorize("updateProfile", $user);
         return new UserResource($this->set_main_address($user, $address));
     }
 
-    public function deleteAddress(User $user, Address $address){
+    public function deleteAddress(User $user, Address $address) {
         Gate::authorize("updateProfile", $user);
         return new UserResource($this->delete_address($user, $address));
     }
 
     public function addAvatar(FileUploadRequest $request, User $user) {
         Gate::authorize("updateProfile", $user);
-        $uploaded =  $this->add_avatar($request, $user);
-        if($uploaded['status'] == 'complete'){
-            return [
-                ...$uploaded,
-                "data" => new UserResource($user)
-            ];
+        $uploaded = $this->add_avatar($request, $user);
+        if ($uploaded["status"] == "complete") {
+            return [...$uploaded, "data" => new UserResource($user)];
         }
         return $uploaded;
     }
@@ -189,11 +201,34 @@ class UsersController extends Controller implements HasMiddleware {
 
     public function updatePermissions(UpdateUserPermissionRequest $request, User $user) {
         $validated = $request->validated();
+        $roles = Role::whereIn("id", $validated["roles"])->get();
+        $auth = $request->user();
+
+        if ($auth->isSuperman() && $roles->where("name", config("mitd.superman"))->count() > 0) {
+            $user->powerUp();
+        } elseif ($auth->isSuperman() && $roles->where("name", config("mitd.superman"))->isEmpty()) {
+            $user->powerDown();
+        }
+
         $user->syncRoles($validated["roles"]);
 
-        if(Auth::user()->isSuperman()) {
+        if (Auth::user()->isSuperman()) {
             $user->syncPermissions($validated["permissions"]);
         }
         return new UserResource($user);
+    }
+
+    public function changeTeam(UpdateUserTeamRequest $request, User $user) {
+        $validated = $request->validated();
+        $session_team = getPermissionsTeamId();
+
+        setPermissionsTeamId($validated["team"]);
+
+        $user->update(["team_id" => $validated["team"]]);
+        $user->syncRoles($validated["roles"]);
+        $result = new UserResource($user);
+
+        setPermissionsTeamId($session_team);
+        return $result;
     }
 }

@@ -18,7 +18,7 @@ const setColors = () => {
       `rgb(${rgbVar} / var(--tw-ring-opacity))`,
     );
     el.style.color = props.color;
-    el.style.backgroundColor = `rgb(${rgbVar} / 0.1)`;
+    el.style.backgroundColor = `rgb(${rgbVar} / 0.25)`;
   }
 };
 
@@ -32,5 +32,7 @@ onMounted(() =>
 </script>
 
 <template>
-  <TBadge ref="badge" class="brightness-75 dark:brightness-100"> </TBadge>
+  <TBadge ref="badge" class="brightness-75 dark:brightness-100">
+    <slot />
+  </TBadge>
 </template>

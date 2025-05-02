@@ -19,7 +19,7 @@ export default defineAppConfig({
       },
       card: {
         base: "border flex flex-col border-dark-200 dark:border-steel-700",
-        divide: "dark:divide-gray-400/25",
+        divide: "divide-dark-100 dark:divide-gray-700",
         background: "bg-gray-50 dark:bg-gray-800",
         rounded: "rounded",
         ring: "dark:ring-gray-600",
@@ -39,6 +39,11 @@ export default defineAppConfig({
         base: "p-6 flex-1 grid gap-4",
         padding: "",
         constrained: "",
+      },
+      divider: {
+        border: {
+          base: "flex border-gray-200 dark:border-gray-700",
+        },
       },
       input: {
         base: "relative block disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 !shadow-none bg-gray-50 dark:bg-gray-700",
@@ -97,6 +102,9 @@ export default defineAppConfig({
       },
       table: {
         base: "border border-gray-200 dark:border-gray-600",
+        tr: {
+          active: "hover:bg-gray-100 dark:hover:bg-gray-700/50",
+        },
         th: {
           base: "bg-gray-100 dark:bg-gray-700",
         },
