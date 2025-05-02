@@ -29,7 +29,7 @@ class UserSeeder extends Seeder {
             [
                 "username" => "danieltejano",
                 "email" => null,
-                "password" => Hash::make("password"),
+                "password" => "password",
                 "role" => "Admin",
                 "team_id" => 1,
             ],
@@ -41,21 +41,21 @@ class UserSeeder extends Seeder {
             [
                 "username" => "test",
                 "email" => null,
-                "password" => Hash::make("password123"),
+                "password" => "password123",
                 "role" => "Admin",
                 "team_id" => 2,
             ],
             [
                 "username" => "uriepogi",
                 "email" => null,
-                "password" => Hash::make("Urie12345"),
+                "password" => "Urie12345",
                 "role" => "Admin",
                 "team_id" => 3,
             ],
             [
                 "username" => "joncarlo",
                 "email" => null,
-                "password" => Hash::make("carlo12345"),
+                "password" => "carlo12345",
                 "role" => "Admin",
                 "team_id" => 3,
             ],
