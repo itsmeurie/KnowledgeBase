@@ -29,7 +29,6 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $addressable
  * @property-read \App\Models\Address\Barangay $barangay
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @property-read \App\Models\Address\AddressType|null $type
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Address byHash(string $hash)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Address newModelQuery()
@@ -64,7 +63,6 @@ namespace App\Models\Address{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AddressType byHash(string $hash)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AddressType newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AddressType newQuery()
@@ -102,7 +100,6 @@ namespace App\Models\Address{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Address\City $city
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @property-read \App\Models\Address\IslandGroup $islandGroup
  * @property-read \App\Models\Address\Province|null $province
  * @property-read \App\Models\Address\Region $region
@@ -150,7 +147,6 @@ namespace App\Models\Address{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address\Barangay> $barangays
  * @property-read int|null $barangays_count
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @property-read \App\Models\Address\IslandGroup $islandGroup
  * @property-read \App\Models\Address\Province|null $province
  * @property-read \App\Models\Address\Region $region
@@ -185,7 +181,6 @@ namespace App\Models\Address{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address\City> $cities
  * @property-read int|null $cities_count
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CityType byHash(string $hash)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CityType newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|CityType newQuery()
@@ -212,7 +207,6 @@ namespace App\Models\Address{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address\City> $cities
  * @property-read int|null $cities_count
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address\Province> $provinces
  * @property-read int|null $provinces_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address\Region> $regions
@@ -248,7 +242,6 @@ namespace App\Models\Address{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address\City> $cities
  * @property-read int|null $cities_count
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @property-read \App\Models\Address\IslandGroup $islandGroup
  * @property-read \App\Models\Address\Region $region
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Province byHash(string $hash)
@@ -285,7 +278,6 @@ namespace App\Models\Address{
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address\City> $cities
  * @property-read int|null $cities_count
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @property-read \App\Models\Address\IslandGroup $islandGroup
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Address\Province> $provinces
  * @property-read int|null $provinces_count
@@ -310,7 +302,6 @@ namespace App\Models{
  * 
  *
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AppModel byHash(string $hash)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AppModel newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|AppModel newQuery()
@@ -323,26 +314,13 @@ namespace App\Models{
 /**
  * 
  *
- * @property int $id
- * @property int $section_id
- * @property string $contents
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents byHash(string $hash)
  * @method static \Database\Factories\DocumentsFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents whereContents($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents whereSectionId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents withoutTrashed()
  */
@@ -367,7 +345,6 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent|null $filable
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @method static \Illuminate\Database\Eloquent\Builder<static>|File byHash(string $hash)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|File newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|File newQuery()
@@ -399,7 +376,6 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Profile> $profiles
  * @property-read int|null $profiles_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Gender byHash(string $hash)
@@ -430,7 +406,6 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\File $file
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Image byHash(string $hash)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Image newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Image newQuery()
@@ -460,7 +435,6 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @property-read \App\Models\User|null $user
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Log byHash(string $hash)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Log newModelQuery()
@@ -485,16 +459,7 @@ namespace App\Models{
 /**
  * 
  *
- * @property int $id
- * @property int|null $parent_id
- * @property string $name
- * @property string|null $code
- * @property string|null $description description_column
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Office> $images
  * @property-read int|null $images_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Section> $sections
@@ -507,14 +472,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Office newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Office onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Office query()
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Office whereCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Office whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Office whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Office whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Office whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Office whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Office whereParentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Office whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Office withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Office withoutTrashed()
  */
@@ -532,7 +489,6 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Permission> $permissions
  * @property-read int|null $permissions_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Role> $roles
@@ -567,7 +523,6 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Policy byHash(string $hash)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Policy newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Policy newQuery()
@@ -592,7 +547,6 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Policy> $policies
  * @property-read int|null $policies_count
  * @property-read \App\Models\PrivacyPrompt $prompt
@@ -620,7 +574,6 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PrivacyPrompt byHash(string $hash)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PrivacyPrompt newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PrivacyPrompt newQuery()
@@ -652,7 +605,6 @@ namespace App\Models{
  * @property-read int|null $addresses_count
  * @property-read \App\Models\Gender|null $gender
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Image> $images
  * @property-read int|null $images_count
  * @property-read \App\Models\User|null $user
@@ -686,7 +638,6 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfileImage byHash(string $hash)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfileImage newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfileImage newQuery()
@@ -706,7 +657,6 @@ namespace App\Models{
  * 
  *
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $propable
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Prop byHash(string $hash)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Prop newModelQuery()
@@ -721,7 +671,6 @@ namespace App\Models{
  * 
  *
  * @property int $id
- * @property int|null $team_id
  * @property string $name
  * @property string $guard_name
  * @property bool $protected
@@ -731,7 +680,6 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Permission> $permissions
  * @property-read int|null $permissions_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
@@ -749,7 +697,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Role whereLevel($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Role whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Role whereProtected($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Role whereTeamId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Role whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Role withoutPermission($permissions)
  */
@@ -760,21 +707,10 @@ namespace App\Models{
 /**
  * 
  *
- * @property int $id
- * @property int|null $parent_id
- * @property string $contents
- * @property int $office_id
- * @property string $title
- * @property string $description description
- * @property string|null $slug
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\File> $files
  * @property-read int|null $files_count
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
- * @property-read \App\Models\Office $office
+ * @property-read \App\Models\Office|null $office
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Section> $subSections
  * @property-read int|null $sub_sections_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Section byHash(string $hash)
@@ -784,16 +720,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Section onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Section query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Section slug(string $slug)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereContents($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereOfficeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereParentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereSlug($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Section withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Section withoutTrashed()
  */
@@ -810,21 +736,21 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property int $fails
- * @property int $team_id
  * @property \Illuminate\Support\Carbon|null $disabled_at
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read string|null $hash
- * @property-read \App\Models\TFactory|null $use_factory
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
- * @property-read \App\Models\Office $office
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Permission> $permissions
  * @property-read int|null $permissions_count
  * @property-read \App\Models\Profile|null $profile
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Role> $roles
  * @property-read int|null $roles_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Role> $roles_all
+ * @property-read int|null $roles_all_count
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $team
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User byHash(string $hash)
@@ -842,7 +768,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRememberToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTeamId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUsername($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutPermission($permissions)

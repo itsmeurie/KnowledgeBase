@@ -1,7 +1,25 @@
-import axios from "axios";
+import axios, { type AxiosInstance } from "axios";
 
 export default defineNuxtPlugin(async (nuxtApp) => {
   const config = useRuntimeConfig();
+  const csrfRetryCtr = ref(0);
+
+  const shouldRetry = (error: any) => {
+    return [419].includes(error.response.status) && csrfRetryCtr.value < 3;
+  };
+
+  const getCsrfToken = async (api: AxiosInstance) => {
+    return new Promise((resolve, reject) => {
+      api
+        .get("/csrf-cookie")
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  };
 
   const api = axios.create({
     withCredentials: true,
@@ -14,13 +32,28 @@ export default defineNuxtPlugin(async (nuxtApp) => {
   });
 
   api.interceptors.request.use(
-    (response) => Promise.resolve(response),
+    async (config) => {
+      // if (config.url == "/auth/login") {
+      //   await getCsrfToken(api).catch((e) => e);
+      // }
+      return config;
+    },
     (error) => Promise.reject(error),
   );
 
   api.interceptors.response.use(
-    (response) => Promise.resolve(response),
-    (error) => {
+    (response) => {
+      csrfRetryCtr.value < 0;
+      return Promise.resolve(response);
+    },
+    async (error) => {
+      if (shouldRetry(error)) {
+        await getCsrfToken(api);
+        csrfRetryCtr.value++;
+        return new Promise((resolve) => {
+          resolve(axios(error.config));
+        });
+      }
       if (error.response.status === 401) {
         const $auth = useAuthStore();
         const { $router } = useNuxtApp();
@@ -49,7 +82,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     },
   );
 
-  await api.get("/csrf-cookie").catch((e) => e);
+  await getCsrfToken(api).catch((e) => e);
 
   return { provide: { api } };
 });

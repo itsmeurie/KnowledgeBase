@@ -1,4 +1,5 @@
 import type { RouteLocationRaw } from "vue-router";
+import type { Prettify } from "./utils";
 
 export type AvatarOptions = {
   label?: string;
@@ -9,8 +10,10 @@ export type AvatarOptions = {
   action?: () => void;
 };
 
-export type MenuOption = AvatarOptions & {
-  active?: boolean;
-  exact?: boolean;
-  children?: Array<MenuOption>;
-};
+export type MenuOption = Prettify<
+  AvatarOptions & {
+    active?: boolean;
+    exact?: boolean;
+    children?: Array<MenuOption>;
+  }
+>;

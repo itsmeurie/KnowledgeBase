@@ -39,6 +39,20 @@ return [
         ],
     ],
 
+    "permission" => [
+        /**
+         * The model to use for teams
+         * ex. "teams_provider" => \App\Models\Team::class
+         */
+        "teams_provider" => \App\Models\Office::class,
+
+        /**
+         * The resource to use for teams, must containt the "id" and "name" attributes
+         *
+         */
+        "teams_resource" => \App\Http\Resources\OfficeResource::class,
+    ],
+
     "password" => [
         /**
          * The default password validation rules

@@ -27,6 +27,7 @@ export const settings = shallowRef([
   getMenuItem("settings-accounts"),
   getMenuItem("settings-roles"),
   getMenuItem("settings-permissions"),
+  getMenuItem("settings-logs"),
 ]);
 
 export default computed<Array<MenuOption>>(() => {
@@ -37,17 +38,17 @@ export default computed<Array<MenuOption>>(() => {
     {
       label: "Tickets",
       icon: "tabler:ticket",
-      to: {name:'tickets-index'}
+      to: { name: "tickets-index" },
     },
     {
       label: "Violators",
       icon: "tabler:user-cancel",
-      to: {name:'violators-index'}
+      to: { name: "violators-index" },
     },
     {
       label: "Violations",
       icon: "tabler:notebook",
-      to: {name: 'violations-index'},
-    }
+      to: { name: "violations-index" },
+    },
   ];
 });

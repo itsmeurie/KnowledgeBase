@@ -55,7 +55,7 @@ onMounted(() => {
             color="gray"
             size="md"
             variant="ghost"
-            :activeClass="`text-primary-500 dark:text-primary-400 hover:text-primary-400 dark:hover:!text-primary-300 ${noIcon ? '!border-primary-400' : ''}`"
+            :activeClass="`!text-primary-500 dark:text-primary-400 hover:text-primary-400 dark:hover:!text-primary-300 ${noIcon ? '!border-primary-400' : ''}`"
             :to="menu.to"
             :active="menu.active"
             @click="action"
@@ -89,7 +89,7 @@ onMounted(() => {
           <template v-if="!expand" #panel>
             <div class="flex flex-col gap-2.5 p-2.5">
               <span class="flex items-center gap-2">
-                <TIcon :name="menu.icon" class="h-5 w-5" /> {{ menu.label }}
+                <TIcon :name="menu.icon!" class="h-5 w-5" /> {{ menu.label }}
               </span>
               <div
                 v-if="menu.children?.length! > 0"

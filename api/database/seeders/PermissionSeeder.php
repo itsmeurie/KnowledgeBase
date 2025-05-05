@@ -11,7 +11,7 @@ class PermissionSeeder extends Seeder {
      * Run the database seeds.
      */
     public function run(): void {
-        $guard_name = "sanctum";
+        $guard_name = "web";
         $now = now();
         $common = [
             "guard_name" => $guard_name,
@@ -74,8 +74,7 @@ class PermissionSeeder extends Seeder {
             ],
             [
                 "name" => "roles_delete",
-                "description" =>
-                    "Delete roles (Warning! this action is permanent and non recoverable.)",
+                "description" => "Delete roles (Warning! this action is permanent and non recoverable.)",
                 ...$common,
             ],
 

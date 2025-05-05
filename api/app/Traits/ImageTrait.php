@@ -13,21 +13,16 @@ use App\Models\File;
 
 trait ImageTrait {
     use FilesTrait;
-    public function imageDisplay(Request $request, Image $image, string $size = null) {
+    public function imageDisplay(Request $request, Image $image, ?string $size = null) {
         $file = $image->file;
         $paths = [$file->path];
         $thumb_ext = config("mitd.images.thumbnail_ext", "webp");
         if (!!$size && !in_array($file->ext, ["gif", "svg"])) {
-            $paths = array_merge($paths, [
-                "thumbnails",
-                $file->file_name . "_" . $size . "." . $thumb_ext,
-            ]);
+            $paths = array_merge($paths, ["thumbnails", $file->file_name . "_" . $size . "." . $thumb_ext]);
         } else {
             $paths = array_merge($paths, [$file->file_name . "." . $file->ext]);
         }
-        $target = Storage::disk(config("filesystems.default"))->path(
-            join(DIRECTORY_SEPARATOR, $paths)
-        );
+        $target = Storage::disk(config("filesystems.default"))->path(join(DIRECTORY_SEPARATOR, $paths));
 
         return response()->file($target, [
             "Content-Type" => $file->mime,
@@ -36,9 +31,7 @@ trait ImageTrait {
 
     public function resizeImage(Image $image) {
         $file = $image->file;
-        $path = Storage::disk(config("filesystems.default"))->path(
-            join(DIRECTORY_SEPARATOR, [$file->path, $file->file_name . "." . $file->ext])
-        );
+        $path = Storage::disk(config("filesystems.default"))->path(join(DIRECTORY_SEPARATOR, [$file->path, $file->file_name . "." . $file->ext]));
         $max = config("mitd.images.sizes.max");
         $img = InterventionImage::read($path);
 
@@ -54,31 +47,20 @@ trait ImageTrait {
 
     public function createThumbnails(Image $image) {
         $file = $image->file;
-        $path = Storage::disk(config("filesystems.default"))->path(
-            join(DIRECTORY_SEPARATOR, [$file->path, $file->file_name . "." . $file->ext])
-        );
+        $path = Storage::disk(config("filesystems.default"))->path(join(DIRECTORY_SEPARATOR, [$file->path, $file->file_name . "." . $file->ext]));
 
         $thumb_ext = config("mitd.images.thumbnail_ext", "webp");
 
         $sizes = config("mitd.images.sizes.thumbnails");
-        $destDir = Storage::disk(config("filesystems.default"))->path(
-            join(DIRECTORY_SEPARATOR, [$file->path, "thumbnails"])
-        );
+        $destDir = Storage::disk(config("filesystems.default"))->path(join(DIRECTORY_SEPARATOR, [$file->path, "thumbnails"]));
 
         FS::ensureDirectoryExists($destDir, 0777, true);
 
         foreach ($sizes as $key => $size) {
             $img = InterventionImage::read($path);
-            $dest = join(DIRECTORY_SEPARATOR, [
-                $destDir,
-                $file->file_name . "_" . $key . "." . $thumb_ext,
-            ]);
+            $dest = join(DIRECTORY_SEPARATOR, [$destDir, $file->file_name . "_" . $key . "." . $thumb_ext]);
 
-            $img->scaleDown($size["width"], $size["height"])->save(
-                $dest,
-                quality: 45,
-                progressive: true
-            );
+            $img->scaleDown($size["width"], $size["height"])->save($dest, quality: 45, progressive: true);
         }
     }
 }

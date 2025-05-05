@@ -23,7 +23,8 @@ class AppServiceProvider extends ServiceProvider {
      * Bootstrap any application services.
      */
     public function boot(): void {
-        URL::forceRootUrl(config("app.url"));
+        // URL::forceRootUrl(config("app.url"));
+        URL::useOrigin(config("app.url"));
         if (Str::contains(config("app.url"), "https://")) {
             URL::forceScheme("https");
         }
