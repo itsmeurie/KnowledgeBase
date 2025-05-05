@@ -9,16 +9,26 @@ return new class extends Migration {
      * Run the migrations.
      */
     public function up(): void {
-        Schema::create("users", function (Blueprint $table) {
+        $teams = config("permission.teams");
+        $columnNames = config("permission.column_names");
+        $teamsProvider = config("mitd.permission.teams_provider");
+
+        if ($teams && empty($teamsProvider ?? null)) {
+            throw new \Exception("Error: teams provider on config/mitd.php not loaded. Run [php artisan config:clear] and try again.");
+        }
+
+        Schema::create("users", function (Blueprint $table) use ($teams, $columnNames, $teamsProvider) {
             $table->id();
             $table->string("username")->unique();
             $table->string("email")->nullable()->unique();
             $table->timestamp("email_verified_at")->nullable();
             $table->string("password");
             $table->unsignedTinyInteger("fails")->default(0);
-
-            $table->foreignId("team_id")->constrained("offices");
             $table->timestamp("disabled_at")->nullable();
+            if ($teams) {
+                $tname = app($teamsProvider)->getTable();
+                $table->foreignId($columnNames["team_foreign_key"])->nullable()->constrained($tname);
+            }
             $table->rememberToken();
             $table->timestamps();
         });

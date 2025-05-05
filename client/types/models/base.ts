@@ -1,8 +1,10 @@
-import type { HasKey } from "../utils";
+import type { HasKey, Prettify } from "../utils";
 
-export type BaseModel = HasKey & {
-  id?: string;
-};
+export type BaseModel = Prettify<
+  HasKey & {
+    id?: string;
+  }
+>;
 
 export type Common = HasKey &
   Required<BaseModel> & {

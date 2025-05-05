@@ -22,7 +22,7 @@ class URLBuilder {
      * @param  string|null  $base
      * @return void
      */
-    public function __construct(string $base = null) {
+    public function __construct(?string $base = null) {
         if ($base != null) {
             $this->base($base);
         }

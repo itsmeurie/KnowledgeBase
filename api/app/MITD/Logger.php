@@ -3,6 +3,7 @@
 namespace App\MITD;
 
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 use App\Models\Log as LogModel;
 use App\Models\User;
@@ -95,10 +96,12 @@ class Logger {
         mixed $newData = null,
         int $level = 7,
         User $user = null,
-        string $actor = null
+        string $actor = null,
+        Carbon $timestamp = null
     ): LogModel {
         $user = $user ?? ($this->user ?? Auth::user());
         $name = $actor ?? ($user?->profile?->fullName() ?? ($user->username ?? null));
+
         $this->model = LogModel::create([
             "action" => $action,
             "module" => $module,
@@ -109,8 +112,34 @@ class Logger {
             "user_id" => $user?->id ?? null,
             "actor" => $name,
         ]);
+        if ($timestamp) {
+            $this->model->created_at = $timestamp;
+            $this->model->save();
+        }
         $this->models[] = $this->model;
         return $this->model;
+    }
+
+    public function randomTest($length = 100, $sentence = null, $level = null) {
+        $users = User::limit(5)->get();
+
+        for ($i = 1; $i <= $length; $i++) {
+            $action = fake()->sentence($sentence ?? fake()->numberBetween(15, 35));
+            $old = fake()->boolean(0.5) ? null : $this->fakeJson();
+            $new = fake()->boolean(0.5) ? null : $this->fakeJson();
+            $this->recordActivity(
+                $action,
+                $this->getModule(),
+                self::ACTION_UNSPECIFIED,
+                $old,
+                $new,
+                $level ?? fake()->numberBetween(1, 7),
+                $users->random(),
+                fake()->name(),
+                Carbon::parse(fake()->dateTimeBetween("-5 year", "now"))
+            );
+        }
+        return $this;
     }
 
     public function emergency(string $action, int $type = self::ACTION_UNSPECIFIED, mixed $oldData = null, mixed $newData = null) {
@@ -160,5 +189,30 @@ class Logger {
         $stack = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 7)[$this->MODULE_STACK_LEVEL];
         $mod = isset($stack["class"]) ? $stack["class"] . ":" : $stack["file"] . ":" . $stack["line"] . " => ";
         return $mod . $stack["function"];
+    }
+
+    private function getUser(User $user = null) {
+        if ($user) {
+            return $user;
+        }
+
+        return $this->user ?? Auth::user();
+    }
+
+    private function fakeJson($length = 5) {
+        $data = [];
+        for ($i = 0; $i < $length; $i++) {
+            $data[] = $this->fakeJsonData();
+        }
+        return $data;
+    }
+
+    private function fakeJsonData() {
+        return [
+            "id" => fake()->uuid(),
+            "first_name" => fake()->firstName(),
+            "last_name" => fake()->lastName(),
+            "email" => fake()->safeEmail(),
+        ];
     }
 }
