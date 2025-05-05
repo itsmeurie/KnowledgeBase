@@ -5,18 +5,30 @@ import type { FormSubmitEvent } from "#ui/types";
 const { $router } = useNuxtApp();
 const $route = useRoute();
 const auth = useAuthStore();
-const { passwordRules } = usePassword();
+const { passwordRules, strength } = usePassword();
 
+const passwordError = "Invalid password format";
 const schema = z.object({
-  email: z.string(),
-  password: passwordRules(),
+  email: z
+    .string({
+      message: "Username/Email is required",
+    })
+    .min(1, { message: "Username/Email is required" }),
+  password: passwordRules({
+    min: "Password is Required",
+    max: passwordError,
+    numbers: passwordError,
+    symbols: passwordError,
+    letters: passwordError,
+    mixedCase: passwordError,
+  }),
 });
 
 type Schema = z.output<typeof schema>;
 
 const state = reactive({
-  email: null,
-  password: null,
+  email: "",
+  password: "",
   remember: false,
 });
 const showPassword = ref(false);
@@ -82,6 +94,22 @@ const login = async (e: FormSubmitEvent<Schema>) => {
       </TFormGroup>
 
       <TFormGroup label="Password" name="password" required>
+        <template #hint>
+          <div
+            v-if="
+              strength(state.password).score > 0 || state.password.length > 0
+            "
+            class="flex items-center gap-1 text-xs"
+          >
+            <TIcon
+              name="tabler:circle-filled"
+              :style="{
+                color: strength(state.password).color,
+              }"
+            />
+            {{ strength(state.password).complexity }}
+          </div>
+        </template>
         <TInput
           v-model="state.password"
           color="gray"

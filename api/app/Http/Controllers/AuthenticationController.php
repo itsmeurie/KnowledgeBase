@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\TeamSwitchRequest;
 
 use App\Traits\AuthTrait;
 
@@ -29,15 +30,18 @@ class AuthenticationController extends Controller {
 
         $field = filter_var($validated["email"], FILTER_VALIDATE_EMAIL) ? "email" : "username";
         $user = User::where($field, strtolower($validated["email"]))->first();
-        if ($user === null) {
+        if (!$user) {
             return response(["message" => config("mitd.auth.error.invalid")], 401);
         }
         $result = $this->AttemptLogin($request, $user, $field, $fromFrontend);
 
-        if ($result["message"] !== null) {
+        if (!$result["success"]) {
             return response(["disabled" => $result["disabled"], "message" => $result["message"]], 401);
         }
         $user->resetFailedLoginAttempts();
+        if (config("permission.teams")) {
+            $this->setTeam($user[config("permission.column_names.team_foreign_key")]);
+        }
         $result = new UserResource($user);
 
         if ($fromFrontend) {
@@ -55,20 +59,17 @@ class AuthenticationController extends Controller {
         $validated = $request->validated();
         $field = filter_var($validated["email"], FILTER_VALIDATE_EMAIL) ? "email" : "username";
         $user = User::where($field, strtolower($validated["email"]))->first();
-        if ($user === null) {
+        if (!$user) {
             return response(["message" => config("mitd.auth.error.invalid")], 401);
         }
         $result = $this->AttemptLogin($request, $user, $field);
-        if ($result["message"] !== null) {
+        if (!$result["success"]) {
             return response(["disabled" => $result["disabled"], "message" => $result["message"]], 401);
         }
-
-        if ($user->office) {
-            $request->session()->put("team_id", $user->office->id);
-            setPermissionsTeamId(session("team_id"));
-        }
-
         $user->resetFailedLoginAttempts();
+        if (config("permission.teams")) {
+            $this->setTeam($user[config("permission.column_names.team_foreign_key")]);
+        }
         $request->session()->regenerate();
 
         return new UserResource($user);
@@ -78,17 +79,20 @@ class AuthenticationController extends Controller {
         $validated = $request->validated();
         $field = filter_var($validated["email"], FILTER_VALIDATE_EMAIL) ? "email" : "username";
         $user = User::where($field, strtolower($validated["email"]))->first();
-        if ($user === null) {
+        if (!$user) {
             return response(["message" => config("mitd.auth.error.invalid")], 401);
         }
         $result = $this->AttemptLogin($request, $user, $field, false);
 
-        if ($result["message"] !== null) {
+        if (!$result["success"]) {
             return response(["disabled" => $result["disabled"], "message" => $result["message"]], 401);
         }
         $user->resetFailedLoginAttempts();
         $user->tokens()->where("name", $request->device_name)->delete();
         $token = $user->createToken($validated["device_name"])->plainTextToken;
+        if (config("permission.teams")) {
+            $this->setTeam($user[config("permission.column_names.team_foreign_key")]);
+        }
 
         return (new UserResource($user))->additional(["token" => $token]);
     }
@@ -97,8 +101,8 @@ class AuthenticationController extends Controller {
         $fromFrontend = EnsureFrontendRequestsAreStateful::fromFrontend($request);
         $user = $request->user();
         if ($fromFrontend) {
-            // Auth::logout();
-            $user->unsetRelation("roles", "permissions");
+            Auth::logout();
+            $user->unsetRelation("roles")->unsetRelation("permissions");
             Session::flush();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
@@ -109,10 +113,33 @@ class AuthenticationController extends Controller {
         return response(null, 204);
     }
 
-    public function getPermissions(Request $request) {
+    public function switchTeam(TeamSwitchRequest $request) {
+        $validated = $request->validated();
+
         $user = $request->user();
+        $this->setTeam($validated["team_id"]);
+        $user->unsetRelation("roles")->unsetRelation("permissions");
+
+        return new UserResource($user);
+    }
+
+    public function getPermissions(Request $request) {
+        if (config("permission.teams")) {
+            $user = $request->user();
+            $team = $user[config("permission.column_names.team_foreign_key")];
+            $user->unsetRelation("roles")->unsetRelation("permissions");
+            if ($user->isSuperman()) {
+                $team = app(config("mitd.permission.teams_provider"))::find(getPermissionsTeamId());
+                $this->setTeam($team);
+            }
+        }
         return response([
-            "data" => new UserResource($user),
+            "data" => new UserResource($request->user()),
         ]);
+    }
+
+    private function setTeam($team_id) {
+        session(["team_id" => $team_id]);
+        setPermissionsTeamId(session("team_id"));
     }
 }

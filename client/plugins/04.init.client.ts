@@ -1,15 +1,14 @@
 export default defineNuxtPlugin(async () => {
   const tart = [
-    "co" + "nso" + "le." + "lo" + "g('",
     " █████╗  ██████╗  █████╗ ██████╗ ",
     "██╔══██╗██╔════╝ ██╔══██╗██╔══██╗",
     "██║  ╚═╝██║  ██╗ ██║  ██║██████╦╝",
     "██║  ██╗██║  ╚██╗██║  ██║██╔══██╗",
     "╚█████╔╝╚██████╔╝╚█████╔╝██████╦╝",
     " ╚════╝  ╚═════╝  ╚════╝ ╚═════╝ ",
-    "    City Government Of Baguio')",
+    "    City Government Of Baguio",
   ];
-  eval(tart.join("\\n"));
+  console.log(tart.join("\n"));
 
   const auth = useAuthStore();
   const { $router } = useNuxtApp();

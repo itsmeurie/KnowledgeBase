@@ -20,8 +20,7 @@
       "ui",
       "active-class",
       "inactive-class"
-    ],
-    "liveServer.settings.multiRootWorkspaceName": "api"
+    ]
   },
   "tasks": {
     "version": "2.0.0",
@@ -98,9 +97,9 @@
       {
         "label": "API",
         "type": "shell",
-        "command": "php artisan serve --host=0.0.0.0 --port=8001",
+        "command": "php artisan serve --host=0.0.0.0 --port=8000",
         "windows": {
-          "command": "php artisan serve --host=0.0.0.0 --port=8001"
+          "command": "php artisan serve --host=0.0.0.0 --port=8000"
         },
         "group": "none",
         "presentation": {

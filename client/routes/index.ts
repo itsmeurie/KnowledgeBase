@@ -129,8 +129,19 @@ export default computed(() => [
           icon: "tabler:lock-access",
         },
       },
+      {
+        path: "syslogs",
+        name: "settings-logs",
+        component: () => import("@/pages/settings/syslogs/index.vue"),
+        meta: {
+          title: "System Logs",
+          permissions: permissions["settings-logs"],
+          icon: "tabler:terminal-2",
+        },
+      },
     ],
   },
+
   {
     meta: { layout: "profile" },
     children: [

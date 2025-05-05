@@ -1,30 +1,35 @@
-import type { HasKey } from "~/types";
+import type { HasKey, Prettify } from "~/types";
 
-export type UploadOptions = {
-  api: string;
-  checkIntegrity?: boolean;
-  multiple?: boolean;
-
-  sleep?: {
+export type UploadOptionsSleep = Prettify<
+  HasKey & {
     long: number;
     short: number;
     interval: number;
-  };
-};
+  }
+>;
 
-export type FileItem = HasKey & {
-  id: string;
-  file: File;
-  name: string;
-  status: "pending" | "uploading" | "complete" | "error" | "cancelled";
-  state?: HasKey & {
+export type UploadOptions = Prettify<
+  HasKey & {
+    api: string;
+    checkIntegrity?: boolean;
+    multiple?: boolean;
+
+    sleep?: UploadOptionsSleep;
+  }
+>;
+
+export type FileItemState = Prettify<
+  HasKey & {
     uid: string;
     part: number;
     parts: number;
     length: number;
     progress: number;
-  };
-  upload: {
+  }
+>;
+
+export type FileItemUpload = Prettify<
+  HasKey & {
     timer: NodeJS.Timeout | null;
     speed: number;
     start: number;
@@ -32,8 +37,19 @@ export type FileItem = HasKey & {
     loaded: number;
     timeRemaining: number;
     progress: number;
-  };
-  remove: (force: boolean) => void;
-  matchedHash?: boolean;
-  hashing: boolean;
-};
+  }
+>;
+
+export type FileItem = Prettify<
+  HasKey & {
+    id: string;
+    file: File;
+    name: string;
+    status: "pending" | "uploading" | "complete" | "error" | "cancelled";
+    state?: FileItemState;
+    upload: FileItemUpload;
+    remove: (force: boolean) => void;
+    matchedHash?: boolean;
+    hashing: boolean;
+  }
+>;

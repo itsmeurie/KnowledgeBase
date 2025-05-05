@@ -62,30 +62,30 @@ export const guard = async (
       (record) => record.meta.requiresVerified,
     );
 
-    // if (to.meta.requiresAuth === true && !$auth.isLoggedIn) {
-    //   reject({ name: "login", query: { redirect: to.fullPath } });
-    // } else if (to.meta.requiresAuth === false && $auth.isLoggedIn) {
-    //   reject({ name: "home" }); // Redirect to the home page when signed in.
-    // } else if (toRequiresVerified && !$auth.verified) {
-    //   reject({ name: "unverified", query: { redirect: to.fullPath } });
-    // } else if (
-    //   $auth.isLoggedIn &&
-    //   !$auth.hasProfileName &&
-    //   to.name !== "update-profile"
-    // ) {
-    //   reject({ name: "update-profile", query: { redirect: to.fullPath } });
-    // } else {
-    //   if (!!to.meta.permissions) {
-    //     if (!guard.canAny(...(to.meta.permissions as string[]))) {
-    //       if (!!to.meta.redirect) {
-    //         reject(to.meta.redirect);
-    //       } else {
-    //         reject({ name: "401", query: { redirect: to.fullPath } });
-    //       }
-    //       return; // Ensure the function exits after the rejection.
-    //     }
-    //   }
-    // }
+    if (to.meta.requiresAuth === true && !$auth.isLoggedIn) {
+      reject({ name: "login", query: { redirect: to.fullPath } });
+    } else if (to.meta.requiresAuth === false && $auth.isLoggedIn) {
+      reject({ name: "home" }); // Redirect to the home page when signed in.
+    } else if (toRequiresVerified && !$auth.verified) {
+      reject({ name: "unverified", query: { redirect: to.fullPath } });
+    } else if (
+      $auth.isLoggedIn &&
+      !$auth.hasProfileName &&
+      to.name !== "update-profile"
+    ) {
+      reject({ name: "update-profile", query: { redirect: to.fullPath } });
+    } else {
+      if (!!to.meta.permissions) {
+        if (!guard.canAny(...(to.meta.permissions as string[]))) {
+          if (!!to.meta.redirect) {
+            reject(to.meta.redirect);
+          } else {
+            reject({ name: "401", query: { redirect: to.fullPath } });
+          }
+          return; // Ensure the function exits after the rejection.
+        }
+      }
+    }
     resolve(to);
   });
 };

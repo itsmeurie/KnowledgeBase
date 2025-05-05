@@ -5,13 +5,20 @@ import type { FormSubmitEvent } from "#ui/types";
 const { $api } = useNuxtApp();
 
 const schema = z.object({
-  email: z.string().email("Must be a valid email"),
+  email: z
+    .string({
+      message: "Email address is required!",
+    })
+    .min(1, {
+      message: "Email address is required!",
+    })
+    .email("Must be a valid email"),
 });
 
 type Schema = z.output<typeof schema>;
 
 const state = reactive({
-  email: null,
+  email: "",
 });
 
 const loading = ref<boolean>(false);
@@ -67,13 +74,14 @@ const forgotPassword = async (e: FormSubmitEvent<Schema>) => {
       :schema="schema"
       :state="state"
       :validateOn="['submit']"
-      class="flex flex-col gap-5"
+      class="flex flex-col gap-6"
       @submit="forgotPassword"
     >
       <TFormGroup
         name="email"
         description="Enter your email and we'll send you a link to reset your password."
         required
+        class="relative"
       >
         <TInput
           v-model="state.email"

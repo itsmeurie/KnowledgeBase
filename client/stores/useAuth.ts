@@ -1,36 +1,44 @@
-import type { StringList } from "~/types";
+import type { AxiosResponse } from "axios";
+import type { Team } from "~/types/models/team";
 import type {
   Profile,
   User,
   ProfileImage,
   UserRole,
+  UserPermission,
 } from "~/types/models/users";
-import type { Office } from "~/types/knowledgebase";
 
 export const useAuthStore = defineStore("auth", () => {
-  const email = ref<string | null>();
-  const username = ref<string | null>();
+  const _super = import.meta.env.NUXT_APP_SUPERMAN ?? "Admin";
+
+  const email = ref<string>();
+  const username = ref<string>();
   const active = ref<boolean>(false);
-  const verified = ref<string | null>();
+  const verified = ref<string>();
   const roles = ref<Array<Omit<UserRole, "id">>>([]);
-  const permissions = ref<StringList>([]);
+  const permissions = ref<Array<UserPermission | string>>([]);
   const images = ref<Array<ProfileImage>>([]);
+  const team = ref<Team>();
 
-  const office = ref<Office>();
+  const profile = ref<Profile>();
 
-  const profile = ref<Profile | null>();
-
-  const isLoggedIn = computed(() => username.value != null);
+  const isLoggedIn = computed(() => !!username.value);
+  const hasTeam = computed(() => !!team.value);
+  const canSwitchTeam = computed(
+    () => hasTeam.value && roles.value.findIndex((r) => r.name == _super) > -1,
+  );
   const hasProfileName = computed(() => !!profile.value?.full_name);
 
   const reset = () => {
-    email.value = null;
-    username.value = null;
+    email.value = undefined;
+    username.value = undefined;
     active.value = false;
-    verified.value = null;
+    verified.value = undefined;
     roles.value = [];
     permissions.value = [];
-    profile.value = null;
+    profile.value = undefined;
+    team.value = undefined;
+    clearCookies();
   };
 
   const setUser = (data: User) => {
@@ -39,12 +47,10 @@ export const useAuthStore = defineStore("auth", () => {
     active.value = data.active;
     verified.value = data.verified;
     roles.value = (data.roles as Array<Omit<UserRole, "id">>) ?? [];
-    permissions.value = (data.permissions as StringList) ?? [];
-    profile.value = {
-      ...data.profile,
-    } as Profile;
-    images.value = (data.profile?.images as Array<ProfileImage>) ?? [];
-    office.value = data.office;
+    permissions.value = data.permissions ?? [];
+    profile.value = data.profile;
+    images.value = data.profile?.images ?? [];
+    team.value = data.team;
   };
 
   const login = async (payload: Object) => {
@@ -62,6 +68,43 @@ export const useAuthStore = defineStore("auth", () => {
     });
   };
 
+  const switchTeam = (t: Team): Promise<AxiosResponse> => {
+    const { $api } = useNuxtApp();
+    return new Promise((resolve, reject) => {
+      $api
+        .put("/auth/team", { team_id: t.id })
+        .then((response) => {
+          setUser(response.data.data);
+          resolve(response);
+        })
+        .catch(reject);
+    });
+  };
+
+  const handleHardReload = async (url: string) => {
+    await fetch(url, {
+      headers: {
+        Pragma: "no-cache",
+        Expires: "-1",
+        "Cache-Control": "no-cache",
+      },
+    });
+    window.location.href = url;
+    // This is to ensure reload with url's having '#'
+    window.location.reload();
+  };
+
+  const clearCookies = () => {
+    const cookies = document.cookie.split(";");
+
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i];
+      const eqPos = cookie.indexOf("=");
+      const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+    }
+  };
+
   /**
    * Sign out user
    * @returns {Promise}
@@ -77,7 +120,10 @@ export const useAuthStore = defineStore("auth", () => {
         .catch((error) => {
           reject(error);
         })
-        .finally(reset);
+        .finally(() => {
+          reset();
+          handleHardReload(window.location.href);
+        });
     });
   };
 
@@ -106,7 +152,11 @@ export const useAuthStore = defineStore("auth", () => {
     roles,
     permissions,
     profile,
-    office,
+    canSwitchTeam,
+    team,
+    hasTeam,
+    office: computed(() => team.value),
+    switchTeam,
     login,
     logout,
     getPermissions,

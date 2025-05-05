@@ -8,10 +8,10 @@ class Paginates {
     public static function paginates(
         $query,
         int $limit,
-        int $page = null,
-        Closure $closure = null,
-        Closure $searchClosure = null,
-        Closure $countClosure = null
+        ?int $page = null,
+        ?Closure $closure = null,
+        ?Closure $searchClosure = null,
+        ?Closure $countClosure = null
     ) {
         $page = max(1, $page ?? 1);
         $limit = max(1, (int) $limit);

@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import type { AvatarOptions } from "~/types";
-import { useRouter } from "vue-router";
-import { ref, computed } from "vue";
 
 const props = defineProps<{ menus?: AvatarOptions[] }>();
 
-const router = useRouter();
 const $auth = useAuthStore();
 
 const signingOut = ref(false);
@@ -33,8 +30,6 @@ const profile_name_short = computed(() => {
 
 const avatar = computed(() => $auth.profile?.images?.find((i) => i.primary));
 
-const isLoggedIn = computed(() => !!$auth.profile || !!$auth.username);
-
 const _menus = computed<AvatarOptions[]>(
   () => props.menus?.filter((m) => toValue(m.hidden) !== true) || [],
 );
@@ -44,10 +39,6 @@ const logout = () => {
   $auth.logout().finally(() => {
     signingOut.value = false;
   });
-};
-
-const goToLogin = () => {
-  router.push("/login?redirect=/");
 };
 </script>
 <template>
@@ -60,58 +51,76 @@ const goToLogin = () => {
       color="gray"
       size="lg"
       square
-      class="select-none p-0"
+      class="seelct-none p-0"
       :ui="{ rounded: 'rounded-full' }"
     >
       <TAvatar
         :text="profile_name_short"
         :src="avatar?.url.md"
+        icon="tabler:user-filled"
         size="lg"
         class="bg-gray-200 dark:bg-gray-600"
       />
     </TButton>
-
     <template #panel="{ close }">
-      <div class="flex items-center gap-2 p-4">
-        <TAvatar
-          :text="profile_name_short"
-          :src="avatar?.url.md"
-          size="lg"
-          class="bg-gray-200 dark:bg-gray-600"
+      <template v-if="$auth.isLoggedIn">
+        <div class="flex items-center gap-2 p-4">
+          <TAvatar
+            :text="profile_name_short"
+            :src="avatar?.url.md"
+            icon="tabler:user-filled"
+            size="lg"
+            class="bg-gray-200 dark:bg-gray-600"
+          />
+          <span class="leading-8">
+            {{ profile_name }}
+          </span>
+        </div>
+        <TDivider
+          :ui="{
+            border: {
+              base: 'border-gray-200 dark:border-gray-600',
+            },
+          }"
         />
-        <span class="leading-8">
-          {{ profile_name }}
-        </span>
-      </div>
-
-      <TDivider />
-
+      </template>
       <template v-if="_menus?.length! > 0">
-        <div class="flex flex-col gap-2 p-4">
+        <div class="flex flex-col gap-2 p-2">
           <template v-for="menu in _menus" :key="menu">
             <template v-if="menu.divider">
-              <TDivider />
+              <TDivider
+                :ui="{
+                  border: {
+                    base: 'border-gray-200 dark:border-gray-600',
+                  },
+                }"
+              />
             </template>
             <TButton
               v-else-if="Object.values(menu).some((v) => !!v)"
               :icon="menu.icon"
               :label="menu.label"
               :to="menu.to"
-              color="gray"
+              color="white"
               size="md"
               variant="ghost"
               @click="(menu.action?.(), close())"
             />
           </template>
         </div>
-        <TDivider />
+        <TDivider
+          :ui="{
+            border: {
+              base: 'border-gray-200 dark:border-gray-600',
+            },
+          }"
+        />
       </template>
-
-      <div class="flex flex-col gap-2 p-4">
+      <div class="flex flex-col gap-2 p-2">
         <TButton
-          v-if="isLoggedIn"
+          v-if="$auth.isLoggedIn"
           icon="tabler:logout"
-          color="gray"
+          color="white"
           label="Logout"
           size="md"
           variant="ghost"
@@ -121,13 +130,33 @@ const goToLogin = () => {
         <TButton
           v-else
           icon="tabler:login"
-          color="gray"
+          color="white"
           label="Login"
           size="md"
           variant="ghost"
-          @click="(goToLogin(), close())"
+          :to="{
+            name: 'login',
+          }"
         />
       </div>
+
+      <TDivider
+        :ui="{
+          border: {
+            base: 'border-gray-200 dark:border-gray-600',
+          },
+        }"
+      />
+      <TTooltip
+        v-if="$auth.hasTeam"
+        :text="$auth.team?.name"
+        :openDelay="500"
+        class="w-full px-3 text-xs"
+      >
+        <span class="mx-auto truncate">
+          {{ $auth.team?.name }}
+        </span>
+      </TTooltip>
     </template>
   </TPopover>
 </template>

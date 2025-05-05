@@ -1,8 +1,10 @@
-import type { HasKey } from "../utils";
+import type { HasKey, Prettify } from "../utils";
 
-export type PermissionItem = HasKey & {
-  id: string;
-  name: string;
-  description: string;
-  date: string;
-};
+export type PermissionItem = Prettify<
+  HasKey & {
+    id: string;
+    name: string;
+    description: string;
+    date: string;
+  }
+>;

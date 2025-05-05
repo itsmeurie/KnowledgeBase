@@ -49,6 +49,21 @@ onBeforeMount(() => redirect());
       @update:user="auth.setUser($event!)"
       api="/auth/profile-update"
     />
-    <TButton label="Save" block type="submit" @click="editor?.save()" />
+    <div class="flex items-center gap-2">
+      <TButton
+        label="Save"
+        type="submit"
+        @click="editor?.save()"
+        :ui="{
+          base: 'flex-auto justify-center',
+        }"
+      />
+      <TButton
+        label="Logout"
+        icon="tabler:logout"
+        variant="ghost"
+        @click="auth.logout()"
+      />
+    </div>
   </TCard>
 </template>

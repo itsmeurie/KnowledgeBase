@@ -29,7 +29,11 @@ class RolesController extends Controller implements HasMiddleware {
         $search = $request->input("search");
         $limit = max(1, $request->input("limit", 25));
         $page = max(1, $request->input("page", 1));
+
         $roles = Role::where("name", "!=", config("mitd.superman"))
+            ->when(config("permission.teams"), function ($q) {
+                $q->whereTeam(getPermissionsTeamId());
+            })
             ->where("name", "ilike", "%" . $search . "%")
             ->orderBy("protected", "desc")
             ->orderBy("level")

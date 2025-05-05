@@ -4,8 +4,10 @@ import type { HasKey } from "~/types";
 import UserItem from "./userItem.vue";
 import Editor from "./editor.vue";
 import Toggle from "~/components/userEditor/toggle/index.vue";
+import TeamChange from "./teamChange/index.vue";
 
 const { merge } = useModels();
+const $auth = useAuthStore();
 const $guard = useGuard();
 const { pagination, params, loading, search } = useSearcher<{
   search: string;
@@ -48,6 +50,15 @@ const onNewUser = (newUser: User) => {
   merge(users.value, newUser);
 };
 
+const onTeamChange = (user: User) => {
+  users.value = users.value.filter((u) => u.id !== user.id);
+  modal.value.show = false;
+};
+
+useTeams(() => {
+  search();
+});
+
 onMounted(() => {
   params.value.perms = true;
   search();
@@ -71,7 +82,7 @@ onMounted(() => {
       }"
     >
       <template #header>
-        <div class="flex flex-auto items-center justify-between px-3 py-3.5">
+        <div class="flex flex-auto items-center justify-between">
           <div class="flex items-center gap-4">
             <TInput
               v-model="params.search"
@@ -108,9 +119,7 @@ onMounted(() => {
           </TButton>
         </div>
       </template>
-      <div
-        class="grid gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
-      >
+      <div class="flex flex-wrap gap-4">
         <template v-for="user in users" :key="user.id">
           <UserItem
             :canEdit="
@@ -120,12 +129,24 @@ onMounted(() => {
                 'users_edit-permission',
               )
             "
+            :canChangeTeam="$guard.isSuperAdmin() && $auth.hasTeam"
             :user
             @edit="openModal(user, 'Editor')"
             @toggle="openModal(user, 'Toggle')"
+            @changeTeam="openModal(user, 'TeamChange')"
           />
         </template>
       </div>
+
+      <template #footer>
+        <div class="flex justify-end">
+          <TPagination
+            v-model="pagination.page"
+            :total="pagination.total"
+            :pageCount="pagination.limit"
+          />
+        </div>
+      </template>
     </TCard>
 
     <TModal
@@ -143,6 +164,12 @@ onMounted(() => {
         v-else-if="modal.type === 'Toggle'"
         v-model:user="modal.data!"
         @update:user="onNewUser($event! as User)"
+        @close="modal.show = false"
+      />
+      <TeamChange
+        v-else-if="modal.type === 'TeamChange'"
+        v-model="modal.data!"
+        @transfer="onTeamChange($event! as User)"
         @close="modal.show = false"
       />
     </TModal>
