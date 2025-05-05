@@ -4,6 +4,8 @@ import { useRouter } from "vue-router";
 import { marked } from "marked";
 import { computed, ref, onMounted, watch } from "vue";
 
+const selectedFile = ref<File | null>(null);
+
 const router = useRouter();
 const { $api } = useNuxtApp();
 const route = useRoute();
@@ -100,6 +102,11 @@ const openEditModal = () => {
   showEditModal.value = true;
 };
 
+const openAddfileModal = () => {
+  showAddfileModal.value = true;
+};
+
+const showAddfileModal = ref(false);
 const submitEdit = async () => {
   try {
     if (!editForm.value.id) return;
@@ -139,6 +146,40 @@ const submitEdit = async () => {
     showEditModal.value = false;
   } catch (error) {
     console.error("Failed to update section:", error);
+  }
+};
+
+const selectedFiles = ref<File[]>([]);
+
+const handleFileChange = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  if (target.files) {
+    selectedFiles.value.push(...Array.from(target.files));
+    // Reset input so selecting the same file again works
+    target.value = "";
+  }
+};
+
+const submitFile = async () => {
+  if (!selectedFiles.value.length) return;
+
+  const formData = new FormData();
+  selectedFiles.value.forEach((file) => {
+    formData.append("files[]", file);
+  });
+
+  try {
+    await $api.post("/files/upload", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    // Reset after upload
+    selectedFiles.value = [];
+    showAddfileModal.value = false;
+  } catch (error) {
+    console.error("File upload failed:", error);
   }
 };
 
@@ -329,6 +370,71 @@ watch(
         <TIcon name="tabler:book" class="text-lg" />
         <h2 class="text-lg font-semibold">Documents</h2>
       </div>
+
+      <TButton
+        class="ml-4 mt-2 flex items-center justify-center gap-2"
+        variant="link"
+        @click="openAddfileModal"
+      >
+        <TModal
+          v-model="showAddfileModal"
+          prevent-close
+          :ui="{ width: 'w-screen-500 max-w-sm sm:max-w-sm' }"
+        >
+          <template #default>
+            <!-- Close Icon (upper-right) -->
+            <button
+              @click="showAddfileModal = false"
+              class="absolute right-4 top-4 text-gray-500 hover:text-black"
+              aria-label="Close"
+            >
+              <TIcon name="i-heroicons-x-mark" class="h-6 w-6" />
+            </button>
+
+            <form @submit.prevent="submitFile" class="pt-10">
+              <div class="m-4 flex flex-col items-center justify-center gap-4">
+                <div class="flex items-center gap-2">
+                  <TIcon name="tabler:upload" class="text-3xl" />
+                  <label
+                    for="file-upload"
+                    class="cursor-pointer text-lg font-semibold"
+                  >
+                    Add File
+                  </label>
+                </div>
+
+                <!-- Hidden File Input (multiple allowed) -->
+                <input
+                  id="file-upload"
+                  type="file"
+                  class="hidden"
+                  multiple
+                  @change="handleFileChange"
+                />
+
+                <!-- File Names Preview -->
+                <ul v-if="selectedFiles.length" class="text-sm">
+                  <li v-for="(file, index) in selectedFiles" :key="index">
+                    {{ file.name }}
+                  </li>
+                </ul>
+
+                <!-- Upload Button: Show if files selected -->
+                <div class="flex justify-end" v-if="selectedFiles.length">
+                  <button
+                    type="submit"
+                    class="bg-primary hover:bg-primary-dark rounded px-4 py-2 text-white"
+                  >
+                    Upload
+                  </button>
+                </div>
+              </div>
+            </form>
+          </template>
+        </TModal>
+        <TIcon name="tabler:plus" class="text-lg" />
+        <h2 class="text-lg font-semibold">Add File</h2>
+      </TButton>
     </aside>
   </div>
 </template>
