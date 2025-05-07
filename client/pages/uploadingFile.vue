@@ -84,38 +84,56 @@ const saveFile = async (e: FormSubmitEvent<Schema>) => {
 
 <template>
   <div>
-    <TCard>
-      <TButton
-        icon="tabler:x"
-        variant="ghost"
-        color="gray"
-        @click="emit('close')"
-      />
-      <TForm
-        :schema
-        :state
-        :validateOn="['submit']"
-        ref="form"
-        @submit="saveFile"
-      >
-        <TFormGroup>
-          <div>
-            <h1>Upload File Here</h1>
-            <TButton label="Choose Files" @click="browser?.open()" />
-            <template v-for="file in files" :key="file.id">
-              <TFileUploadItem :file="file" />
-            </template>
-          </div>
-        </TFormGroup>
-      </TForm>
-      <TInnerLoading :active="loading" :text="loadingMessage" />
+    <TCard class="p-6 space-y-6">
+  <!-- Close Button Top Right -->
+  <div class="flex justify-end">
+    <TButton
+      icon="tabler:x"
+      variant="ghost"
+      @click="emit('close')"
+      class="!p-2"
+    />
+  </div>
+
+  <!-- Upload Form -->
+  <TForm
+    :schema
+    :state
+    :validateOn="['submit']"
+    ref="form"
+    @submit="saveFile"
+    class="space-y-4"
+  >
+    <TFormGroup>
+      <div>
+        <h2 class="text-xl font-semibold mb-2">Upload File</h2>
+
+        <!-- File Upload Button -->
+        <TButton
+          label="Choose Files"
+          @click="browser?.open()"
+          class="mb-4"
+        />
+
+        <!-- Uploaded Files List -->
+        <div class="space-y-2">
+          <template v-for="file in files" :key="file.id">
+            <TFileUploadItem :file="file" />
+          </template>
+        </div>
+      </div>
+    </TFormGroup>
+
+    <!-- Loading State -->
+    <TInnerLoading :active="loading" :text="loadingMessage" />
+
+    <!-- Action Buttons -->
+    <div class="flex justify-end space-x-2">
+      <TButton label="Cancel" variant="ghost" @click="emit('close')" />
       <TButton label="Save" @click="saveFile" />
-      <TButton
-        label="Cancel"
-        variant="ghost"
-        color="gray"
-        @click="emit('close')"
-      />
-    </TCard>
+    </div>
+  </TForm>
+</TCard>
+
   </div>
 </template>

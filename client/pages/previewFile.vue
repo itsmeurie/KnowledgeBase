@@ -56,6 +56,7 @@ const emit = defineEmits(["close", "download"]);
 
       <TButton
         icon="tabler:download"
+        label="Download"
         variant="ghost"
         color="gray"
         :padded="false"

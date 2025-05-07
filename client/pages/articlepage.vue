@@ -231,7 +231,7 @@ watch(
     </aside>
 
     <!-- Main Content -->
-    <main class="col-span-full mx-4 flex flex-col gap-6 sm:col-span-6">
+    <main class="col-span-full mx-4 flex flex-col gap-2 sm:col-span-6">
       <!-- Breadcrumbs -->
       <div class="flex flex-wrap items-center justify-between text-sm">
         <nav class="flex flex-wrap items-center space-x-2 text-sm sm:text-base">
@@ -358,12 +358,12 @@ watch(
       <!-- Article Content -->
       <section class="space-y-6">
         <div>
-          <h1 class="text-2xl font-extrabold sm:text-4xl">
+          <h1 class="text-5xl font-extrabold sm:text-4xl">
             {{ activeSubsection?.title || section?.title }}
           </h1>
         </div>
         <!-- Update Date-->
-        <div class="text-sm">Last update: {{ formattedUpdatedAt }}</div>
+        <div class="text-sm ml-2">Last update: {{ formattedUpdatedAt }}</div>
 
         <!-- Markdown -->
         <div
@@ -387,7 +387,7 @@ watch(
 
       <!-- Button for Uploading Files -->
       <div
-        class="size-sm item-center text-gray hover:text-primary flex cursor-pointer items-center justify-center"
+        class="size-sm item-center hover:underline flex cursor-pointer items-center justify-center"
         @click="openModal(section, 'UploadingFile')"
         variant="solid"
       >
@@ -395,15 +395,17 @@ watch(
         <h2 class="text-sm font-semibold">Add File</h2>
       </div>
       <!-- file fetching -->
-      <div class="mt-3">
-        <template v-for="file in section?.files" :key="file.id">
-          <TButton
-            variant="link"
-            :label="file.name"
-            @click="openModal(file, 'PreviewFile')"
-          />
-        </template>
-      </div>
+      <div class="mt-3 space-y-1">
+  <template v-for="file in section?.files" :key="file.id">
+    <TButton
+      variant="link"
+      :label="file.name"
+      @click="openModal(file, 'PreviewFile')"
+      class="block text-left w-full"
+    />
+  </template>
+</div>
+
     </aside>
   </div>
 </template>
