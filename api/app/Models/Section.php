@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\ModelSlugTrait;
 
-use Laravel\Scout\Searchable;
+// use Laravel\Scout\Searchable;
 
 class Section extends AppModel {
-    use SoftDeletes, ModelSlugTrait, Searchable;
+    use SoftDeletes, ModelSlugTrait;
 
     protected $fillable = ["title", "office_id", "parent_id", "description", "contents", "slug"];
 

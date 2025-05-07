@@ -5,13 +5,6 @@ import { marked } from "marked";
 import { computed, ref, onMounted, watch } from "vue";
 import UploadingFile from "~/pages/uploadingFile.vue";
 import PreviewFile from "./previewFile.vue";
-import { z } from "zod";
-
-//search bar
-const query = ref("");
-const results = ref<Section[]>([]);
-const loading = ref(false);
-const error = ref("");
 
 const router = useRouter();
 const { $api } = useNuxtApp();
@@ -29,55 +22,6 @@ const activeSubsection = ref<Section | null>(null);
 const isHovered = ref(false);
 const openItems = ref<string[]>([]);
 
-// search bar//
-
-const $guard = useGuard();
-interface section {
-  id: number;
-  title: string;
-  description: string;
-}
-const SearchQuerySchema = z.object({
-  q: z.string().min(1, "Search query cannot be empty"),
-});
-async function searchSection(rawQuery: unknown) {
-  const parsed = SearchQuerySchema.safeParse(rawQuery);
-  if (!parsed.success) {
-    throw new Error(parsed.error.errors[0].message);
-  }
-
-  const res = await fetch(
-    `/api/search/section?q=${encodeURIComponent(parsed.data.q)}`,
-  );
-  if (!res.ok) {
-    throw new Error("Failed to fetch search results");
-  }
-
-  const data = await res.json();
-  return data as Section[];
-}
-let debounceTimer: NodeJS.Timeout;
-function onInputChange() {
-  clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(async () => {
-    error.value = "";
-    if (!query.value.trim()) {
-      results.value = [];
-      return section;
-    }
-
-    loading.value = true;
-    try {
-      results.value = await searchSection({ q: query.value });
-    } catch (err: any) {
-      error.value = err.message;
-    } finally {
-      loading.value = false;
-    }
-  }, 300);
-}
-
-//end of search bar test
 const modal = ref<{
   show: boolean;
   data?: Section | UploadedFile;
@@ -287,7 +231,7 @@ watch(
     </aside>
 
     <!-- Main Content -->
-    <main class="col-span-full mx-4 flex flex-col gap-2 sm:col-span-6">
+    <main class="col-span-full mx-4 flex flex-col gap-6 sm:col-span-6">
       <!-- Breadcrumbs -->
       <div class="flex flex-wrap items-center justify-between text-sm">
         <nav class="flex flex-wrap items-center space-x-2 text-sm sm:text-base">
@@ -414,12 +358,12 @@ watch(
       <!-- Article Content -->
       <section class="space-y-6">
         <div>
-          <h1 class="text-5xl font-extrabold sm:text-4xl">
+          <h1 class="text-2xl font-extrabold sm:text-4xl">
             {{ activeSubsection?.title || section?.title }}
           </h1>
         </div>
         <!-- Update Date-->
-        <div class="text-sm ml-2">Last update: {{ formattedUpdatedAt }}</div>
+        <div class="text-sm">Last update: {{ formattedUpdatedAt }}</div>
 
         <!-- Markdown -->
         <div
@@ -443,7 +387,7 @@ watch(
 
       <!-- Button for Uploading Files -->
       <div
-        class="size-sm item-center hover:underline flex cursor-pointer items-center justify-center"
+        class="size-sm item-center text-gray hover:text-primary flex cursor-pointer items-center justify-center"
         @click="openModal(section, 'UploadingFile')"
         variant="solid"
       >
@@ -451,17 +395,15 @@ watch(
         <h2 class="text-sm font-semibold">Add File</h2>
       </div>
       <!-- file fetching -->
-      <div class="mt-3 space-y-1">
-  <template v-for="file in section?.files" :key="file.id">
-    <TButton
-      variant="link"
-      :label="file.name"
-      @click="openModal(file, 'PreviewFile')"
-      class="block text-left w-full"
-    />
-  </template>
-</div>
-
+      <div class="mt-3">
+        <template v-for="file in section?.files" :key="file.id">
+          <TButton
+            variant="link"
+            :label="file.name"
+            @click="openModal(file, 'PreviewFile')"
+          />
+        </template>
+      </div>
     </aside>
   </div>
 </template>
