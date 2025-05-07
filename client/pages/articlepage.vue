@@ -5,6 +5,13 @@ import { marked } from "marked";
 import { computed, ref, onMounted, watch } from "vue";
 import UploadingFile from "~/pages/uploadingFile.vue";
 import PreviewFile from "./previewFile.vue";
+import { z } from "zod";
+
+//search bar
+const query = ref("");
+const results = ref<Section[]>([]);
+const loading = ref(false);
+const error = ref("");
 
 const router = useRouter();
 const { $api } = useNuxtApp();
@@ -22,6 +29,55 @@ const activeSubsection = ref<Section | null>(null);
 const isHovered = ref(false);
 const openItems = ref<string[]>([]);
 
+// search bar//
+
+const $guard = useGuard();
+interface section {
+  id: number;
+  title: string;
+  description: string;
+}
+const SearchQuerySchema = z.object({
+  q: z.string().min(1, "Search query cannot be empty"),
+});
+async function searchSection(rawQuery: unknown) {
+  const parsed = SearchQuerySchema.safeParse(rawQuery);
+  if (!parsed.success) {
+    throw new Error(parsed.error.errors[0].message);
+  }
+
+  const res = await fetch(
+    `/api/search/section?q=${encodeURIComponent(parsed.data.q)}`,
+  );
+  if (!res.ok) {
+    throw new Error("Failed to fetch search results");
+  }
+
+  const data = await res.json();
+  return data as Section[];
+}
+let debounceTimer: NodeJS.Timeout;
+function onInputChange() {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(async () => {
+    error.value = "";
+    if (!query.value.trim()) {
+      results.value = [];
+      return section;
+    }
+
+    loading.value = true;
+    try {
+      results.value = await searchSection({ q: query.value });
+    } catch (err: any) {
+      error.value = err.message;
+    } finally {
+      loading.value = false;
+    }
+  }, 300);
+}
+
+//end of search bar test
 const modal = ref<{
   show: boolean;
   data?: Section | UploadedFile;

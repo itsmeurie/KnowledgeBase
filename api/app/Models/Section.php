@@ -8,8 +8,10 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\ModelSlugTrait;
 
+use Laravel\Scout\Searchable;
+
 class Section extends AppModel {
-    use SoftDeletes, ModelSlugTrait;
+    use SoftDeletes, ModelSlugTrait, Searchable;
 
     protected $fillable = ["title", "office_id", "parent_id", "description", "contents", "slug"];
 
@@ -38,6 +40,15 @@ class Section extends AppModel {
 
     public function scopeSlug(Builder $query, string $slug): void {
         $query->where("slug", $slug);
+    }
+
+    public function toSearchableArray() {
+        return [
+            "parent_id" => $this->id,
+            "title" => $this->title,
+            "description" => $this->description,
+            "contents" => $this->contents,
+        ];
     }
 
     /**

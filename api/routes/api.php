@@ -130,6 +130,11 @@ Route::middleware(["auth:web,sanctum", "throttle:90,1", "isActive"])->group(func
             Route::get("/files/{slug}", [SectionController::class, "getFiles"]);
             Route::get("/download/{file}", [SectionController::class, "download"])->name("section.download");
             Route::get("preview/{file}", [SectionController::class, "preview"])->name("section.preview");
+            //test search
+            Route::get("search/{section}", function (Request $request, Section $section) {
+                $query = $request->input("query");
+                return $section->search($query)->get();
+            })->name("sections.search");
             Route::post("", [SectionController::class, "create"])->name("sections.create");
             Route::put("{section}", [SectionController::class, "update"])->name("sections.update");
             Route::delete("{section}", [SectionController::class, "delete"])->name("sections.delete");

@@ -15,9 +15,10 @@ use App\Traits\FilesTrait;
 use App\Http\Requests\FileUploadRequest;
 use App\Models\File;
 use Illuminate\Support\Str;
+use Laravel\Scout\Searchable;
 
 class SectionController extends Controller {
-    use FilesTrait;
+    use FilesTrait, Searchable;
     public function list(Request $request, ?string $parent_id = null): JsonResponse {
         $limit = $request->input("limit", 25);
         $page = $request->input("page", 1);
@@ -73,7 +74,7 @@ class SectionController extends Controller {
 
         return response()->json(GetSectionResource::collection($sections));
     }
-    public function create(Request $request): JsonResponse {
+    public function create(createSectionRequest $request): JsonResponse {
         $user = $request->user();
         $office = $user->getSessionOffice();
 
