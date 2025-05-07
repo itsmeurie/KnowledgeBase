@@ -8,6 +8,21 @@ export type Office = {
   created_at?: string;
 };
 
+export type UploadedFile = {
+  id?: number;
+  name: string;
+  mime: string;
+  size: number;
+  ext: string;
+  fileable_id: number;
+  fileable_type: string;
+  deleted_at?: string;
+  updated_at?: string;
+  created_at?: string;
+  prevUrl: string;
+  downUrl: string;
+};
+
 export type Section = {
   id: number;
   title: string;
@@ -20,6 +35,7 @@ export type Section = {
   updated_at?: string;
   created_at?: string;
   subsections?: Section[];
+  files?: Array<UploadedFile>;
 };
 
 export type Documents = {

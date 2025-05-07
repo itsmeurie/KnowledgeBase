@@ -28,6 +28,7 @@ class SectionResource extends JsonResource {
                     "contents" => $section->contents,
                 ];
             }),
+            "files" => FileResource::collection($this->files),
         ];
     }
 }
