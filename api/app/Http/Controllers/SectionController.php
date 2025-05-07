@@ -141,9 +141,9 @@ class SectionController extends Controller {
             "message" => "{$section->name}#{$section->hash} has been restored",
         ]);
     }
-
+    // mime:pdf,png,xlsx
     public function upload(FileUploadRequest $request, Section $section) {
-        $upload = $this->uploadFileRequest($request, "kb_file", "required|file|mime:pdf,png,xlsx");
+        $upload = $this->uploadFileRequest($request, "kb_file", "required|file|");
         if (isset($upload["file"])) {
             $file = $upload["file"];
             $file->update(["filable_id" => $section->id, "filable_type" => Section::class]);

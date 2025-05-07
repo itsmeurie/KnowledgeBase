@@ -9,6 +9,9 @@ const src = {
   withCredentials: true,
 };
 
+const isPdf = props.file.name.toLowerCase().endsWith(".pdf");
+const isImage = /\.(jpe?g|png|gif|bmp|webp|svg)$/i.test(props.file.name);
+
 const downloadFile = () => {
   $api.get(props.file.downUrl, { responseType: "blob" }).then((response) => {
     const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -21,18 +24,27 @@ const downloadFile = () => {
     link.remove();
   });
 };
-const isPdf = props.file.name.endsWith(".pdf");
+
 const emit = defineEmits(["close", "download"]);
 </script>
 
 <template>
-  <div :class="isPdf ? 'h-screen-95' : 'h-screen-10' + ' w-full'">
-    <VPdf v-if="isPdf" :src="src" smoothhJump textLayer />
-    <div class="text-center" v-else>
-      "This file cannot be viewed here. Download to access."
+  <div :class="isPdf || isImage ? 'h-screen-95' : 'h-screen-10' + ' w-full'">
+    <VPdf v-if="isPdf" :src="src" smoothJump textLayer />
+
+    <div v-else-if="isImage" class="flex h-full items-center justify-center">
+      <img
+        :src="src.url"
+        alt="Image preview"
+        class="max-h-full max-w-full object-contain"
+      />
     </div>
 
-    <div :class="isPdf ? '' : 'flex justify-center'">
+    <div v-else class="mt-4 text-center text-gray-600">
+      This file cannot be viewed here. Download to access.
+    </div>
+
+    <div :class="isPdf || isImage ? '' : 'flex justify-center'">
       <TButton
         icon="tabler:x"
         variant="ghost"

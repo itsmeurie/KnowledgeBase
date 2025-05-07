@@ -30,7 +30,7 @@ function goToSystemSection(code: string) {
             src="@/assets/image/final-logo.png"
           />
           <p
-            class="font-Inter ml-2 hidden text-2xl font-extrabold sm:block sm:text-3xl"
+            class="font-Inter ml-2 text-2xl font-extrabold sm:block sm:text-3xl"
           >
             Knowledge Base
           </p>
@@ -43,7 +43,7 @@ function goToSystemSection(code: string) {
             :to="{ name: 'home-page' }"
             class="flex sm:inline-flex"
           >
-            <span class="hidden sm:inline">Home</span>
+            <span class="sm:inline">Home</span>
           </TButton>
           <TButton
             label="Docs"
@@ -51,7 +51,7 @@ function goToSystemSection(code: string) {
             @click="goToSystemSection(office?.code!)"
             class="flex sm:inline-flex"
           >
-            <span class="hidden sm:inline">Docs</span>
+            <span class="sm:inline">Docs</span>
           </TButton>
         </div>
       </TopNav>
