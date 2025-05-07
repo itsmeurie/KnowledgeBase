@@ -14,6 +14,7 @@ use App\Models\Office;
 use App\Traits\FilesTrait;
 use App\Http\Requests\FileUploadRequest;
 use App\Models\File;
+use GuzzleHttp\Promise\Create;
 use Illuminate\Support\Str;
 use Laravel\Scout\Searchable;
 
@@ -74,16 +75,16 @@ class SectionController extends Controller {
 
         return response()->json(GetSectionResource::collection($sections));
     }
+<<<<<<< Updated upstream
     public function create(createSectionRequest $request): JsonResponse {
         $user = $request->user();
+=======
+    public function create(CreateSectionRequest $request): JsonResponse {
+        $user = request()->user();
+>>>>>>> Stashed changes
         $office = $user->getSessionOffice();
 
-        $fields = $request->validate([
-            "title" => "required|string",
-            "description" => "nullable|string",
-            "contents" => "nullable|string",
-            "parent_id" => "nullable|string",
-        ]);
+        $fields = $request->validated();
 
         $section = Section::create([
             "office_id" => $office->id,
@@ -106,6 +107,8 @@ class SectionController extends Controller {
         return response()->json([
             "section" => new GetSectionResource($parentSection),
         ]);
+
+        trail("Create Section")->info("Section Created");
     }
 
     public function update(UpdateSectionRequest $request, Section $section): JsonResponse {
@@ -120,28 +123,38 @@ class SectionController extends Controller {
         return response()->json([
             "section" => SectionResource::make($section),
         ]);
+        trail("Update Section")->info("Section Updated");
     }
 
     public function delete(Request $request, Section $section): JsonResponse {
+        $parentId = $section->parent_id;
         $section->delete();
+
+        $remainingSubsections = Section::where("parent_id", $parentId)->get();
 
         return response()->json([
             "message" => "{$section->title} #{$section->hash} has been deleted.",
+            "remaining" => SectionResource::collection($remainingSubsections),
         ]);
     }
+
     public function restore(Request $request, string $section): JsonResponse {
         if (!is_numeric($section)) {
-            //expecting hash
             $section = Section::withTrashed()->byHash($section);
         } else {
-            //expecting id
             $section = Section::withTrashed()->find($section);
-            $section->restore();
         }
+
+        $section->restore();
+
+        $siblings = Section::where("parent_id", $section->parent_id)->get();
+
         return response()->json([
-            "message" => "{$section->name}#{$section->hash} has been restored",
+            "message" => "{$section->title} #{$section->hash} has been restored",
+            "siblings" => SectionResource::collection($siblings),
         ]);
     }
+
     // mime:pdf,png,xlsx
     public function upload(FileUploadRequest $request, Section $section) {
         $upload = $this->uploadFileRequest($request, "kb_file", "required|file|");
