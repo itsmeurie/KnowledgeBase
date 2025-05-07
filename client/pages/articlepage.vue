@@ -268,12 +268,22 @@ watch(
           </span>
         </nav>
 
-        <!-- Edit Icon -->
-        <TIcon
-          name="i-heroicons-pencil-square"
-          class="h-6 w-6 cursor-pointer hover:text-black"
-          @click="openEditModal"
-        />
+        <div class="flex min-w-[1rem] items-center justify-end gap-3 p-2">
+          <!-- Soft Delete icon -->
+          <TIcon
+            name="tabler:trash"
+            class="h-6 w-6 cursor-pointer transition-colors duration-200 hover:text-black"
+          />
+          <!-- Restore icon -->
+          <button>Restore</button>
+          <!-- Edit icon -->
+          <TIcon
+            name="tabler:pencil"
+            class="h-6 w-6 cursor-pointer transition-colors duration-200 hover:text-black"
+            @click="openEditModal"
+          />
+        </div>
+
         <TModal
           v-model="showEditModal"
           prevent-close
