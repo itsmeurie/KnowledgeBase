@@ -57,7 +57,7 @@ const state = computed(() => {
       <TIcon v-if="uploading" name="line-md:uploading-loop" />
       <TButton
         v-else
-        icon="tabler:x"
+        icon="tabler:minus"
         variant="ghost"
         color="gray"
         size="xs"

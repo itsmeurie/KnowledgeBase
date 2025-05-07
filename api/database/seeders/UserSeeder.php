@@ -57,7 +57,7 @@ class UserSeeder extends Seeder {
                 "email" => null,
                 "password" => "carlo12345",
                 "role" => "Admin",
-                "team_id" => 3,
+                "team_id" => 1,
             ],
         ]);
         // return $this->generateTestUsers(2);

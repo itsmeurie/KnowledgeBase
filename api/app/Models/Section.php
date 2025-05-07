@@ -33,7 +33,7 @@ class Section extends AppModel {
     }
 
     public function files(): MorphMany {
-        return $this->morphMany(File::class, "fileable");
+        return $this->morphMany(File::class, "filable");
     }
 
     public function scopeSlug(Builder $query, string $slug): void {

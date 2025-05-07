@@ -6,13 +6,18 @@ use App\Http\Requests\SectionRequests\CreateSectionRequest;
 use App\Http\Requests\SectionRequests\UpdateSectionRequest;
 use App\Http\Resources\GetSectionResource;
 use App\Http\Resources\SectionResource;
+use App\Http\Resources\FileResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Section;
 use App\Models\Office;
+use App\Traits\FilesTrait;
+use App\Http\Requests\FileUploadRequest;
+use App\Models\File;
 use Illuminate\Support\Str;
 
 class SectionController extends Controller {
+    use FilesTrait;
     public function list(Request $request, ?string $parent_id = null): JsonResponse {
         $limit = $request->input("limit", 25);
         $page = $request->input("page", 1);
@@ -135,5 +140,28 @@ class SectionController extends Controller {
         return response()->json([
             "message" => "{$section->name}#{$section->hash} has been restored",
         ]);
+    }
+    // mime:pdf,png,xlsx
+    public function upload(FileUploadRequest $request, Section $section) {
+        $upload = $this->uploadFileRequest($request, "kb_file", "required|file|");
+        if (isset($upload["file"])) {
+            $file = $upload["file"];
+            $file->update(["filable_id" => $section->id, "filable_type" => Section::class]);
+            return [
+                ...$upload["result"],
+                // "file" => $upload["file"],
+                "sha256" => $upload["raw"]["sha256"],
+                "data" => SectionResource::make($section),
+            ];
+        }
+        return $upload["result"];
+    }
+
+    public function preview(Request $request, File $file) {
+        return $this->previewFile($file);
+    }
+
+    public function download(Request $request, File $file) {
+        return $this->downloadFile($file);
     }
 }

@@ -19,6 +19,7 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\OfficeController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\DocumentsController;
+use App\Models\Section;
 
 Route::middleware(["auth:web,sanctum", "throttle:90,1", "isActive"])->group(function () {
     Route::middleware(["verified", "SPAOnly"])->group(function () {
@@ -126,10 +127,14 @@ Route::middleware(["auth:web,sanctum", "throttle:90,1", "isActive"])->group(func
             Route::get("office/{parent_id?}", [SectionController::class, "list"])->name("sections.list");
             Route::get("slug/{slug}", [SectionController::class, "show"])->name("sections.show");
             Route::get("section/{parent_id?}", [SectionController::class, "getSectionByParentId"])->name("sections.getSectionByParentId");
+            Route::get("/files/{slug}", [SectionController::class, "getFiles"]);
+            Route::get("/download/{file}", [SectionController::class, "download"])->name("section.download");
+            Route::get("preview/{file}", [SectionController::class, "preview"])->name("section.preview");
             Route::post("", [SectionController::class, "create"])->name("sections.create");
             Route::put("{section}", [SectionController::class, "update"])->name("sections.update");
             Route::delete("{section}", [SectionController::class, "delete"])->name("sections.delete");
             Route::patch("{section}", [SectionController::class, "restore"])->name("sections.restore");
+            Route::post("file/upload/{section}", [SectionController::class, "upload"])->name("sections.upload");
         });
     });
 

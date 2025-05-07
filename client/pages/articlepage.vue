@@ -1,23 +1,45 @@
 <script setup lang="ts">
-import type { Section, Office } from "~/types";
+import type { Section, Office, UploadedFile } from "~/types";
 import { useRouter } from "vue-router";
 import { marked } from "marked";
 import { computed, ref, onMounted, watch } from "vue";
-
-const selectedFile = ref<File | null>(null);
+import UploadingFile from "~/pages/uploadingFile.vue";
+import PreviewFile from "./previewFile.vue";
 
 const router = useRouter();
 const { $api } = useNuxtApp();
 const route = useRoute();
 const { office } = useAuthStore();
+const showFileModal = ref(false);
+const { merge } = useModels();
 
 const offices = ref<Office>();
 const officeSection = ref<Section[]>([]);
 const section = ref<Section>();
+const fileSection = ref<Array<Section>>([]);
 const activeSubsection = ref<Section | null>(null);
 
 const isHovered = ref(false);
 const openItems = ref<string[]>([]);
+
+const modal = ref<{
+  show: boolean;
+  data?: Section | UploadedFile;
+  type: string;
+}>({
+  show: false,
+  data: undefined,
+  type: "UploadingFile",
+});
+
+const openModal = (
+  data?: Section | UploadedFile,
+  type: string = "UploadingFile",
+) => {
+  modal.value.data = data;
+  modal.value.type = type;
+  modal.value.show = true;
+};
 
 const showEditModal = ref(false);
 const editForm = ref<{
@@ -29,6 +51,11 @@ const editForm = ref<{
   title: "",
   contents: "",
 });
+
+const onUpload = (data: Section) => {
+  merge(fileSection.value, data);
+  modal.value.show = false;
+};
 
 const renderedContent = computed(() =>
   marked(activeSubsection.value?.contents || section.value?.contents || ""),
@@ -102,11 +129,6 @@ const openEditModal = () => {
   showEditModal.value = true;
 };
 
-const openAddfileModal = () => {
-  showAddfileModal.value = true;
-};
-
-const showAddfileModal = ref(false);
 const submitEdit = async () => {
   try {
     if (!editForm.value.id) return;
@@ -146,40 +168,6 @@ const submitEdit = async () => {
     showEditModal.value = false;
   } catch (error) {
     console.error("Failed to update section:", error);
-  }
-};
-
-const selectedFiles = ref<File[]>([]);
-
-const handleFileChange = (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  if (target.files) {
-    selectedFiles.value.push(...Array.from(target.files));
-    // Reset input so selecting the same file again works
-    target.value = "";
-  }
-};
-
-const submitFile = async () => {
-  if (!selectedFiles.value.length) return;
-
-  const formData = new FormData();
-  selectedFiles.value.forEach((file) => {
-    formData.append("files[]", file);
-  });
-
-  try {
-    await $api.post("/files/upload", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-
-    // Reset after upload
-    selectedFiles.value = [];
-    showAddfileModal.value = false;
-  } catch (error) {
-    console.error("File upload failed:", error);
   }
 };
 
@@ -340,6 +328,22 @@ watch(
           </template>
         </TModal>
       </div>
+      <div>
+        <TModal v-model="modal.show" :prevent-close="true">
+          <UploadingFile
+            v-if="modal.type === 'UploadingFile'"
+            :modelValue="modal.data! as Section"
+            @upload="onUpload($event)"
+            @close="modal.show = false"
+          />
+
+          <PreviewFile
+            v-if="modal.type === 'PreviewFile'"
+            :file="modal.data as UploadedFile"
+            @close="modal.show = false"
+          />
+        </TModal>
+      </div>
 
       <!-- Article Content -->
       <section class="space-y-6">
@@ -371,70 +375,25 @@ watch(
         <h2 class="text-lg font-semibold">Documents</h2>
       </div>
 
-      <TButton
-        class="ml-4 mt-2 flex items-center justify-center gap-2"
-        variant="link"
-        @click="openAddfileModal"
+      <!-- Button for Uploading Files -->
+      <div
+        class="size-sm item-center text-gray hover:text-primary flex cursor-pointer items-center justify-center"
+        @click="openModal(section, 'UploadingFile')"
+        variant="solid"
       >
-        <TModal
-          v-model="showAddfileModal"
-          prevent-close
-          :ui="{ width: 'w-screen-500 max-w-sm sm:max-w-sm' }"
-        >
-          <template #default>
-            <!-- Close Icon (upper-right) -->
-            <button
-              @click="showAddfileModal = false"
-              class="absolute right-4 top-4 text-gray-500 hover:text-black"
-              aria-label="Close"
-            >
-              <TIcon name="i-heroicons-x-mark" class="h-6 w-6" />
-            </button>
-
-            <form @submit.prevent="submitFile" class="pt-10">
-              <div class="m-4 flex flex-col items-center justify-center gap-4">
-                <div class="flex items-center gap-2">
-                  <TIcon name="tabler:upload" class="text-3xl" />
-                  <label
-                    for="file-upload"
-                    class="cursor-pointer text-lg font-semibold"
-                  >
-                    Add File
-                  </label>
-                </div>
-
-                <!-- Hidden File Input (multiple allowed) -->
-                <input
-                  id="file-upload"
-                  type="file"
-                  class="hidden"
-                  multiple
-                  @change="handleFileChange"
-                />
-
-                <!-- File Names Preview -->
-                <ul v-if="selectedFiles.length" class="text-sm">
-                  <li v-for="(file, index) in selectedFiles" :key="index">
-                    {{ file.name }}
-                  </li>
-                </ul>
-
-                <!-- Upload Button: Show if files selected -->
-                <div class="flex justify-end" v-if="selectedFiles.length">
-                  <button
-                    type="submit"
-                    class="bg-primary hover:bg-primary-dark rounded px-4 py-2 text-white"
-                  >
-                    Upload
-                  </button>
-                </div>
-              </div>
-            </form>
-          </template>
-        </TModal>
-        <TIcon name="tabler:plus" class="text-lg" />
-        <h2 class="text-lg font-semibold">Add File</h2>
-      </TButton>
+        <TIcon name="tabler:circle-plus" class="text-lg" />
+        <h2 class="text-sm font-semibold">Add File</h2>
+      </div>
+      <!-- file fetching -->
+      <div class="mt-3">
+        <template v-for="file in section?.files" :key="file.id">
+          <TButton
+            variant="link"
+            :label="file.name"
+            @click="openModal(file, 'PreviewFile')"
+          />
+        </template>
+      </div>
     </aside>
   </div>
 </template>
