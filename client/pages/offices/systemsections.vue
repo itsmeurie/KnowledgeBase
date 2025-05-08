@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Section, Office } from "~/types";
+const $guard = useGuard();
 
 const { $api } = useNuxtApp();
 const route = useRoute();
@@ -98,6 +99,7 @@ onMounted(() => {
           <!-- Add New Section -->
           <div
             @click="goToAdd(office?.code!)"
+            v-if="$guard.can('create_section')"
             class="flex cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 p-4 shadow-md transition hover:bg-green-100"
           >
             <TIcon name="tabler:plus"></TIcon>

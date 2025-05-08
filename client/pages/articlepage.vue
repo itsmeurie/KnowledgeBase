@@ -5,6 +5,7 @@ import { marked } from "marked";
 import { computed, ref, onMounted, watch } from "vue";
 import UploadingFile from "~/pages/uploadingFile.vue";
 import PreviewFile from "./previewFile.vue";
+const $guard = useGuard();
 
 const router = useRouter();
 const { $api } = useNuxtApp();
@@ -231,7 +232,7 @@ watch(
     </aside>
 
     <!-- Main Content -->
-    <main class="col-span-full mx-4 flex flex-col gap-6 sm:col-span-6">
+    <main class="col-span-full mx-4 flex flex-col gap-2 sm:col-span-6">
       <!-- Breadcrumbs -->
       <div class="flex flex-wrap items-center justify-between text-sm">
         <nav class="flex flex-wrap items-center space-x-2 text-sm sm:text-base">
@@ -280,6 +281,7 @@ watch(
           <!-- Edit icon -->
           <TIcon
             name="tabler:pencil"
+            v-if="$guard.can('update_section')"
             class="h-6 w-6 cursor-pointer transition-colors duration-200 hover:text-black"
             @click="openEditModal"
           />
@@ -359,7 +361,7 @@ watch(
       <!-- Article Content -->
       <section class="space-y-6">
         <div>
-          <h1 class="text-2xl font-extrabold sm:text-4xl">
+          <h1 class="text-4xl font-extrabold">
             {{ activeSubsection?.title || section?.title }}
           </h1>
         </div>

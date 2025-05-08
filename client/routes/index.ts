@@ -42,7 +42,7 @@ export default computed(() => [
             path: "/:code/systems",
             name: "system-sections",
             component: () => import("@/pages/offices/systemsections.vue"),
-
+            permissions: permissions["system-sections"],
             meta: {
               title: "System Sections",
 
@@ -64,7 +64,7 @@ export default computed(() => [
             path: "/:code/systems/articlepage/:slug",
             name: "Article",
             component: () => import("@/pages/articlepage.vue"),
-
+            permissions: permissions["manage-articles"],
             meta: {
               title: "Article",
 
