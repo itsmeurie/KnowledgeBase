@@ -11,7 +11,7 @@ export const settings = {
   "settings-roles": ["roles_list", "roles_add", "roles_edit", "roles_delete"],
   "settings-logs": [],
   "system-sections": ["create_section"],
-  "manage-articles": ["update_section"],
+  "manage-articles": ["update_section", "upload_files"],
 };
 
 export const dasboard = {};

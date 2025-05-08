@@ -392,18 +392,20 @@ watch(
       <div
         class="size-sm item-center text-gray hover:text-primary flex cursor-pointer items-center justify-center"
         @click="openModal(section, 'UploadingFile')"
+        v-if="$guard.can('upload_files')"
         variant="solid"
       >
         <TIcon name="tabler:circle-plus" class="text-lg" />
         <h2 class="text-sm font-semibold">Add File</h2>
       </div>
       <!-- file fetching -->
-      <div class="mt-3">
+      <div class="spce-y-1 mt-2">
         <template v-for="file in section?.files" :key="file.id">
           <TButton
             variant="link"
             :label="file.name"
             @click="openModal(file, 'PreviewFile')"
+            class="block w-full text-left"
           />
         </template>
       </div>
