@@ -99,6 +99,16 @@ class PermissionSeeder extends Seeder {
                 "description" => "Allow users to change their profile image",
                 ...$common,
             ],
+            [
+                "name" => "create_section",
+                "description" => "Allow users to create section",
+                ...$common,
+            ],
+            [
+                "name" => "update_section",
+                "description" => "Allow users to update section",
+                ...$common,
+            ],
         ];
 
         Permission::insert($permissions);

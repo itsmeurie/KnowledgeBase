@@ -29,6 +29,7 @@ class SectionResource extends JsonResource {
                 ];
             }),
             "files" => FileResource::collection($this->files),
+            "deleted_at" => $this->deleted_at,
         ];
     }
 }

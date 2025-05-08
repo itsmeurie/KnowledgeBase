@@ -269,13 +269,14 @@ watch(
         </nav>
 
         <div class="flex min-w-[1rem] items-center justify-end gap-3 p-2">
+          <!-- Restore icon -->
+          <button>Restore</button>
           <!-- Soft Delete icon -->
           <TIcon
             name="tabler:trash"
             class="h-6 w-6 cursor-pointer transition-colors duration-200 hover:text-black"
           />
-          <!-- Restore icon -->
-          <button>Restore</button>
+
           <!-- Edit icon -->
           <TIcon
             name="tabler:pencil"

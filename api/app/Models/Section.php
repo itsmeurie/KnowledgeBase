@@ -1,18 +1,15 @@
 <?php
 
 namespace App\Models;
-use Illuminate\DAtabase\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\ModelSlugTrait;
 
-<<<<<<< Updated upstream
 // use Laravel\Scout\Searchable;
 
-=======
->>>>>>> Stashed changes
 class Section extends AppModel {
     use SoftDeletes, ModelSlugTrait;
 

@@ -16,10 +16,10 @@ use App\Http\Requests\FileUploadRequest;
 use App\Models\File;
 use GuzzleHttp\Promise\Create;
 use Illuminate\Support\Str;
-use Laravel\Scout\Searchable;
 
 class SectionController extends Controller {
-    use FilesTrait, Searchable;
+    use FilesTrait;
+
     public function list(Request $request, ?string $parent_id = null): JsonResponse {
         $limit = $request->input("limit", 25);
         $page = $request->input("page", 1);
@@ -75,13 +75,8 @@ class SectionController extends Controller {
 
         return response()->json(GetSectionResource::collection($sections));
     }
-<<<<<<< Updated upstream
-    public function create(createSectionRequest $request): JsonResponse {
-        $user = $request->user();
-=======
-    public function create(CreateSectionRequest $request): JsonResponse {
+    public function create(CreateSectionRequest $request, Section $section): JsonResponse {
         $user = request()->user();
->>>>>>> Stashed changes
         $office = $user->getSessionOffice();
 
         $fields = $request->validated();
@@ -92,7 +87,7 @@ class SectionController extends Controller {
             "description" => $fields["description"] ?? null,
             "contents" => $fields["contents"] ?? null,
             "slug" => Section::slugify($fields["title"]),
-            "parent_id" => isset($fields["parent_id"]) && $fields["parent_id"] !== "none" ? Section::hashToId($fields["parent_id"]) : null, // <-- ADD THIS
+            "parent_id" => isset($fields["parent_id"]) && $fields["parent_id"] !== "none" ? Section::hashToId($fields["parent_id"]) : null,
         ]);
 
         $parentSection = $section->parent_id
@@ -104,11 +99,11 @@ class SectionController extends Controller {
             ])->find($section->parent_id)
             : $section;
 
+        trail("Create Section")->info("Section Created");
+
         return response()->json([
             "section" => new GetSectionResource($parentSection),
         ]);
-
-        trail("Create Section")->info("Section Created");
     }
 
     public function update(UpdateSectionRequest $request, Section $section): JsonResponse {

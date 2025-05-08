@@ -134,7 +134,7 @@ Route::middleware(["auth:web,sanctum", "throttle:90,1", "isActive"])->group(func
             Route::post("", [SectionController::class, "create"])->name("sections.create");
             Route::put("{section}", [SectionController::class, "update"])->name("sections.update");
             Route::delete("delete/{section}", [SectionController::class, "delete"])->name("sections.delete");
-            Route::patch("{restore/section}", [SectionController::class, "restore"])->name("sections.restore");
+            Route::patch("restore/{section}", [SectionController::class, "restore"])->name("sections.restore");
             Route::post("file/upload/{section}", [SectionController::class, "upload"])->name("sections.upload");
         });
     });
