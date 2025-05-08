@@ -4,14 +4,12 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FileUploadRequest extends FormRequest
-{
+class FileUploadRequest extends FormRequest {
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
-    {
-        return true;
+    public function authorize(): bool {
+        return $this->user()->can("upload", $this->route("section"));
     }
 
     /**
@@ -19,8 +17,7 @@ class FileUploadRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
-    {
+    public function rules(): array {
         return [
             "uid" => "nullable|string",
             "name" => "required_without:uid",
@@ -29,8 +26,7 @@ class FileUploadRequest extends FormRequest
         ];
     }
 
-    public function messages(): array
-    {
+    public function messages(): array {
         return [
             "uid.string" => "Invalid upload id.",
             "name.required_without" => "A file name is required.",

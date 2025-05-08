@@ -150,7 +150,6 @@ class SectionController extends Controller {
         ]);
     }
 
-    // mime:pdf,png,xlsx
     public function upload(FileUploadRequest $request, Section $section) {
         $upload = $this->uploadFileRequest($request, "kb_file", "required|file|");
         if (isset($upload["file"])) {

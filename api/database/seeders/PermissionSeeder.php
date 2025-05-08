@@ -109,6 +109,11 @@ class PermissionSeeder extends Seeder {
                 "description" => "Allow users to update section",
                 ...$common,
             ],
+            [
+                "name" => "upload_files",
+                "description" => "Allow users to upload files to section",
+                ...$common,
+            ],
         ];
 
         Permission::insert($permissions);

@@ -55,4 +55,8 @@ class SectionPolicy {
     public function forceDelete(User $user, Section $section): bool {
         return false;
     }
+
+    public function upload(User $user, Section $section): bool {
+        return $user->can("upload_files", $section);
+    }
 }
