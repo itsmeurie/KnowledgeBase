@@ -71,6 +71,16 @@ export default computed(() => [
               layout: "office",
             },
           },
+          {
+            path: "/:code/systems/restore",
+            name: "Restore",
+            component: () => import("@/pages/restore.vue"),
+            meta: {
+              title: "Restore",
+
+              layout: "office",
+            },
+          },
         ],
       },
     ],

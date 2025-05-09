@@ -5,6 +5,8 @@ import { marked } from "marked";
 import { computed, ref, onMounted, watch } from "vue";
 import UploadingFile from "~/pages/uploadingFile.vue";
 import PreviewFile from "./previewFile.vue";
+import DeleteModal from "./DeleteModal.vue";
+
 const $guard = useGuard();
 
 const router = useRouter();
@@ -22,6 +24,18 @@ const activeSubsection = ref<Section | null>(null);
 
 const isHovered = ref(false);
 const openItems = ref<string[]>([]);
+
+const showDeleteModal = ref(false);
+const itemIdToDelete = ref<number | null>(null);
+
+const openDeleteModal = (itemId: number) => {
+  itemIdToDelete.value = itemId;
+  showDeleteModal.value = true;
+};
+
+const handleDelete = (itemId: number) => {
+  console.log("Item to delete:", itemId);
+};
 
 const modal = ref<{
   show: boolean;
@@ -270,15 +284,32 @@ watch(
         </nav>
 
         <div class="flex min-w-[1rem] items-center justify-end gap-3 p-2">
-          <!-- Restore icon -->
-          <button>Restore</button>
-          <!-- Soft Delete icon -->
-          <TIcon
-            name="tabler:trash"
-            class="h-6 w-6 cursor-pointer transition-colors duration-200 hover:text-black"
+          <!-- Restore  -->
+          <TButton
+            label="Restore"
+            color="gray"
+            variant="ghost"
+            :to="{ name: 'Restore' }"
           />
+          <div>
+            <!-- Your Article Content -->
 
-          <!-- Edit icon -->
+            <!-- Delete Button -->
+            <TIcon
+              name="tabler:trash"
+              class="h-6 w-6 cursor-pointer transition-colors duration-200 hover:text-black"
+              @click="openDeleteModal"
+            />
+
+            <!-- Delete Modal Component -->
+            <DeleteModal
+              :show="showDeleteModal"
+              @update:show="showDeleteModal = $event"
+              @delete="handleDelete"
+            />
+          </div>
+
+          <!-- Edit  -->
           <TIcon
             name="tabler:pencil"
             v-if="$guard.can('update_section')"
