@@ -19,8 +19,6 @@ const validate = (state: any): FormError[] => {
   return errors;
 };
 
-//hahahaha
-
 const schema = z.object({
   name: z.string(),
   code: z.string().min(3, "Must be at least 3 characters"),
@@ -36,39 +34,34 @@ const state = reactive({
 });
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  // Do something with data
   console.log(event.data);
   $api.post("/offices", event.data).then((response) => {
-    if (response.status == 200) emit("update:show", false);
+    if (response.status === 200) emit("update:show", false);
   });
 }
 
-function toggleModal(state: boolean | undefined) {
-  emit("update:show", state);
+function toggleModal(value: boolean) {
+  emit("update:show", value);
 }
 </script>
 
-<!-- VALIDATION -->
 <template>
-  <TSlideover :modelValue="show" @update:modelValue="toggleModal">
-    <div class="flex-1 p-4">
-      <TButton
-        color="gray"
-        variant="ghost"
-        size="sm"
-        icon="i-heroicons-x-mark-20-solid"
-        class="absolute end-5 top-5 z-10 flex sm:hidden"
-        square
-        padded
-        @click="toggleModal(false)"
-      />
-      <h2 class="text-xl">Create new Office</h2>
-      <p class="text-sm">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Explicabo
-        officia culpa eveniet voluptas atque mollitia corrupti magnam vel
-        possimus labore. Quaerat animi eaque officiis nemo impedit natus cum
-        debitis minima?
+  <TModal :modelValue="show" @update:modelValue="toggleModal">
+    <div class="p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold">Create new Office</h2>
+        <TButton
+          icon="i-heroicons-x-mark-20-solid"
+          variant="ghost"
+          size="sm"
+          @click="toggleModal(false)"
+        />
+      </div>
+
+      <p class="text-sm text-gray-600 mb-4">
+        Fill out the form below to create a new office.
       </p>
+
       <TForm
         :schema="schema"
         :validate="validate"
@@ -87,15 +80,11 @@ function toggleModal(state: boolean | undefined) {
         <TFormGroup label="Short Description" name="description">
           <TInput v-model="state.description" />
         </TFormGroup>
-        <!-- <TInput type="file" size="sm" icon="i-heroicons-photo" /> -->
-        <div>
-          <label for="name">Office Logo</label>
-          <input type="file" class="form-control-file" />
-        </div>
 
-        <div></div>
-        <TButton type="submit"> Submit </TButton>
+        <div class="pt-4 flex justify-end">
+          <TButton type="submit">Submit</TButton>
+        </div>
       </TForm>
     </div>
-  </TSlideover>
+  </TModal>
 </template>

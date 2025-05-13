@@ -120,6 +120,7 @@ onMounted(() => {
             <div class="flex flex-auto items-center justify-end gap-2">
               <TButton
                 :icon="section.active ? 'tabler:trash' : 'tabler:restore'"
+                v-if="$guard.canAny('delete_article', 'restore_article')"
                 variant="ghost"
                 class="h-6 w-6 cursor-pointer items-center justify-end transition-colors duration-200 hover:text-black"
                 @click="

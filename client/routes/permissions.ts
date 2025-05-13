@@ -10,7 +10,7 @@ export const settings = {
   "settings-permissions": [],
   "settings-roles": ["roles_list", "roles_add", "roles_edit", "roles_delete"],
   "settings-logs": [],
-  "system-sections": ["create_section"],
+  "system-sections": ["create_section", "delete_article", "restore_article"],
   "manage-articles": ["update_section", "upload_files"],
 };
 
