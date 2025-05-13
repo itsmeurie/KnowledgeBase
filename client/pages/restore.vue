@@ -1,76 +1,27 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 
+// Sample Section Data
 const section = [
   {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    contents: "lindsay.walton@example.com",
+    section_title: "Lindsay Walton",
+    subsection_title: "Front-end Developer",
   },
   {
-    name: "Courtney Henry",
-    title: "Designer",
-    contents: "courtney.henry@example.com",
+    section_title: "Courtney Henry",
+    subsection_title: "Designer",
   },
   {
-    name: "Tom Cook",
-    title: "Director of Product",
-    contents: "tom.cook@example.com",
+    section_title: "Tom Cook",
+    subsection_title: "Director of Product",
   },
   {
-    name: "Whitney Francis",
-    title: "Copywriter",
-    contents: "whitney.francis@example.com",
+    section_title: "Whitney Francis",
+    subsection_title: "Copywriter",
   },
   {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    contents: "lindsay.walton@example.com",
-  },
-  {
-    name: "Courtney Henry",
-    title: "Designer",
-    contents: "courtney.henry@example.com",
-  },
-  {
-    name: "Tom Cook",
-    title: "Director of Product",
-    contents: "tom.cook@example.com",
-  },
-  {
-    name: "Whitney Francis",
-    title: "Copywriter",
-    contents: "whitney.francis@example.com",
-  },
-  {
-    name: "Lindsay Walton",
-    title: "Front-end Developer",
-    contents: "lindsay.walton@example.com",
-  },
-  {
-    name: "Courtney Henry",
-    title: "Designer",
-    contents: "courtney.henry@example.com",
-  },
-  {
-    name: "Tom Cook",
-    title: "Director of Product",
-    contents: "tom.cook@example.com",
-  },
-  {
-    name: "Whitney Francis",
-    title: "Copywriter",
-    contents: "whitney.francis@example.com",
-  },
-  {
-    name: "Leonard Krasner",
-    title: "Senior Designer",
-    contents: "leonard.krasner@example.com",
-  },
-  {
-    name: "Floyd Miles",
-    title: "Principal Designer",
-    contents: "floyd.miles@example.com",
+    section_title: "Lindsay Walton",
+    subsection_title: "Front-end Developer",
   },
 ];
 
@@ -98,7 +49,6 @@ const isChecked = (item: any) => {
           <tr>
             <th class="p-2 text-left">Section Name</th>
             <th class="p-2 text-left">Subsection Name</th>
-            <th class="p-2 text-left">Contents</th>
             <th class="w-2 p-2 text-center">
               <input type="checkbox" v-model="allSelected" />
             </th>
@@ -111,9 +61,8 @@ const isChecked = (item: any) => {
             :key="index"
             class="odd:bg-white even:bg-gray-50"
           >
-            <td class="p-2">{{ item.name }}</td>
-            <td class="p-2">{{ item.title }}</td>
-            <td class="p-2">{{ item.contents }}</td>
+            <td class="p-2">{{ item.section_title }}</td>
+            <td class="p-2">{{ item.subsection_title }}</td>
             <td class="w-2 p-2 text-center">
               <input
                 type="checkbox"

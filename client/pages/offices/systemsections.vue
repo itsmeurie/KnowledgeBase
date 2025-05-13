@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import type { Section, Office } from "~/types";
+import DeleteModal from "../DeleteModal.vue";
+import Restore from "./Restore.vue";
 const $guard = useGuard();
 
 const { $api } = useNuxtApp();
@@ -14,6 +16,29 @@ const aboutSection = ref<HTMLElement | null>(null);
 
 const goToAdd = (code: string) => {
   router.push(`/systems/${office?.code.toLowerCase()}/create`);
+};
+const modal = ref<{
+  show: boolean;
+  data?: Section;
+  type: string;
+}>({
+  show: false,
+  data: undefined,
+  type: "DeleteModal",
+});
+
+const openModal = (data?: Section, type: string = "DeleteModal") => {
+  modal.value.data = data;
+  modal.value.type = type;
+  modal.value.show = true;
+};
+
+const toggleModal = (data: Section) => {
+  const section = officeSection.value.find((s) => s.id === data.id);
+  if (section) {
+    section.active = !section.active;
+  }
+  modal.value.show = false;
 };
 
 const goToArticlePage = (slug: string) => {
@@ -56,6 +81,11 @@ async function fetchOfficeSectionList() {
   }
 }
 
+useTeams(() => {
+  fetchOfficeSectionList();
+  office;
+});
+
 onMounted(() => {
   fetchOfficeSectionList();
 });
@@ -85,15 +115,26 @@ onMounted(() => {
           <div
             v-for="section in officeSection"
             :key="section.id"
-            @click="goToArticlePage(section.slug)"
             class="cursor-pointer rounded-lg border border-gray-200 p-4 shadow-md transition"
           >
-            <h5 class="text-primary text-lg font-semibold">
-              {{ section.title }}
-            </h5>
-            <p class="text-sm transition duration-300 hover:underline">
-              {{ section.description }}
-            </p>
+            <div class="flex flex-auto items-center justify-end gap-2">
+              <TButton
+                :icon="section.active ? 'tabler:trash' : 'tabler:restore'"
+                variant="ghost"
+                class="h-6 w-6 cursor-pointer items-center justify-end transition-colors duration-200 hover:text-black"
+                @click="
+                  openModal(section, section.active ? 'DeleteModal' : 'Restore')
+                "
+              />
+            </div>
+            <div @click="goToArticlePage(section.slug)">
+              <h5 class="text-primary text-lg font-semibold">
+                {{ section.title }}
+              </h5>
+              <p class="text-sm transition duration-300 hover:underline">
+                {{ section.description }}
+              </p>
+            </div>
           </div>
 
           <!-- Add New Section -->
@@ -110,5 +151,19 @@ onMounted(() => {
         </div>
       </div>
     </div>
+    <TModal v-model="modal.show" :prevent-close="true">
+      <DeleteModal
+        v-if="modal.type === 'DeleteModal'"
+        :modelValue="modal.data!"
+        @delete="toggleModal"
+        @close="modal.show = false"
+      />
+      <Restore
+        v-if="modal.type === 'Restore'"
+        :modelValue="modal.data!"
+        @restore="toggleModal"
+        @close="modal.show = false"
+      />
+    </TModal>
   </div>
 </template>

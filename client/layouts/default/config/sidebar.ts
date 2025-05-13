@@ -28,6 +28,7 @@ export const settings = shallowRef([
   getMenuItem("settings-roles"),
   getMenuItem("settings-permissions"),
   getMenuItem("settings-logs"),
+  getMenuItem("offices"),
 ]);
 
 export default computed<Array<MenuOption>>(() => {

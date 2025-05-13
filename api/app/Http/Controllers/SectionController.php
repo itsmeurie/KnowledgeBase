@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SectionRequests\DeleteSectionRequest;
 use App\Http\Requests\SectionRequests\CreateSectionRequest;
 use App\Http\Requests\SectionRequests\UpdateSectionRequest;
 use App\Http\Resources\GetSectionResource;
@@ -13,6 +14,7 @@ use App\Models\Section;
 use App\Models\Office;
 use App\Traits\FilesTrait;
 use App\Http\Requests\FileUploadRequest;
+use App\Http\Requests\SectionRequests\RestoreSectionRequest;
 use App\Models\File;
 use GuzzleHttp\Promise\Create;
 use Illuminate\Support\Str;
@@ -39,9 +41,10 @@ class SectionController extends Controller {
             ->when($request->query("slug"), function ($query) use ($request) {
                 $query->slug($request->query("slug"));
             })
+            ->when($user->isSuperman(), function ($query) {
+                $query->withTrashed();
+            })
             ->paginates(limit: $limit, page: $page);
-
-        // $sections["data"] = SectionResource::collection($sections["data"]);
 
         $sections["data"] = SectionResource::collection($sections["data"]);
         return response()->json($sections);
@@ -121,37 +124,42 @@ class SectionController extends Controller {
         trail("Update Section")->info("Section Updated");
     }
 
-    public function delete(Request $request, Section $section): JsonResponse {
-        $parentId = $section->parent_id;
-        $section->delete();
+    public function deleteSection(DeleteSectionRequest $request, Section $section): JsonResponse {
+        $user = $request->user();
+        $office = $user->getSessionOffice();
+        $exists = $office->sections()->where("id", $section->id)->first();
 
-        $remainingSubsections = Section::where("parent_id", $parentId)->get();
-
-        return response()->json([
-            "message" => "{$section->title} #{$section->hash} has been deleted.",
-            "remaining" => SectionResource::collection($remainingSubsections),
-        ]);
-    }
-
-    public function restore(Request $request, string $section): JsonResponse {
-        if (!is_numeric($section)) {
-            $section = Section::withTrashed()->byHash($section);
-        } else {
-            $section = Section::withTrashed()->find($section);
+        if (!$exists) {
+            return response()->json([
+                "message" => "Section not found!",
+            ]);
         }
 
-        $section->restore();
-
-        $siblings = Section::where("parent_id", $section->parent_id)->get();
+        $section->delete();
 
         return response()->json([
-            "message" => "{$section->title} #{$section->hash} has been restored",
-            "siblings" => SectionResource::collection($siblings),
+            "message" => "Section Deleted Successfully",
         ]);
     }
 
+    public function restoreSection(RestoreSectionRequest $request, string $section): JsonResponse {
+        $user = request()->user();
+        $office = $user->getSessionOffice();
+        $section = $office->sections()->onlyTrashed()->where("id", Section::hashToId($section))->first(); // $office->sections()->onlyTrashed()->where("id", $section->id)->first();
+
+        if (!$section) {
+            return response()->json([
+                "message" => "Section not found!",
+            ]);
+        }
+        $section->restore();
+        return response()->json([
+            "message" => "Section Restored Successfully",
+            "data" => SectionResource::make($section),
+        ]);
+    }
     public function upload(FileUploadRequest $request, Section $section) {
-        $upload = $this->uploadFileRequest($request, "kb_file", "required|file|");
+        $upload = $this->uploadFileRequest($request, "kb_file", "required|file|mime:pdf,jpeg,jpg,png,doc,docx,ppt,pptx,mp4,mp3");
         if (isset($upload["file"])) {
             $file = $upload["file"];
             $file->update(["filable_id" => $section->id, "filable_type" => Section::class]);

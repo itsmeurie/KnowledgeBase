@@ -33,8 +33,12 @@ const openDeleteModal = (itemId: number) => {
   showDeleteModal.value = true;
 };
 
-const handleDelete = (itemId: number) => {
-  console.log("Item to delete:", itemId);
+// const handleDelete = (itemId: number) => {
+//   console.log("Item to delete:", itemId);
+// };
+
+const onDelete = (data: Section) => {
+  showDeleteModal.value = false;
 };
 
 const modal = ref<{
@@ -285,12 +289,12 @@ watch(
 
         <div class="flex min-w-[1rem] items-center justify-end gap-3 p-2">
           <!-- Restore  -->
-          <TButton
+          <!-- <TButton
             label="Restore"
             color="gray"
             variant="ghost"
             :to="{ name: 'Restore' }"
-          />
+          /> -->
           <div>
             <!-- Your Article Content -->
 
@@ -302,11 +306,11 @@ watch(
             />
 
             <!-- Delete Modal Component -->
-            <DeleteModal
+            <!-- <DeleteModal
               :show="showDeleteModal"
               @update:show="showDeleteModal = $event"
               @delete="handleDelete"
-            />
+            /> -->
           </div>
 
           <!-- Edit  -->

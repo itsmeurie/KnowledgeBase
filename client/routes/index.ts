@@ -28,16 +28,7 @@ export default computed(() => [
               layout: "office",
             },
           },
-          {
-            path: "/offices",
-            name: "offices",
-            component: () => import("@/pages/offices/index.vue"),
-            meta: {
-              title: "Offices",
 
-              layout: "office",
-            },
-          },
           {
             path: "/:code/systems",
             name: "system-sections",
@@ -149,6 +140,25 @@ export default computed(() => [
           icon: "tabler:terminal-2",
         },
       },
+      {
+        path: "/offices",
+        name: "offices",
+        component: () => import("@/pages/offices/index.vue"),
+        meta: {
+          title: "Offices",
+          icon: "tabler:building",
+        },
+      },
+      // {
+      //   path: "system",
+      //   name: "system-section",
+      //   component: () => import("@/pages/offices/systemsections.vue"),
+      //   permissions: permissions["system-sections"],
+      //   meta: {
+      //     title: "System Sections",
+      //     icon: "tabler:building",
+      //   },
+      // },
     ],
   },
 

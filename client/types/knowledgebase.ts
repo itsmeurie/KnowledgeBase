@@ -36,6 +36,7 @@ export type Section = {
   created_at?: string;
   subsections?: Section[];
   files?: Array<UploadedFile>;
+  active?: boolean;
 };
 
 export type Documents = {

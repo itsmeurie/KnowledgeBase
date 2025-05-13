@@ -6,24 +6,24 @@ const { $api } = useNuxtApp();
 const loading = ref(false);
 const toast = useToast();
 
-const emit = defineEmits(["close", "delete"]);
+const emit = defineEmits(["close", "restore"]);
 
 const props = defineProps<{
   modelValue: Section;
 }>();
 
-const handleDelete = () => {
+const handleRestore = () => {
   loading.value = true;
   $api
-    .delete(`/sections/${props.modelValue.id}`)
+    .patch(`/sections/${props.modelValue.id}`)
     .then((response) => {
       toast.add({
         title: "Success",
-        description: response.data.message ?? "Section deleted successfully!",
+        description: response.data.message ?? "Section restored successfully!",
         color: "primary",
         icon: "tabler:circle-check",
       });
-      emit("delete", props.modelValue);
+      emit("restore", props.modelValue);
     })
     .catch((error) => {
       console.error(error);
@@ -37,7 +37,7 @@ const handleDelete = () => {
 <template>
   <TCard>
     <template #header>
-      <div>Delete Section</div>
+      <div>Restore Section</div>
       <TButton
         icon="tabler:x"
         variant="ghost"
@@ -45,11 +45,11 @@ const handleDelete = () => {
         @click="emit('close')"
       />
     </template>
-    Are you sure you want to delete this?
+    Are you sure you want to restore this?
     <h3>{{ modelValue.title }}</h3>
-    <TInnerLoading :active="loading" text="Deleting section..." />
+    <TInnerLoading :active="loading" text="Restore section..." />
     <template #footer>
-      <TButton label="Delete" color="red" @click="handleDelete" />
+      <TButton label="Restore" color="red" @click="handleRestore" />
       <TButton
         label="Cancel"
         variant="ghost"

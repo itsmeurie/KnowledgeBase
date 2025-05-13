@@ -114,6 +114,16 @@ class PermissionSeeder extends Seeder {
                 "description" => "Allow users to upload files to section",
                 ...$common,
             ],
+            [
+                "name" => "delete_article",
+                "description" => "Allow users to delete articles",
+                ...$common,
+            ],
+            [
+                "name" => "restore_article",
+                "description" => "Allow users to restore articles",
+                ...$common,
+            ],
         ];
 
         Permission::insert($permissions);

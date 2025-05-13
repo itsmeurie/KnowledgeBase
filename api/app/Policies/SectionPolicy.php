@@ -39,14 +39,14 @@ class SectionPolicy {
      * Determine whether the user can delete the model.
      */
     public function delete(User $user, Section $section): bool {
-        return false;
+        return $user->can("delete_article", $section);
     }
 
     /**
      * Determine whether the user can restore the model.
      */
     public function restore(User $user, Section $section): bool {
-        return false;
+        return $user->can("restore_article", $section);
     }
 
     /**

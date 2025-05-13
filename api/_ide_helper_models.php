@@ -314,6 +314,12 @@ namespace App\Models{
 /**
  * 
  *
+ * @property int $id
+ * @property int $section_id
+ * @property string $contents
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read string|null $hash
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents byHash(string $hash)
  * @method static \Database\Factories\DocumentsFactory factory($count = null, $state = [])
@@ -321,6 +327,12 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents whereContents($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents whereSectionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Documents withoutTrashed()
  */
@@ -459,6 +471,14 @@ namespace App\Models{
 /**
  * 
  *
+ * @property int $id
+ * @property int|null $parent_id
+ * @property string $name
+ * @property string|null $code
+ * @property string|null $description description_column
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read string|null $hash
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Office> $images
  * @property-read int|null $images_count
@@ -472,6 +492,14 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Office newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Office onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Office query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Office whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Office whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Office whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Office whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Office whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Office whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Office whereParentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Office whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Office withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Office withoutTrashed()
  */
@@ -671,6 +699,7 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property int|null $team_id
  * @property string $name
  * @property string $guard_name
  * @property bool $protected
@@ -697,6 +726,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Role whereLevel($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Role whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Role whereProtected($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Role whereTeamId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Role whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Role withoutPermission($permissions)
  */
@@ -707,10 +737,20 @@ namespace App\Models{
 /**
  * 
  *
+ * @property int $id
+ * @property int|null $parent_id
+ * @property string $contents
+ * @property int $office_id
+ * @property string $title
+ * @property string|null $description description
+ * @property string|null $slug
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\File> $files
  * @property-read int|null $files_count
  * @property-read string|null $hash
- * @property-read \App\Models\Office|null $office
+ * @property-read \App\Models\Office $office
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Section> $subSections
  * @property-read int|null $sub_sections_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Section byHash(string $hash)
@@ -720,6 +760,16 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Section onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Section query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Section slug(string $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereContents($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereOfficeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereParentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Section whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Section withTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Section withoutTrashed()
  */
@@ -737,6 +787,7 @@ namespace App\Models{
  * @property string $password
  * @property int $fails
  * @property \Illuminate\Support\Carbon|null $disabled_at
+ * @property int|null $team_id
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -750,7 +801,7 @@ namespace App\Models{
  * @property-read int|null $roles_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Role> $roles_all
  * @property-read int|null $roles_all_count
- * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $team
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent|null $team
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User byHash(string $hash)
@@ -768,6 +819,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTeamId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUsername($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User withoutPermission($permissions)

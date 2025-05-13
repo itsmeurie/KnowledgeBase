@@ -1,18 +1,15 @@
 <?php
 
 namespace App\Http\Requests\SectionRequests;
-use App\Models\Section;
+
 use Illuminate\Foundation\Http\FormRequest;
 
-class RestoreSectionRequest extends FormRequest {
+class DeleteSectionRequest extends FormRequest {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool {
-        $id = Section::hashToId($this->section);
-        $section = Section::onlyTrashed()->find($id);
-        return $this->user()->can("restore", $this->route("section"));
-        // return $this->user()->can("restore", $this->section);
+        return $this->user()->can("delete", $this->route("section"));
     }
 
     /**
