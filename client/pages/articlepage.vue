@@ -6,6 +6,7 @@ import { computed, ref, onMounted, watch } from "vue";
 import UploadingFile from "~/pages/uploadingFile.vue";
 import PreviewFile from "./previewFile.vue";
 import DeleteModal from "./DeleteModal.vue";
+import Restore from "./Restore.vue";
 
 const $guard = useGuard();
 
@@ -25,20 +26,48 @@ const activeSubsection = ref<Section | null>(null);
 const isHovered = ref(false);
 const openItems = ref<string[]>([]);
 
-const showDeleteModal = ref(false);
-const itemIdToDelete = ref<number | null>(null);
+const deleteModal = ref<{
+  show: boolean;
+  data?: Section;
+  type: string;
+}>({
+  show: false,
+  data: undefined,
+  type: "DeleteModal",
+});
 
-const openDeleteModal = (itemId: number) => {
-  itemIdToDelete.value = itemId;
-  showDeleteModal.value = true;
+const openDeleteModal = (data?: Section, type: string = "DeleteModal") => {
+  deleteModal.value.data = data;
+  deleteModal.value.type = type;
+  deleteModal.value.show = true;
 };
 
-// const handleDelete = (itemId: number) => {
-//   console.log("Item to delete:", itemId);
-// };
+const toggleModal = (data: Section) => {
+  const target = officeSection.value.find((s) => s.id === data.id);
 
-const onDelete = (data: Section) => {
-  showDeleteModal.value = false;
+  if (target) {
+    target.active = !target.active; // Toggle active status
+
+    if (target.subsections) {
+      target.subsections = target.subsections.map((sub) => ({
+        ...sub,
+        active: target.active,
+      }));
+    }
+  }
+
+  if (section.value?.id === data.id) {
+    section.value.active = !section.value.active;
+    section.value.subsections?.forEach(
+      (sub) => (sub.active = section.value!.active),
+    );
+  }
+
+  if (activeSubsection.value?.id === data.id) {
+    activeSubsection.value.active = !activeSubsection.value.active;
+  }
+
+  modal.value.show = false;
 };
 
 const modal = ref<{
@@ -118,6 +147,7 @@ const fetchSection = () => {
     .get(`/sections/slug/${route.params.slug}`)
     .then((response) => {
       section.value = response.data;
+      officeSection.value = [response.data];
       if (section.value?.title) {
         openItems.value = [section.value.title];
       }
@@ -288,29 +318,31 @@ watch(
         </nav>
 
         <div class="flex min-w-[1rem] items-center justify-end gap-3 p-2">
-          <!-- Restore  -->
-          <!-- <TButton
-            label="Restore"
-            color="gray"
-            variant="ghost"
-            :to="{ name: 'Restore' }"
-          /> -->
-          <div>
+          <div
+            v-for="section in officeSection"
+            :key="section.id"
+            class="cursor-pointer rounded-lg border border-gray-200 p-4 shadow-md transition"
+          >
             <!-- Your Article Content -->
 
             <!-- Delete Button -->
-            <TIcon
-              name="tabler:trash"
-              class="h-6 w-6 cursor-pointer transition-colors duration-200 hover:text-black"
-              @click="openDeleteModal"
+            <TButton
+              :icon="
+                (activeSubsection?.active ?? section.active)
+                  ? 'tabler:trash'
+                  : 'tabler:restore'
+              "
+              variant="ghost"
+              class="h-6 w-6 cursor-pointer items-center justify-end transition-colors duration-200 hover:text-black"
+              @click="
+                openDeleteModal(
+                  activeSubsection || section,
+                  (activeSubsection?.active ?? section.active)
+                    ? 'DeleteModal'
+                    : 'Restore',
+                )
+              "
             />
-
-            <!-- Delete Modal Component -->
-            <!-- <DeleteModal
-              :show="showDeleteModal"
-              @update:show="showDeleteModal = $event"
-              @delete="handleDelete"
-            /> -->
           </div>
 
           <!-- Edit  -->
@@ -445,5 +477,19 @@ watch(
         </template>
       </div>
     </aside>
+    <TModal v-model="deleteModal.show" :prevent-close="true">
+      <DeleteModal
+        v-if="deleteModal.type === 'DeleteModal'"
+        :modelValue="deleteModal.data!"
+        @delete="toggleModal"
+        @close="deleteModal.show = false"
+      />
+      <Restore
+        v-if="deleteModal.type === 'Restore'"
+        :modelValue="deleteModal.data!"
+        @restore="toggleModal"
+        @close="deleteModal.show = false"
+      />
+    </TModal>
   </div>
 </template>

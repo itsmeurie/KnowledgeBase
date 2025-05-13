@@ -33,12 +33,15 @@ const openModal = (data?: Section, type: string = "DeleteModal") => {
   modal.value.show = true;
 };
 
-const toggleModal = (data: Section) => {
+const toggleModal = async (data: Section) => {
   const section = officeSection.value.find((s) => s.id === data.id);
   if (section) {
     section.active = !section.active;
   }
   modal.value.show = false;
+
+  // Refresh sections after delete/restore
+  await fetchOfficeSectionList();
 };
 
 const goToArticlePage = (slug: string) => {

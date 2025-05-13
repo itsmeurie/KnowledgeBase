@@ -53,9 +53,18 @@ class SectionController extends Controller {
         $user = $request->user();
         $office = $user->getSessionOffice();
 
-        $section = Section::with("subSections") // eager load subsections
+        $section = Section::with([
+            "subSections" => function ($query) use ($user) {
+                if ($user->isSuperman()) {
+                    $query->withTrashed(); // ✅ load deleted subsections too
+                }
+            },
+        ])
             ->where("office_id", $office->id)
             ->where("slug", $slug)
+            ->when($user->isSuperman(), function ($query) {
+                $query->withTrashed(); // ✅ load deleted section if needed
+            })
             ->firstOrFail();
 
         return response()->json(new GetSectionResource($section));
@@ -135,29 +144,44 @@ class SectionController extends Controller {
             ]);
         }
 
+        // Soft-delete subsections if any
+        if ($section->subsections()->count() > 0) {
+            $section->subsections()->delete(); // Soft-delete subsections
+        }
+
+        // Soft-delete the section itself
         $section->delete();
 
         return response()->json([
-            "message" => "Section Deleted Successfully",
+            "message" => $section->parent_id ? "Subsection deleted successfully." : "Section deleted successfully.",
         ]);
     }
 
     public function restoreSection(RestoreSectionRequest $request, string $section): JsonResponse {
         $user = request()->user();
         $office = $user->getSessionOffice();
-        $section = $office->sections()->onlyTrashed()->where("id", Section::hashToId($section))->first(); // $office->sections()->onlyTrashed()->where("id", $section->id)->first();
+
+        // Get the soft-deleted section
+        $section = $office->sections()->onlyTrashed()->where("id", Section::hashToId($section))->first();
 
         if (!$section) {
             return response()->json([
                 "message" => "Section not found!",
             ]);
         }
+
+        // Restore the section
         $section->restore();
+
+        // Restore all soft-deleted subsections
+        $section->subsections()->onlyTrashed()->restore();
+
         return response()->json([
             "message" => "Section Restored Successfully",
-            "data" => SectionResource::make($section),
+            "data" => new SectionResource($section),
         ]);
     }
+
     public function upload(FileUploadRequest $request, Section $section) {
         $upload = $this->uploadFileRequest($request, "kb_file", "required|file|mime:pdf,jpeg,jpg,png,doc,docx,ppt,pptx,mp4,mp3");
         if (isset($upload["file"])) {

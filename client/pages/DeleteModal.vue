@@ -24,6 +24,7 @@ const handleDelete = () => {
         icon: "tabler:circle-check",
       });
       emit("delete", props.modelValue);
+      emit("close"); // ✅ this closes the modal
     })
     .catch((error) => {
       console.error(error);

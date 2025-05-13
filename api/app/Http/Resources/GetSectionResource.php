@@ -32,10 +32,13 @@ class GetSectionResource extends JsonResource {
                         "id" => $section->hash,
                         "slug" => $section->slug,
                         "contents" => $section->contents,
+                        "deleted_at" => $section->deleted_at,
+                        "active" => is_null($section->deleted_at),
                     ];
                 });
             }),
             "deleted_at" => $this->deleted_at,
+            "active" => !$this->trashed(),
         ];
     }
 }

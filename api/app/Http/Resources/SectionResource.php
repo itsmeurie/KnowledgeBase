@@ -26,6 +26,8 @@ class SectionResource extends JsonResource {
                     "description" => $section->description,
                     "slug" => $section->slug,
                     "contents" => $section->contents,
+                    "deleted_at" => $section->deleted_at,
+                    "active" => is_null($section->deleted_at),
                 ];
             }),
             "files" => FileResource::collection($this->files),
