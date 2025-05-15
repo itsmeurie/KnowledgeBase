@@ -89,9 +89,7 @@ const isActive = (item: MenuOption): boolean => {
           'overflow-y-auto': expand,
         }"
       >
-        <template>
-          
-        </template>
+        <template> </template>
       </div>
     </aside>
   </div>

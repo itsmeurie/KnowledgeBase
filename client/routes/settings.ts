@@ -65,7 +65,7 @@ export const guard = async (
     if (to.meta.requiresAuth === true && !$auth.isLoggedIn) {
       reject({ name: "login", query: { redirect: to.fullPath } });
     } else if (to.meta.requiresAuth === false && $auth.isLoggedIn) {
-      reject({ name: "home" }); // Redirect to the home page when signed in.
+      reject({ name: "home-page" }); // Redirect to the home page when signed in.
     } else if (toRequiresVerified && !$auth.verified) {
       reject({ name: "unverified", query: { redirect: to.fullPath } });
     } else if (

@@ -9,9 +9,7 @@ const router = useRouter();
 const CreateOffice = defineAsyncComponent(
   () => import("./components/create-office.vue"),
 );
-// const Delete = defineAsyncComponent(
-//   () => import("./components/delete.vue"),
-// );
+const Delete = defineAsyncComponent(() => import("./delete.vue"));
 
 const offices = ref<Office[]>([]);
 const search_term = ref("");
@@ -55,10 +53,10 @@ const columns = ref([
     key: "name",
     label: "Name",
   },
-  // {
-  //   key: "actions",
-  //   label: "Actions",
-  // },
+  {
+    key: "actions",
+    label: "Actions",
+  },
 ]);
 
 const { pagination, params, loading, search } = useSearcher<{ search: string }>(

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\OfficeRequests;
 
+use App\Models\Office;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RestoreOfficeRequest extends FormRequest {
@@ -9,7 +10,9 @@ class RestoreOfficeRequest extends FormRequest {
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool {
-        return $this->user()->isSuperman();
+        $id = Office::hashToId($this->office);
+        $section = Office::onlyTrashed()->find($id);
+        return $this->user()->can("restore", $this->route("section"));
     }
 
     /**

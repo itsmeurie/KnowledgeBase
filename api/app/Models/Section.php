@@ -38,8 +38,8 @@ class Section extends AppModel {
         return $this->morphMany(File::class, "filable");
     }
 
-    public function scopeSlug(Builder $query, string $slug): void {
-        $query->where("slug", $slug);
+    public function searchEngine(Builder $query, string $title, string $contents) {
+        $query->where("code", "ilike", $title || "contents", "ilike", $contents);
     }
 
     /**

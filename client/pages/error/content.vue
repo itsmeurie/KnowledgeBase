@@ -4,7 +4,7 @@ const router = useRouter();
 const canGoBack = computed(() => !!router.currentRoute.value.redirectedFrom);
 const goBack = () => {
   if (!canGoBack.value) {
-    router.push({ name: "home" });
+    router.push({ name: "home-page" });
   } else {
     router.back();
   }

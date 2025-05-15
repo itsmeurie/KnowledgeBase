@@ -9,7 +9,7 @@ const editor = ref();
 
 const redirect = () => {
   if (auth.hasProfileName) {
-    router.push((route.query.redirect as string) ?? { name: "home" });
+    router.push((route.query.redirect as string) ?? { name: "home-page" });
   }
 };
 

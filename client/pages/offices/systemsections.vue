@@ -125,14 +125,18 @@ onMounted(() => {
                 :icon="section.active ? 'tabler:trash' : 'tabler:restore'"
                 v-if="$guard.canAny('delete_article', 'restore_article')"
                 variant="ghost"
-                class="h-6 w-6 cursor-pointer items-center justify-end transition-colors duration-200 hover:text-black"
+                :class="[
+                  'h-6 w-6 cursor-pointer items-center justify-end transition-colors duration-200',
+                  section.active ? 'text-red-500' : 'text-green-500',
+                  'hover:text-black',
+                ]"
                 @click="
                   openModal(section, section.active ? 'DeleteModal' : 'Restore')
                 "
               />
             </div>
             <div @click="goToArticlePage(section.slug)">
-              <h5 class="text-primary text-lg font-semibold">
+              <h5 class="text-lg font-bold">
                 {{ section.title }}
               </h5>
               <p class="text-sm transition duration-300 hover:underline">

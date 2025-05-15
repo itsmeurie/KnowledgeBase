@@ -16,7 +16,6 @@ function goToSystemSection(code: string) {
     name: "system-sections",
     params: {
       code: office?.code?.toLowerCase(),
-      slug: code.toLowerCase(),
     },
   });
 }

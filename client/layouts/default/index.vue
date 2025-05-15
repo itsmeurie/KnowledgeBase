@@ -31,7 +31,7 @@ const crumbs = computed<Array<BreadcrumbLink>>(() =>
           icon="tabler:home"
           color="gray"
           variant="ghost"
-          :to="{ name: 'home' }"
+          :to="{ name: 'home-page' }"
         />
         <div class="flex flex-auto items-center justify-end">
           <TTeamSelect />

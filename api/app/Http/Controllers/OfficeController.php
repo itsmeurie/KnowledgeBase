@@ -11,80 +11,65 @@ use Illuminate\Http\Request;
 use Intervention\Image\Colors\Rgb\Channels\Red;
 use App\Models\Office;
 
-class OfficeController extends Controller
-{
-    public function list(Request $request) : JsonResponse 
-    {
+class OfficeController extends Controller {
+    public function list(Request $request): JsonResponse {
+        $offices = Office::when($request->query("name"), function ($query) use ($request) {
+            $query->name($request->query("name"));
+        })
+            ->when($request->query("code"), function ($query) use ($request) {
+                $query->code($request->query("code"));
+            })
+            ->get();
 
-        $offices = Office::when($request->query('name'), function($query) use ($request){
-                                $query->name($request->query('name'));
-                            })
-                            ->when($request->query('code'), function($query) use ($request){
-                                $query->code($request->query('code'));
-                            })
-                            ->get();
-
-        
-
-        return response()->json( OfficeResource::collection($offices));    
+        return response()->json(OfficeResource::collection($offices));
     }
 
-    public function show(Request $request, Office $office) : JsonResponse 
-    {
+    public function show(Request $request, Office $office): JsonResponse {
         return response()->json([
-            'office' => OfficeResource::make($office)
-        ]);    
+            "office" => OfficeResource::make($office),
+        ]);
     }
 
-    public function create(CreateOfficeRequest $request) : JsonResponse 
-    {
+    public function create(CreateOfficeRequest $request): JsonResponse {
         $fields = $request->validated();
 
         $office = Office::create($fields);
 
         return response()->json([
-            'office' => OfficeResource::make($office)
-        ]);    
+            "office" => OfficeResource::make($office),
+        ]);
     }
 
-    public function update(UpdateOfficeRequest $request, Office $office) : JsonResponse 
-    {
-
+    public function update(UpdateOfficeRequest $request, Office $office): JsonResponse {
         $fields = $request->validated();
 
         $office->update($fields);
 
         return response()->json([
-            'office' => OfficeResource::make($office)
-        ]);    
+            "office" => OfficeResource::make($office),
+        ]);
     }
 
-    public function delete(Request $request, Office $office) : JsonResponse 
-    {
-
+    public function delete(Request $request, Office $office): JsonResponse {
         $office->delete();
 
         return response()->json([
-            'message' => "{$office->name} #{$office->hash} has been deleted."
-        ]);    
+            "message" => "{$office->name} #{$office->hash} has been deleted.",
+        ]);
     }
 
-    public function restore(Request $request, string | int $office) : JsonResponse 
-    {
-
-        if(!is_numeric($office)){
+    public function restore(Request $request, string|int $office): JsonResponse {
+        if (!is_numeric($office)) {
             // expecting Hash
             $office = Office::withTrashed()->byHash($office);
-        }else{
+        } else {
             // expecting id
             $office = Office::withTrashed()->find($office);
             $office->restore();
         }
 
-
         return response()->json([
-            'message' => "{$office->name}#{$office->hash} has been restored"
-        ]);    
+            "message" => "{$office->name}#{$office->hash} has been restored",
+        ]);
     }
-
 }

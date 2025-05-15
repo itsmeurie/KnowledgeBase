@@ -34,22 +34,6 @@ export const settings = shallowRef([
 export default computed<Array<MenuOption>>(() => {
   const layoutName = $route.matched[0]?.name as string;
   if (layoutName === "settings") return settings.value;
-  if (layoutName === "home") return home.value;
-  return [
-    {
-      label: "Tickets",
-      icon: "tabler:ticket",
-      to: { name: "tickets-index" },
-    },
-    {
-      label: "Violators",
-      icon: "tabler:user-cancel",
-      to: { name: "violators-index" },
-    },
-    {
-      label: "Violations",
-      icon: "tabler:notebook",
-      to: { name: "violations-index" },
-    },
-  ];
+  if (layoutName === "home-page") return home.value;
+  return [];
 });

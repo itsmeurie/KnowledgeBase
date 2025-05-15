@@ -43,7 +43,9 @@ const login = async (e: FormSubmitEvent<Schema>) => {
     auth
       .login(e.data)
       .then((res) => {
-        $router.push(($route.query.redirect as string) || { name: "home" });
+        $router.push(
+          ($route.query.redirect as string) || { name: "home-page" },
+        );
         resolve(res);
       })
       .catch((error) => {

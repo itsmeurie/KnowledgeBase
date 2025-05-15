@@ -1,4 +1,16 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const router = useRouter();
+const { office } = useAuthStore();
+function goToSystemSection(code: string) {
+  router.push({
+    name: "system-sections",
+    params: {
+      code: office?.code?.toLowerCase(),
+      // slug: code.toLowerCase(),
+    },
+  });
+}
+</script>
 
 <template>
   <!-- Hero Section -->
@@ -12,8 +24,9 @@
       <p class="mt-4 text-lg">
         A centralized platform for obtaining knowledge on system documentation.
       </p>
-      <a href="/offices">
+      <a>
         <button
+          @click="goToSystemSection(office?.code!)"
           class="hover:bg-primary mt-6 rounded-full border-2 px-6 py-2 font-bold hover:text-white"
         >
           Get Started

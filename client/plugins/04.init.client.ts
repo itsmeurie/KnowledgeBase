@@ -27,7 +27,9 @@ export default defineNuxtPlugin(async () => {
           query: { redirect: $router.currentRoute.value.fullPath },
         };
       } else {
-        to = $router.currentRoute.value.query?.redirect || { name: "home" };
+        to = $router.currentRoute.value.query?.redirect || {
+          name: "home-page",
+        };
       }
       $router.push(to);
     },

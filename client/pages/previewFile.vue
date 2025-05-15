@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useNuxtApp } from "nuxt/app";
 import type { UploadedFile } from "~/types";
 
 const props = defineProps<{ file: UploadedFile }>();

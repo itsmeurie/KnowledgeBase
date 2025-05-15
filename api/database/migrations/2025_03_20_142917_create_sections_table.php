@@ -14,10 +14,10 @@ return new class extends Migration {
         Schema::create("sections", function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("parent_id")->nullable();
-            $table->longText("contents");
+            $table->longText("contents")->nullable();
             $table->foreignIdFor(Office::class)->references("id")->on("offices");
             $table->string("title");
-            $table->string("description")->nullable()->comment("description");
+            $table->string("description")->nullable()->comment("description")->nullable();
             $table->string("slug")->unique()->nullable();
             $table->softDeletes();
             $table->timestamps();

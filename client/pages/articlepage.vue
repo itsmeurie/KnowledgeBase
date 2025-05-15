@@ -9,7 +9,7 @@ import DeleteModal from "./DeleteModal.vue";
 import Restore from "./Restore.vue";
 
 const $guard = useGuard();
-
+const searchResults = ref<Section[]>([]);
 const router = useRouter();
 const { $api } = useNuxtApp();
 const route = useRoute();
@@ -25,6 +25,28 @@ const activeSubsection = ref<Section | null>(null);
 
 const isHovered = ref(false);
 const openItems = ref<string[]>([]);
+const searchTerm = ref("");
+const filteredSubsections = computed(() => {
+  if (!section.value?.subsections) return [];
+  if (!searchTerm.value.trim()) return section.value.subsections;
+
+  const lower = searchTerm.value.toLowerCase();
+  return section.value.subsections.filter(
+    (sub) =>
+      sub.title.toLowerCase().includes(lower) ||
+      sub.contents?.toLowerCase().includes(lower),
+  );
+});
+
+const selectSearchResult = (result: Section) => {
+  if (result.id === section.value?.id) {
+    clearSubsection();
+  } else {
+    activeSubsection.value = result;
+  }
+  searchResults.value = [];
+  searchTerm.value = "";
+};
 
 const deleteModal = ref<{
   show: boolean;
@@ -105,9 +127,12 @@ const onUpload = (data: Section) => {
   modal.value.show = false;
 };
 
-const renderedContent = computed(() =>
-  marked(activeSubsection.value?.contents || section.value?.contents || ""),
-);
+const renderedContent = computed(() => {
+  if (activeSubsection.value) {
+    return marked(activeSubsection.value.contents ?? "");
+  }
+  return marked(section.value?.contents ?? "");
+});
 
 const formattedUpdatedAt = computed(() => {
   const dateStr =
@@ -238,21 +263,95 @@ watch(
     }
   },
 );
+let debounceTimer: ReturnType<typeof setTimeout>;
+
+const performSearch = async (term: string) => {
+  if (!term.trim()) {
+    searchResults.value = [];
+    return;
+  }
+
+  try {
+    const response = await $api.get(`/sections/slug/${route.params.slug}`, {
+      params: { search: term },
+    });
+
+    const sectionData = response.data;
+    const results: Section[] = [];
+    const lower = term.toLowerCase();
+
+    if (
+      sectionData.title.toLowerCase().includes(lower) ||
+      sectionData.contents?.toLowerCase().includes(lower)
+    ) {
+      results.push({
+        ...sectionData,
+        title: sectionData.title + " (Main Section)",
+      });
+    }
+
+    const matchingSubs = (sectionData.subsections || []).filter(
+      (sub: Section) =>
+        sub.title.toLowerCase().includes(lower) ||
+        sub.contents?.toLowerCase().includes(lower),
+    );
+
+    results.push(...matchingSubs);
+    searchResults.value = results;
+  } catch (error) {
+    console.error("Search error:", error);
+    searchResults.value = [];
+  }
+};
+
+// Watch with Debounce
+watch(searchTerm, (term) => {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => performSearch(term), 300);
+});
 </script>
 
 <template>
   <div class="mt-12 grid gap-4 sm:grid-cols-10">
-    <!-- Left Side Bar -->
-    <aside class="px-4 sm:col-span-2 sm:px-6">
+    <!-- Main Sidebar with Search -->
+    <aside class="relative px-4 sm:col-span-2 sm:px-6">
       <div class="mb-4">
-        <TInput
-          icon="i-heroicons-magnifying-glass-20-solid"
-          size="sm"
-          color="white"
-          :trailing="false"
-          placeholder="Search here..."
-          class="w-full"
-        />
+        <!-- Search Engine -->
+        <div class="relative">
+          <TInput
+            v-model="searchTerm"
+            icon="i-heroicons-magnifying-glass-20-solid"
+            size="sm"
+            color="white"
+            :trailing="false"
+            placeholder="Search here..."
+            class="w-full"
+          />
+
+          <div
+            v-if="searchResults.length > 0"
+            class="absolute left-0 top-full z-50 mt-2 max-h-60 w-full overflow-y-auto rounded-md border bg-white shadow-lg"
+          >
+            <div
+              v-for="result in searchResults"
+              :key="result.id"
+              class="cursor-pointer px-3 py-2 text-sm hover:bg-gray-100"
+              @click="selectSearchResult(result)"
+            >
+              <div class="font-semibold">{{ result.title }}</div>
+              <div class="truncate text-gray-600" v-if="result.contents">
+                {{ result.contents }}
+              </div>
+            </div>
+          </div>
+
+          <div
+            v-if="searchResults.length === 0 && searchTerm"
+            class="absolute left-0 top-full z-50 mt-2 w-full rounded-md border bg-white p-3 text-sm text-gray-500 shadow-lg"
+          >
+            No search results found.
+          </div>
+        </div>
       </div>
 
       <!-- Main Section -->
@@ -271,8 +370,11 @@ watch(
           v-for="sub in section?.subsections || []"
           :key="sub.id"
           @click="selectSubsection(sub)"
-          class="cursor-pointer rounded px-2 py-1 font-semibold transition-colors hover:underline"
-          :class="{ 'text-primary': sub.id === activeSubsection?.id }"
+          class="cursor-pointer rounded px-2 py-1 font-semibold transition-colors"
+          :class="{
+            'text-primary underline': sub.id === activeSubsection?.id,
+            'hover:underline': sub.id !== activeSubsection?.id,
+          }"
         >
           {{ sub.title }}
         </div>
@@ -317,12 +419,8 @@ watch(
           </span>
         </nav>
 
-        <div class="flex min-w-[1rem] items-center justify-end gap-3 p-2">
-          <div
-            v-for="section in officeSection"
-            :key="section.id"
-            class="cursor-pointer rounded-lg border border-gray-200 p-4 shadow-md transition"
-          >
+        <div class="flex min-w-1 items-center justify-end gap-3 p-2">
+          <div v-for="section in officeSection" :key="section.id">
             <!-- Your Article Content -->
 
             <!-- Delete Button -->
@@ -333,7 +431,14 @@ watch(
                   : 'tabler:restore'
               "
               variant="ghost"
-              class="h-6 w-6 cursor-pointer items-center justify-end transition-colors duration-200 hover:text-black"
+              v-if="$guard.can('delete_article')"
+              :class="[
+                'cursor-pointer items-center justify-end',
+                (activeSubsection?.active ?? section.active)
+                  ? 'text-red-500'
+                  : 'text-green-500',
+                'hover:text-black',
+              ]"
               @click="
                 openDeleteModal(
                   activeSubsection || section,
@@ -349,7 +454,7 @@ watch(
           <TIcon
             name="tabler:pencil"
             v-if="$guard.can('update_section')"
-            class="h-6 w-6 cursor-pointer transition-colors duration-200 hover:text-black"
+            class="h-6 w-6 cursor-pointer text-blue-500 transition-colors duration-200 hover:text-black"
             @click="openEditModal"
           />
         </div>

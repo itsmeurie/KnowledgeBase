@@ -16,6 +16,7 @@ export default computed(() => [
         meta: {
           title: "office landing page",
           layout: "office",
+          requiresAuth: true,
         },
         children: [
           {
@@ -30,7 +31,7 @@ export default computed(() => [
           },
 
           {
-            path: "/:code/systems",
+            path: "/:code/systems/",
             name: "system-sections",
             component: () => import("@/pages/offices/systemsections.vue"),
             permissions: permissions["system-sections"],
@@ -47,7 +48,7 @@ export default computed(() => [
 
             meta: {
               title: "Create Article",
-
+              requiresAuth: true,
               layout: "office",
             },
           },
@@ -65,7 +66,7 @@ export default computed(() => [
           {
             path: "/:code/systems/restore",
             name: "Restore",
-            component: () => import("@/pages/restore.vue"),
+            component: () => import("~/pages/Restore.vue"),
             meta: {
               title: "Restore",
 
@@ -76,15 +77,16 @@ export default computed(() => [
       },
     ],
   },
-  {
-    path: "/",
-    name: "home",
-    component: () => import("@/pages/index.vue"),
-    meta: {
-      requiresAuth: true,
-    },
-    children: [],
-  },
+  // {
+  //   path: "/",
+  //   name: "home-page",
+  //   component: () => import("@/pages/playground.vue"),
+  //   meta: {
+  //     title: "Home Page",
+
+  //     layout: "office",
+  //   },
+  // },
   {
     path: "/settings",
     name: "settings",

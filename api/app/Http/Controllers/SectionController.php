@@ -52,19 +52,25 @@ class SectionController extends Controller {
     public function show(Request $request, string $slug) {
         $user = $request->user();
         $office = $user->getSessionOffice();
+        $search = $request->input("search"); // Grab the ?search=... query
 
         $section = Section::with([
-            "subSections" => function ($query) use ($user) {
+            "subSections" => function ($query) use ($user, $search) {
                 if ($user->isSuperman()) {
-                    $query->withTrashed(); // ✅ load deleted subsections too
+                    $query->withTrashed();
+                }
+
+                // Add filtering if search term is provided
+                if ($search) {
+                    $query->where(function ($q) use ($search) {
+                        $q->where("title", "ILIKE", "%{$search}%")->orWhere("contents", "ILIKE", "%{$search}%");
+                    });
                 }
             },
         ])
-            ->where("office_id", $office->id)
             ->where("slug", $slug)
-            ->when($user->isSuperman(), function ($query) {
-                $query->withTrashed(); // ✅ load deleted section if needed
-            })
+            ->where("office_id", $office->id)
+            ->when($user->isSuperman(), fn($q) => $q->withTrashed())
             ->firstOrFail();
 
         return response()->json(new GetSectionResource($section));
@@ -155,6 +161,7 @@ class SectionController extends Controller {
         return response()->json([
             "message" => $section->parent_id ? "Subsection deleted successfully." : "Section deleted successfully.",
         ]);
+        trail("Delete Section")->info("Section Deleted");
     }
 
     public function restoreSection(RestoreSectionRequest $request, string $section): JsonResponse {
@@ -180,10 +187,11 @@ class SectionController extends Controller {
             "message" => "Section Restored Successfully",
             "data" => new SectionResource($section),
         ]);
+        trail("Restore Section")->info("Section Restored");
     }
-
+    // mime:pdf,jpeg,jpg,png,doc,docx,ppt,pptx,mp4,mp3
     public function upload(FileUploadRequest $request, Section $section) {
-        $upload = $this->uploadFileRequest($request, "kb_file", "required|file|mime:pdf,jpeg,jpg,png,doc,docx,ppt,pptx,mp4,mp3");
+        $upload = $this->uploadFileRequest($request, "kb_file", "required|file|");
         if (isset($upload["file"])) {
             $file = $upload["file"];
             $file->update(["filable_id" => $section->id, "filable_type" => Section::class]);

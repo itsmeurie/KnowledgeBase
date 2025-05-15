@@ -3,7 +3,7 @@ export type Office = {
   name: string;
   description: string;
   code: string;
-  deleted_at?: string;
+  deleted_at?: string | null;
   updated_at?: string;
   created_at?: string;
 };

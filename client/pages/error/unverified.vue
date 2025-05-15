@@ -43,7 +43,7 @@ watch(
   () => $auth.verified,
   (val) => {
     if (val) {
-      $router.push(($route.query.redirect as string) || { name: "home" });
+      $router.push(($route.query.redirect as string) || { name: "home-page" });
     }
   },
   { immediate: true },
