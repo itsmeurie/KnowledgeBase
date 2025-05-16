@@ -54,7 +54,7 @@ const saveFile = async (e: FormSubmitEvent<Schema>) => {
           color: "primary",
           icon: "tabler:check",
         });
-        emit("upload", props.modelValue);
+        emit("upload", response?.[0]?.data.data);
         resolve(response);
       })
       .catch((error) => {
@@ -65,75 +65,59 @@ const saveFile = async (e: FormSubmitEvent<Schema>) => {
       });
   });
 };
-
-// const uploadFiles = () => {
-//   upload()
-//     .then((response) => {
-//       log(response);
-//       toast.add({
-//         title: "Success",
-//         description: "File uploaded successfully",
-//         color: "primary",
-//         icon: "tabler:check",
-//       });
-//     })
-//     .catch((error) => {})
-//     .finally(() => {});
-// };
 </script>
 
 <template>
   <div>
-    <TCard class="p-6 space-y-6">
-  <!-- Close Button Top Right -->
-  <div class="flex justify-end">
-    <TButton
-      icon="tabler:x"
-      variant="ghost"
-      @click="emit('close')"
-      class="!p-2"
-    />
-  </div>
-
-  <!-- Upload Form -->
-  <TForm
-    :schema
-    :state
-    :validateOn="['submit']"
-    ref="form"
-    @submit="saveFile"
-    class="space-y-4"
-  >
-    <TFormGroup>
-      <div>
-        <h2 class="text-xl font-semibold mb-2">Upload File</h2>
-
-        <!-- File Upload Button -->
+    <TCard class="space-y-6 p-6">
+      <!-- Close Button Top Right -->
+      <div class="flex justify-end">
         <TButton
-          label="Choose Files"
-          @click="browser?.open()"
-          class="mb-4"
+          icon="tabler:x"
+          variant="ghost"
+          @click="emit('close')"
+          class="!p-2"
         />
-
-        <!-- Uploaded Files List -->
-        <div class="space-y-2">
-          <template v-for="file in files" :key="file.id">
-            <TFileUploadItem :file="file" />
-          </template>
-        </div>
       </div>
-    </TFormGroup>
 
-    <!-- Loading State -->
-    <TInnerLoading :active="loading" :text="loadingMessage" />
+      <!-- Upload Form -->
+      <TForm
+        :schema
+        :state
+        :validateOn="['submit']"
+        ref="form"
+        @submit="saveFile"
+        class="space-y-4"
+      >
+        <TFormGroup>
+          <div>
+            <h2 class="mb-2 text-xl font-semibold">Upload File</h2>
 
-    <!-- Action Buttons -->
-    <div class="flex justify-end space-x-2">
-      <TButton label="Cancel" variant="ghost" @click="emit('close')" />
-      <TButton label="Save" @click="saveFile" />
-    </div>
-  </TForm>
-</TCard>
+            <!-- File Upload Button -->
+            <TButton
+              label="Choose Files"
+              @click="browser?.open()"
+              class="mb-4"
+            />
 
+            <!-- Uploaded Files List -->
+            <div class="space-y-2">
+              <template v-for="file in files" :key="file.id">
+                <TFileUploadItem :file="file" />
+              </template>
+            </div>
+          </div>
+        </TFormGroup>
+
+        <!-- Loading State -->
+        <TInnerLoading :active="loading" :text="loadingMessage" />
+
+        <!-- Action Buttons -->
+        <div class="flex justify-end space-x-2">
+          <TButton label="Cancel" variant="ghost" @click="emit('close')" />
+          <TButton label="Save" @click="saveFile" />
+        </div>
+      </TForm>
+    </TCard>
   </div>
 </template>

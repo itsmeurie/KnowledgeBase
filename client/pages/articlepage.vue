@@ -123,7 +123,9 @@ const editForm = ref<{
 });
 
 const onUpload = (data: Section) => {
-  merge(fileSection.value, data);
+  log(data);
+  merge(officeSection.value, data);
+  section.value = { ...data };
   modal.value.show = false;
 };
 
@@ -181,7 +183,6 @@ const fetchSection = () => {
       console.error("Error fetching section:", error);
     });
 };
-
 const selectSubsection = (subsection: Section) => {
   activeSubsection.value = subsection;
 };
@@ -330,16 +331,16 @@ watch(searchTerm, (term) => {
 
           <div
             v-if="searchResults.length > 0"
-            class="absolute left-0 top-full z-50 mt-2 max-h-60 w-full overflow-y-auto rounded-md border bg-white shadow-lg"
+            class="absolute left-0 top-full z-50 mt-2 max-h-60 w-full overflow-y-auto rounded-md border bg-white shadow-lg dark:bg-gray-800"
           >
             <div
               v-for="result in searchResults"
               :key="result.id"
-              class="cursor-pointer px-3 py-2 text-sm hover:bg-gray-100"
+              class="hover:bg-primary cursor-pointer px-3 py-2 text-sm"
               @click="selectSearchResult(result)"
             >
               <div class="font-semibold">{{ result.title }}</div>
-              <div class="truncate text-gray-600" v-if="result.contents">
+              <div class="truncate" v-if="result.contents">
                 {{ result.contents }}
               </div>
             </div>
@@ -357,7 +358,7 @@ watch(searchTerm, (term) => {
       <!-- Main Section -->
       <div class="mb-1">
         <h6
-          class="hover:text-primary text-md cursor-pointer font-extrabold"
+          class="text-md cursor-pointer font-extrabold"
           @click="clearSubsection"
         >
           {{ section?.title }}
@@ -372,7 +373,7 @@ watch(searchTerm, (term) => {
           @click="selectSubsection(sub)"
           class="cursor-pointer rounded px-2 py-1 font-semibold transition-colors"
           :class="{
-            'text-primary underline': sub.id === activeSubsection?.id,
+            'underline hover:underline': sub.id === activeSubsection?.id,
             'hover:underline': sub.id !== activeSubsection?.id,
           }"
         >
@@ -435,7 +436,7 @@ watch(searchTerm, (term) => {
               :class="[
                 'cursor-pointer items-center justify-end',
                 (activeSubsection?.active ?? section.active)
-                  ? 'text-red-500'
+                  ? '!text-red-500'
                   : 'text-green-500',
                 'hover:text-black',
               ]"

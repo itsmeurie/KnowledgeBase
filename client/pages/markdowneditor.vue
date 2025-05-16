@@ -21,7 +21,7 @@ const update = debounce((event) => {
       v-model="input"
     ></textarea>
     <div
-      class="prose prose-blockquote:border-l-4 prose-blockquote:border-gray-300 prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-gray-600 prose-table:border prose-table:border-gray-200 prose-th:bg-gray-100 prose-th:text-left h-1/2 w-full max-w-4xl overflow-auto p-6 text-base leading-relaxed md:h-full md:w-1/2"
+      class="prose dark:prose-invert prose-blockquote:border-l-4 prose-blockquote:border-gray-300 prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-gray-600 prose-table:border prose-table:border-gray-200 prose-th:bg-gray-100 prose-th:text-left h-1/2 w-full max-w-4xl overflow-auto p-6 text-base leading-relaxed md:h-full md:w-1/2"
       v-html="output"
     ></div>
   </div>

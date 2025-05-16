@@ -41,33 +41,30 @@ useTeams(() => {
       <TopNav fixed :avatarOptions="aMenus">
         <div class="mr-4 flex items-center">
           <img
-            class="mt-6 h-20 w-20 gap-5 object-contain"
+            class="mt-6 hidden h-20 w-20 gap-5 object-contain sm:!block"
             src="@/assets/image/final-logo.png"
           />
           <p
-            class="font-Inter ml-2 text-2xl font-extrabold sm:block sm:text-3xl"
+            class="font-Inter ml-2 hidden text-2xl font-extrabold sm:!block sm:text-3xl"
           >
             Knowledge Base
           </p>
         </div>
-
         <div class="flex flex-auto items-center justify-end gap-2">
           <TTeamSelect />
           <TButton
-            label="Home"
             icon="tabler:home"
             :to="{ name: 'home-page' }"
             class="flex sm:inline-flex"
           >
-            <span class="sm:inline">Home</span>
+            <span class="hidden sm:!inline">Home</span>
           </TButton>
           <TButton
-            label="Docs"
             icon="tabler:book-2"
             @click="goToSystemSection(office?.code!)"
             class="flex sm:inline-flex"
           >
-            <span class="sm:inline">Docs</span>
+            <span class="hidden sm:!inline">Docs</span>
           </TButton>
         </div>
       </TopNav>

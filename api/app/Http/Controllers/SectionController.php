@@ -189,9 +189,9 @@ class SectionController extends Controller {
         ]);
         trail("Restore Section")->info("Section Restored");
     }
-    // mime:pdf,jpeg,jpg,png,doc,docx,ppt,pptx,mp4,mp3
+
     public function upload(FileUploadRequest $request, Section $section) {
-        $upload = $this->uploadFileRequest($request, "kb_file", "required|file|");
+        $upload = $this->uploadFileRequest($request, "kb_file", "required|file|mimes:pdf,jpeg,jpg,png,doc,docx,ppt,pptx,mp4,mp3");
         if (isset($upload["file"])) {
             $file = $upload["file"];
             $file->update(["filable_id" => $section->id, "filable_type" => Section::class]);

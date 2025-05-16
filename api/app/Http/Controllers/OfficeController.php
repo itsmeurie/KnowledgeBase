@@ -58,18 +58,29 @@ class OfficeController extends Controller {
         ]);
     }
 
-    public function restore(Request $request, string|int $office): JsonResponse {
-        if (!is_numeric($office)) {
-            // expecting Hash
-            $office = Office::withTrashed()->byHash($office);
-        } else {
-            // expecting id
-            $office = Office::withTrashed()->find($office);
-            $office->restore();
+    public function restore(Request $request, string|int $id): JsonResponse {
+        $user = request()->user();
+        $office = $user->getSessionOffice();
+
+        // Get the soft-deleted section
+        $section = $office->sections()->onlyTrashed()->where("id", Office::hashToId($id))->first();
+
+        if (!$section) {
+            return response()->json([
+                "message" => "Section not found!",
+            ]);
         }
 
+        // Restore the section
+        $section->restore();
+
+        // Restore all soft-deleted subsections
+        $section->subsections()->onlyTrashed()->restore();
+
         return response()->json([
-            "message" => "{$office->name}#{$office->hash} has been restored",
+            "message" => "Section Restored Successfully",
+            "data" => new OfficeResource($section),
         ]);
+        trail("Restore Section")->info("Section Restored");
     }
 }

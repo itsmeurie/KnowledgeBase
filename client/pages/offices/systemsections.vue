@@ -8,14 +8,14 @@ const { $api } = useNuxtApp();
 const route = useRoute();
 const router = useRouter();
 
-const { office } = useAuthStore();
+const user = useAuthStore();
 
 // const office = ref<Office | null>(null);
 const officeSection = ref<Section[]>([]);
 const aboutSection = ref<HTMLElement | null>(null);
 
 const goToAdd = (code: string) => {
-  router.push(`/systems/${office?.code.toLowerCase()}/create`);
+  router.push(`/systems/${user.office?.code.toLowerCase()}/create`);
 };
 const modal = ref<{
   show: boolean;
@@ -45,11 +45,11 @@ const toggleModal = async (data: Section) => {
 };
 
 const goToArticlePage = (slug: string) => {
-  if (office?.code) {
+  if (user.office?.code) {
     router.push({
       name: "Article",
       params: {
-        code: office.code.toLowerCase(),
+        code: user.office.code.toLowerCase(),
         slug: slug,
       },
     });
@@ -75,7 +75,7 @@ const goToArticlePage = (slug: string) => {
 
 // Fetch Office Sections
 async function fetchOfficeSectionList() {
-  if (!office?.id) return;
+  if (!user.office?.id) return;
   try {
     const response = await $api.get(`/sections/office`);
     officeSection.value = response.data.data;
@@ -86,7 +86,7 @@ async function fetchOfficeSectionList() {
 
 useTeams(() => {
   fetchOfficeSectionList();
-  office;
+  user.office;
 });
 
 onMounted(() => {
@@ -104,9 +104,9 @@ onMounted(() => {
         <div class="flex flex-col gap-4 rounded-md px-6 py-6">
           <!-- HEADER -->
           <div class="flex items-center justify-between">
-            <h5 class="text-4xl font-semibold">{{ office?.name }}</h5>
+            <h5 class="text-4xl font-semibold">{{ user.office?.name }}</h5>
           </div>
-          <p class="max-w-xl text-sm">{{ office?.description }}</p>
+          <p class="max-w-xl text-sm">{{ user.office?.description }}</p>
         </div>
       </div>
 
@@ -147,14 +147,12 @@ onMounted(() => {
 
           <!-- Add New Section -->
           <div
-            @click="goToAdd(office?.code!)"
+            @click="goToAdd(user.office?.code!)"
             v-if="$guard.can('create_section')"
-            class="flex cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 p-4 shadow-md transition hover:bg-green-100"
+            class="hover:bg-primary flex cursor-pointer flex-col items-center justify-center rounded-lg border border-gray-200 p-4 shadow-md"
           >
             <TIcon name="tabler:plus"></TIcon>
-            <h5 class="text-primary text-lg font-semibold">
-              Create New Section/Manual
-            </h5>
+            <h5 class="text-lg font-semibold">Create New Section/Manual</h5>
           </div>
         </div>
       </div>
