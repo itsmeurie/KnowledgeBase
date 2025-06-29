@@ -102,6 +102,8 @@ const onSubmit = (event: FormSubmitEvent<Schema>): Promise<void> => {
 //       console.error("Error fetching office:", error);
 //     });
 // };
+//
+//.
 const fetchSection = (): void => {
   $api
     .get(`sections/section`)
